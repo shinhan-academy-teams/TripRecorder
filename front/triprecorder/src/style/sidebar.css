@@ -1,0 +1,35 @@
+.sidebar {
+  background-color: #f7f6dc;
+  width: 20%;
+}
+.sidebar img {
+  display: block;
+  width: 80%;
+  height: auto;
+  padding: 20px;
+  margin: 0px auto;
+}
+ul {
+  list-style-type: none;
+  background-color: #f7f6dc;
+  width: 20%;
+  padding: 0;
+  margin: 0;
+  position: fixed;
+  height: 100%;
+  overflow: auto;
+}
+
+li a {
+  text-decoration: none;
+  text-align: left;
+  display: block;
+  color: #1f2621;
+  padding: 8px 15px 8px 45px;
+  /* font-weight: bold; */
+}
+
+li a:hover {
+  background-color: #7fb77e;
+  color: #1f2621;
+}
