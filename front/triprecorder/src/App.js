@@ -1,12 +1,5 @@
-// import {
-//   BrowserRouter as Router,
-//   Route,
-//   Link,
-//   Routes,
-//   BrowserRouter,
-// } from "react-router-dom";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import "App.css";
+import "../src/style/main.scss";
 import {
   Home,
   Login,
@@ -14,21 +7,25 @@ import {
   Search,
   TripRegistration,
 } from "pages/index";
-import Sidebar from "components/common/Sidebar";
+//import Sidebar from "components/common/Sidebar";
 import NotFound from "NotFound";
+import Navbar from "components/common/Navbar";
+import RegistrationAll from "pages/RegistrationAll";
 
 const App = () => {
   return (
     <div className="App">
       <BrowserRouter>
-        <Sidebar />
+        {/* <Sidebar /> */}
+        <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/searh" element={<Search />} />
+          <Route path="/search" element={<Search />} />
           <Route path="/tripregistration" element={<TripRegistration />} />
           <Route path="/popularcard" element={<PopularCard />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/registerationall" element={<RegistrationAll />} />
         </Routes>
       </BrowserRouter>
     </div>
