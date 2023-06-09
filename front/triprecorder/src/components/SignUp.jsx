@@ -137,8 +137,6 @@ const SignUp = (props) => {
           labelCol={{ span: 8 }}
         >
           <DivInner>
-            {/* <Label>ID</Label> */}
-            {/* <Input type="text" placeholder="너의 ID는"></Input> */}
             <Form.Item
               name="ID"
               label="아이디"
@@ -157,7 +155,6 @@ const SignUp = (props) => {
           </DivInner>
 
           <DivInner>
-            {/* <Label>ID</Label> */}
             <Form.Item
               name="Name"
               label="이름"
@@ -176,7 +173,6 @@ const SignUp = (props) => {
           </DivInner>
 
           <DivInner>
-            {/* <Label>ID</Label> */}
             <Form.Item
               name="Gender"
               label="성별"
@@ -195,7 +191,6 @@ const SignUp = (props) => {
           </DivInner>
 
           <DivInner>
-            {/* <Label>ID</Label> */}
             <Form.Item
               name="NicName"
               label="닉네임"
@@ -214,8 +209,6 @@ const SignUp = (props) => {
           </DivInner>
 
           <DivInner>
-            {/* <Label>PW</Label> */}
-            {/* <Input type="password" placeholder="너의 PW는"></Input> */}
             <Form.Item
               name="password"
               label="비밀번호"
@@ -235,8 +228,6 @@ const SignUp = (props) => {
           </DivInner>
 
           <DivInner>
-            {/* <Label>PW</Label> */}
-            {/* <Input type="password" placeholder="너의 PW는"></Input> */}
             <Form.Item
               name="pwconfirm"
               label="비밀번호 확인"
@@ -256,7 +247,6 @@ const SignUp = (props) => {
           </DivInner>
 
           <DivInner>
-            {/* <Label>ID</Label> */}
             <Form.Item
               name="Email"
               label="이메일"
@@ -304,7 +294,6 @@ const SignUp = (props) => {
                 </Button>
               )}
             </Form.Item>
-            {/* <Button>Sign in</Button> */}
           </DivInner>
         </Form>
       </div>
