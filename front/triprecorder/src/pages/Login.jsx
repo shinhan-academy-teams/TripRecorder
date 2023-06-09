@@ -4,7 +4,8 @@ import SignUp from "components/SignUp";
 import trip2 from "assets/trip2.jpg";
 import SignIn from "components/SignIn";
 
-const Login = () => {
+const Login = ({ setIsShow }) => {
+  setIsShow(false);
   const DivContainer = styled.div`
     display: flex;
     padding-top: 2.5rem;

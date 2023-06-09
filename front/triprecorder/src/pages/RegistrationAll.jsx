@@ -56,6 +56,7 @@ const RegistrationAll = () => {
           >
             경비 등록
           </Checkbox>
+          <hr style={{ border: "solid 1.5px #7fb77e" }} />
           <Form
             labelCol={{
               span: 4,
@@ -137,6 +138,7 @@ const RegistrationAll = () => {
           >
             게시글 등록
           </Checkbox>
+          <hr style={{ border: "solid 1.5px #7fb77e" }} />
           <Form
             labelCol={{
               span: 4,
@@ -153,8 +155,6 @@ const RegistrationAll = () => {
             <Form.Item label="메모">
               <TextArea rows={3} />
             </Form.Item>
-            
-
           </Form>
         </Col>
       </Row>
