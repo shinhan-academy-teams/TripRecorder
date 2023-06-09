@@ -1,5 +1,5 @@
 import React from "react";
-import "../style/profile.css";
+import "../style/profile.scss";
 
 const Profile = () => {
   return (
@@ -340,7 +340,7 @@ const Profile = () => {
           </div>
           {/* <!-- End of gallery --> */}
 
-          <div class="loader"></div>
+          {/* <div class="loader"></div> */}
         </div>
         {/* <!-- End of container --> */}
       </div>

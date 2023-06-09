@@ -13,6 +13,7 @@ import Navbar from "components/common/Navbar";
 import RegistrationAll from "pages/RegistrationAll";
 import { useState } from "react";
 import "style/main.scss";
+import Profile from "pages/Profile";
 
 const App = () => {
   const [isShow, setIsShow] = useState(true);
@@ -25,6 +26,7 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login setIsShow={setIsShow} />} />
             <Route path="/search" element={<Search />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/tripregistration" element={<TripRegistration />} />
             <Route path="/popularcard" element={<PopularCard />} />
             <Route path="*" element={<NotFound />} />
