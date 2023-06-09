@@ -5,22 +5,22 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Form, Input, Button } from "antd";
 const SignIn = (props) => {
   const DivInner = styled.div`
-    margin-bottom: 0.75rem;
+    // margin-bottom: 0.75rem;
   `;
   const Footer = styled.div`
-    text-align: center;
+    // text-align: center;
   `;
 
   const LoginForm = styled.div`
-    display: flex;
-    background-color: #f7f6dc;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-content: center;
-    border-top-left-radius: 0.375rem;
-    border-bottom-left-radius: 0.375rem;
-    width: 26rem;
-    height: 42rem;
+    // display: flex;
+    // background-color: #f7f6dc;
+    // flex-wrap: wrap;
+    // justify-content: center;
+    // align-content: center;
+    // border-top-left-radius: 0.375rem;
+    // border-bottom-left-radius: 0.375rem;
+    // width: 26rem;
+    // height: 42rem;
   `;
 
   // const Input = styled.input`
@@ -36,13 +36,13 @@ const SignIn = (props) => {
   //   border-color: #d1d5db;
   //   background-color: #d9d9d9;
   // `;
-  const Label = styled.label`
-    display: inline;
-    margin-bottom: 0.5rem;
-    font-size: 0.75rem;
-    line-height: 1rem;
-    font-weight: 600;
-  `;
+  // const Label = styled.label`
+  //   display: inline;
+  //   margin-bottom: 0.5rem;
+  //   font-size: 0.75rem;
+  //   line-height: 1rem;
+  //   font-weight: 600;
+  // `;
   // const Button = styled.button`
   //   display: block;
   //   padding-top: 0.375rem;

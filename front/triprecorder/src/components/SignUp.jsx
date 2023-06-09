@@ -12,11 +12,11 @@ import {
   Form,
   Input,
   Button,
-  Dropdown,
-  Space,
+  // Dropdown,
+  // Space,
   Radio,
   Select,
-  Cascader,
+  // Cascader,
 } from "antd";
 const { Option } = Select;
 const SignUp = (props) => {

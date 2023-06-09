@@ -7,6 +7,7 @@ import {
   PlusOutlined,
   CreditCardOutlined,
 } from "@ant-design/icons";
+import "style/navbar.scss";
 
 import { useLocation, Link } from "react-router-dom";
 
@@ -29,9 +30,9 @@ const Navbar = () => {
         <Link to={"/"}>
           <img src={Logo} alt="logo" className="logo" style={{ width: 48 }} />
         </Link>
-        <a href="/" className="link">
+        <Link to={"/"} className="link">
           <h2 className="title">TripRecorder </h2>
-        </a>
+        </Link>
       </div>
       <div
         className={
@@ -64,40 +65,41 @@ const Navbar = () => {
       >
         <ul>
           <li className={location.pathname === "/login" ? "active" : ""}>
-            <Link to={"/"} class="link_icon">
+            <Link to={"/"} className="link_icon">
               <LogoutOutlined
                 style={{ padding: "0 1rem 0 0.5rem", fontSize: "20px" }}
               />
             </Link>
-            <a href="/login">로그아웃</a>
+            <Link to={"/"}>로그아웃</Link>
           </li>
+
           <li className={location.pathname === "/search" ? "active" : ""}>
-            <Link to={"/search"} class="link_icon">
+            <Link to={"/search"} className="link_icon">
               <SearchOutlined
                 style={{ padding: "0 1rem 0 0.5rem", fontSize: "20px" }}
               />
             </Link>
-            <a href="/search">검색</a>
+            <Link to={"/search"}>검색</Link>
           </li>
           <li
             className={
               location.pathname === "/tripregistration" ? "active" : ""
             }
           >
-            <Link to={"/tripregistration"} class="link_icon">
+            <Link to={"/tripregistration"} className="link_icon">
               <PlusOutlined
                 style={{ padding: "0 1rem 0 0.5rem", fontSize: "20px" }}
               />
             </Link>
-            <a href="/tripregistration">여행등록</a>
+            <Link to={"/tripregistration"}>여행등록</Link>
           </li>
           <li className={location.pathname === "/popularcard" ? "active" : ""}>
-            <Link to={"/popularcard"} class="link_icon">
+            <Link to={"/popularcard"} className="link_icon">
               <CreditCardOutlined
                 style={{ padding: "0 1rem 0 0.5rem", fontSize: "20px" }}
               />
             </Link>
-            <a href="/popularcard">인기카드</a>
+            <Link to={"/popularcard"}>인기카드</Link>
           </li>
         </ul>
       </div>
