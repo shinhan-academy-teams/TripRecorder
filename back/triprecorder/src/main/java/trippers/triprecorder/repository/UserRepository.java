@@ -1,9 +1,9 @@
 package trippers.triprecorder.repository;
 
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import trippers.triprecorder.vo.UserVO;
+import trippers.triprecorder.entity.UserVO;
 
-public interface UserRepository extends PagingAndSortingRepository<UserVO, Long>{
-
+public interface UserRepository extends JpaRepository<UserVO, Long>{
+	public UserVO findByUserId(String userid);
 }
