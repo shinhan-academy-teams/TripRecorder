@@ -70,7 +70,9 @@ const Navbar = () => {
                 style={{ padding: "0 1rem 0 0.5rem", fontSize: "20px" }}
               />
             </Link>
-            <Link to={"/"}>로그아웃</Link>
+            <Link to={"/"} className="link_name">
+              로그아웃
+            </Link>
           </li>
 
           <li className={location.pathname === "/search" ? "active" : ""}>
@@ -79,7 +81,9 @@ const Navbar = () => {
                 style={{ padding: "0 1rem 0 0.5rem", fontSize: "20px" }}
               />
             </Link>
-            <Link to={"/search"}>검색</Link>
+            <Link to={"/search"} className="link_name">
+              검색
+            </Link>
           </li>
           <li
             className={
@@ -91,7 +95,9 @@ const Navbar = () => {
                 style={{ padding: "0 1rem 0 0.5rem", fontSize: "20px" }}
               />
             </Link>
-            <Link to={"/tripregistration"}>여행등록</Link>
+            <Link to={"/tripregistration"} className="link_name">
+              여행등록
+            </Link>
           </li>
           <li className={location.pathname === "/popularcard" ? "active" : ""}>
             <Link to={"/popularcard"} className="link_icon">
@@ -99,7 +105,9 @@ const Navbar = () => {
                 style={{ padding: "0 1rem 0 0.5rem", fontSize: "20px" }}
               />
             </Link>
-            <Link to={"/popularcard"}>인기카드</Link>
+            <Link to={"/popularcard"} className="link_name">
+              인기카드
+            </Link>
           </li>
         </ul>
       </div>
