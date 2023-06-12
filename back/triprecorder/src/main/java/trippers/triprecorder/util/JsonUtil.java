@@ -5,7 +5,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 public class JsonUtil {
-	public static JSONObject getJsonObj(String str) {
+	public static JSONObject getStringToJsonObj(String str) {
 		JSONParser parser = new JSONParser();
 		JSONObject jsonObj = null;
 		try {

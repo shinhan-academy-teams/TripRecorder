@@ -47,11 +47,11 @@ public class TripVO {
 	@Column(nullable = false)
 	private Long tripExp;
 	
-	// sns °Ô½Ã±Û
+	// sns 게시글
 	@OneToMany(mappedBy = "sns", cascade = CascadeType.ALL)
 	private List<SnsVO> sns;
 	
-	// ¿©Çà °æºñ (¿µ¼öÁõ)
+	// 여행 경비 (영수증)
 	@OneToMany(mappedBy = "trip", cascade = CascadeType.ALL)
 	private List<ExpVO> exp;
 }
