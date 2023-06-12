@@ -5,22 +5,22 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Form, Input, Button } from "antd";
 const SignIn = (props) => {
   const DivInner = styled.div`
-    // margin-bottom: 0.75rem;
+    margin-bottom: 0.75rem;
   `;
   const Footer = styled.div`
-    // text-align: center;
+    text-align: center;
   `;
 
   const LoginForm = styled.div`
-    // display: flex;
-    // background-color: #f7f6dc;
-    // flex-wrap: wrap;
-    // justify-content: center;
-    // align-content: center;
-    // border-top-left-radius: 0.375rem;
-    // border-bottom-left-radius: 0.375rem;
-    // width: 26rem;
-    // height: 42rem;
+    display: flex;
+    background-color: #f7f6dc;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    border-top-left-radius: 0.375rem;
+    border-bottom-left-radius: 0.375rem;
+    width: 26rem;
+    height: 42rem;
   `;
 
   // const Input = styled.input`
@@ -103,7 +103,6 @@ const SignIn = (props) => {
         </h1>
         <small style={{ color: "#9CA3AF" }}>어서오세요 반갑습니다 😊</small>
         {/* Form */}
-        {/* <form style={{ marginTop: "1rem" }}> */}
         <Form
           form={form}
           name="horizontal_login"
@@ -112,8 +111,6 @@ const SignIn = (props) => {
           labelCol={{ span: 7 }}
         >
           <DivInner>
-            {/* <Label>ID</Label> */}
-            {/* <Input type="text" placeholder="너의 ID는"></Input> */}
             <Form.Item
               label="아이디"
               name="ID"
@@ -132,8 +129,6 @@ const SignIn = (props) => {
           </DivInner>
 
           <DivInner>
-            {/* <Label>PW</Label> */}
-            {/* <Input type="password" placeholder="너의 PW는"></Input> */}
             <Form.Item
               label="비밀번호"
               name="password"
@@ -181,10 +176,8 @@ const SignIn = (props) => {
                 </Button>
               )}
             </Form.Item>
-            {/* <Button>Sign in</Button> */}
           </DivInner>
         </Form>
-        {/* </form> */}
       </div>
       <Footer>
         <span
