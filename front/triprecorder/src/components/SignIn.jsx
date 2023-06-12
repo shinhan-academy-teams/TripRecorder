@@ -3,6 +3,8 @@ import styled from "@emotion/styled";
 import tripRecorder from "assets/tripRecorder.png";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Form, Input, Button } from "antd";
+import axios from "api/axios";
+import authService from "api/auth.service";
 const SignIn = (props) => {
   const DivInner = styled.div`
     margin-bottom: 0.75rem;
@@ -83,8 +85,17 @@ const SignIn = (props) => {
     forceUpdate({});
   }, []);
 
-  const onFinish = (values) => {
-    console.log("Finish:", values);
+  const onFinish = async (values) => {
+    console.log("Success:", values);
+    await authService
+      .checkDuplicateId(values["ID"])
+      .then((res) => console.log(res));
+  };
+  // const onFinish = (values) => {
+  //   console.log( values["ID"], values["password"]);
+  // };
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
   };
   return (
     <LoginForm>
@@ -101,12 +112,21 @@ const SignIn = (props) => {
             <ImgComponent src={tripRecorder} id="logo" />
           </Link>
         </h1>
-        <small style={{ color: "#9CA3AF" }}>어서오세요 반갑습니다 😊</small>
+        <small
+          style={{
+            color: "#9CA3AF",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          어서오세요 반갑습니다 😊
+        </small>
         {/* Form */}
         <Form
           form={form}
           name="horizontal_login"
           onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
           style={{ marginTop: "1rem" }}
           labelCol={{ span: 7 }}
         >
@@ -158,12 +178,16 @@ const SignIn = (props) => {
           >
             <Link href="#">비밀번호 찾기</Link>
           </DivInner>
-          <DivInner>
+          <DivInner style={{ display: "flex", justifyContent: "center" }}>
             <Form.Item shouldUpdate>
               {() => (
                 <Button
                   type="default"
-                  style={{ backgroundColor: "#7fb77e", color: "#ffffff" }}
+                  htmlType="submit"
+                  style={{
+                    backgroundColor: "#7fb77e",
+                    color: "#ffffff",
+                  }}
                   size="large"
                   disabled={
                     !form.isFieldsTouched(true) ||
