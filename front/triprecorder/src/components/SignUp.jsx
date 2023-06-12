@@ -125,7 +125,9 @@ const SignUp = (props) => {
             <ImgComponent src={tripRecorder} id="logo" />
           </Link>
         </h1>
-        <small style={{ color: "#9CA3AF" }}>
+        <small style={{ color: "#9CA3AF", 
+            display: "flex",
+            justifyContent: "center" }}>
           당신의 지갑을 지켜주는 여행용 SNS 플랫폼 TripRecoder
         </small>
         {/* Form */}
@@ -276,12 +278,15 @@ const SignUp = (props) => {
           >
             <Link href="#">비밀번호 찾기</Link>
           </DivInner>
-          <DivInner>
+          <DivInner style={{ display: "flex", justifyContent: "center" }}>
             <Form.Item shouldUpdate>
               {() => (
                 <Button
                   type="default"
-                  style={{ backgroundColor: "#7fb77e", color: "#ffffff" }}
+                  style={{
+                    backgroundColor: "#7fb77e",
+                    color: "#ffffff",
+                  }}
                   size="large"
                   disabled={
                     !form.isFieldsTouched(true) ||
