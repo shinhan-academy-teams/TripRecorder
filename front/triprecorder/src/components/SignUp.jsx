@@ -52,13 +52,13 @@ const SignUp = (props) => {
   //     border-color: #d1d5db;
   //     background-color: #d9d9d9;
   //   `;
-  const Label = styled.label`
-    display: block;
-    margin-bottom: 0.5rem;
-    font-size: 0.75rem;
-    line-height: 1rem;
-    font-weight: 600;
-  `;
+  // const Label = styled.label`
+  //   display: block;
+  //   margin-bottom: 0.5rem;
+  //   font-size: 0.75rem;
+  //   line-height: 1rem;
+  //   font-weight: 600;
+  // `;
   //   const Button = styled.button`
   //     display: block;
   //     padding-top: 0.375rem;
