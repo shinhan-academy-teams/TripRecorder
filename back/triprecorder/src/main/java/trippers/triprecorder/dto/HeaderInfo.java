@@ -1,0 +1,12 @@
+package trippers.triprecorder.dto;
+
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@Builder
+public class HeaderInfo {
+	private Object userno;
+	private Object uesrid;
+	private Object usernick;
+}
