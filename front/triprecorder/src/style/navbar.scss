@@ -184,6 +184,56 @@
   }
 }
 
+@media (max-width: 1200px) {
+  .sidebar {
+    width: 3rem;
+    transition: 0.5s all;
+
+    .logoContainer {
+      .link {
+        pointer-events: none;
+      }
+      h2.title {
+        opacity: 0;
+      }
+    }
+
+    .burgerContainer {
+      transition: 0.5s all;
+      .burgerMenu {
+        background-color: $white;
+        transition: 0.5s all;
+      }
+
+      .burgerMenu::before {
+        transform: translateY(0rem) rotate(0deg);
+        transition: 0.5s all;
+      }
+
+      .burgerMenu::after {
+        transform: translateY(0rem) rotate(0deg);
+        transition: 0.5s all;
+      }
+    }
+
+    .profileContainer {
+      .profileContents {
+        opacity: 0;
+      }
+    }
+
+    .contentsContainer {
+      .link_name {
+        // opacity: 0;
+        display: none;
+      }
+      .link_icon {
+        display: block;
+      }
+    }
+  }
+}
+
 //사이드바 닫음
 .sidebar.active {
   width: 3rem;
@@ -223,7 +273,7 @@
   }
 
   .contentsContainer {
-    a {
+    .link_name {
       // opacity: 0;
       display: none;
     }

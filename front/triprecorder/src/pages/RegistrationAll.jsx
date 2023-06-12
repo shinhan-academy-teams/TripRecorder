@@ -13,7 +13,8 @@ import {
   Button,
 } from "antd";
 import dayjs from "dayjs";
-//import { PlusOutlined } from "@ant-design/icons";
+import UploadPic from "components/UploadPic";
+import HashTag from "components/HashTag";
 
 const RegistrationAll = () => {
   const DivBox = styled.div`
@@ -46,6 +47,7 @@ const RegistrationAll = () => {
     disabledHours: () => range(0, 24).splice(4, 20),
     disabledMinutes: () => range(30, 60),
   });
+  const [size, setSize] = useState("none");
   return (
     <DivBox>
       <Row>
@@ -70,6 +72,8 @@ const RegistrationAll = () => {
               maxWidth: 600,
             }}
           >
+            <Button type="dashed">영수증 등록</Button>
+
             <Form.Item label="결제 방식">
               <Radio.Group>
                 <Radio value="cash"> 현금 </Radio>
@@ -124,10 +128,12 @@ const RegistrationAll = () => {
               </Select>
             </Form.Item>
 
-            <Form.Item>
-              <Button>경비 저장</Button>
-              <Button>경비 리셋</Button>
-            </Form.Item>
+            <Button type="dashed" style={{ margin: "5px 5px" }}>
+              경비 등록
+            </Button>
+            <Button type="dashed" style={{ margin: "5px 5px" }}>
+              경비 리셋
+            </Button>
           </Form>
         </Col>
 
@@ -155,6 +161,29 @@ const RegistrationAll = () => {
             <Form.Item label="메모">
               <TextArea rows={3} />
             </Form.Item>
+
+            {/* 사진 업로드 */}
+            <UploadPic />
+            <br />
+            <br />
+            {/* 해시 태그 */}
+            <HashTag />
+            <br />
+            <br />
+            <Radio.Group value={size} onChange={(e) => setSize(e.target.value)}>
+              <Radio.Button value="all">전체 공개</Radio.Button>
+              <Radio.Button value="fallower">팔로워 공개</Radio.Button>
+              <Radio.Button value="none">비공개</Radio.Button>
+            </Radio.Group>
+
+            <br />
+            <br />
+            <Button type="dashed" style={{ margin: "5px 5px" }}>
+              게시글 등록
+            </Button>
+            <Button type="dashed" style={{ margin: "5px 5px" }}>
+              게시글 리셋
+            </Button>
           </Form>
         </Col>
       </Row>
