@@ -13,11 +13,12 @@ import {
   Button,
 } from "antd";
 import dayjs from "dayjs";
-import UploadPic from "components/UploadPic";
+// import UploadPic from "components/UploadPic";
 import HashTag from "components/HashTag";
 import CashCardRadio from "components/CashCardRadio";
 import logo from "assets/tripRecorder.png";
 import OpenRangeRadio from "components/OpenRangeRadio";
+import S3Upload from "components/S3Upload";
 
 const RegistrationAll = () => {
   const DivBox = styled.div`
@@ -236,9 +237,11 @@ const RegistrationAll = () => {
             </Form.Item>
 
             {/* 사진 업로드 - 여러장 리스트로 값 전달 받기*/}
-            <UploadPic />
+            {/* <UploadPic /> */}
+            <S3Upload />
             <br />
             <br />
+
             {/* 해시 태그 - 해시태그 여러개 리스트로 전달 받기 */}
             <HashTag />
             <br />
