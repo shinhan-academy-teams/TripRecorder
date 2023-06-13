@@ -8,16 +8,7 @@ import {
   SmileOutlined,
   MailOutlined,
 } from "@ant-design/icons";
-import {
-  Form,
-  Input,
-  Button,
-  // Dropdown,
-  // Space,
-  Radio,
-  Select,
-  // Cascader,
-} from "antd";
+import { Form, Input, Button, Radio, Select } from "antd";
 const { Option } = Select;
 const SignUp = (props) => {
   const DivInner = styled.div`
@@ -39,43 +30,6 @@ const SignUp = (props) => {
     height: 42rem;
   `;
 
-  //   const Input = styled.input`
-  //     display: block;
-  //     padding-top: 0.25rem;
-  //     padding-bottom: 0.25rem;
-  //     padding-left: 0.375rem;
-  //     padding-right: 0.375rem;
-  //     color: #6b7280;
-  //     width: 100%;
-  //     border-radius: 0.375rem;
-  //     border-width: 1px;
-  //     border-color: #d1d5db;
-  //     background-color: #d9d9d9;
-  //   `;
-  // const Label = styled.label`
-  //   display: block;
-  //   margin-bottom: 0.5rem;
-  //   font-size: 0.75rem;
-  //   line-height: 1rem;
-  //   font-weight: 600;
-  // `;
-  //   const Button = styled.button`
-  //     display: block;
-  //     padding-top: 0.375rem;
-  //     padding-bottom: 0.375rem;
-  //     padding-left: 0.5rem;
-  //     padding-right: 0.5rem;
-  //     margin-bottom: 0.375rem;
-  //     background-color: #7fb77e;
-  //     color: #ffffff;
-  //     text-align: center;
-  //     width: 100%;
-  //     border-radius: 0.375rem;
-
-  //     :hover {
-  //       background-color: #649364;
-  //     }
-  //   `;
   const Link = styled.a`
     color: #7fb77e;
     font-size: 0.75rem;
@@ -97,12 +51,33 @@ const SignUp = (props) => {
   useEffect(() => {
     forceUpdate({});
   }, []);
+  const [email, setEmail] = useState([]);
 
   const onFinish = (values) => {
-    console.log("Finish:", values);
+    console.log(
+      values["ID"],
+      values["Name"],
+      values["Gender"],
+      values["Nick"],
+      values["PW"],
+      values["Email"],
+      values
+    );
   };
+
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
+
   const selectAfter = (
-    <Select defaultValue="@naver.com">
+    <Select
+      defaultValue="@naver.com"
+      onSelect={(e) => {
+        setEmail(e);
+        console.log(email);
+      }}
+    >
+      <Option value="@naver.com">@naver.com</Option>
       <Option value="@daum.net">@daum.net</Option>
       <Option value="@gmail.com">@gmail.com</Option>
       <Option value="@kakao.com">@kakao.com</Option>
@@ -125,9 +100,13 @@ const SignUp = (props) => {
             <ImgComponent src={tripRecorder} id="logo" />
           </Link>
         </h1>
-        <small style={{ color: "#9CA3AF", 
+        <small
+          style={{
+            color: "#9CA3AF",
             display: "flex",
-            justifyContent: "center" }}>
+            justifyContent: "center",
+          }}
+        >
           당신의 지갑을 지켜주는 여행용 SNS 플랫폼 TripRecoder
         </small>
         {/* Form */}
@@ -135,6 +114,7 @@ const SignUp = (props) => {
           form={form}
           name="horizontal_login"
           onFinish={onFinish}
+          onFieldsChange={onFinishFailed}
           style={{ marginTop: "1rem" }}
           labelCol={{ span: 8 }}
         >
@@ -185,16 +165,16 @@ const SignUp = (props) => {
                 },
               ]}
             >
-              <Radio.Group defaultValue="a" size="middle">
-                <Radio.Button value="man">남성</Radio.Button>
-                <Radio.Button value="woman">여성</Radio.Button>
+              <Radio.Group size="middle">
+                <Radio.Button value="남자">남자</Radio.Button>
+                <Radio.Button value="여자">여자</Radio.Button>
               </Radio.Group>
             </Form.Item>
           </DivInner>
 
           <DivInner>
             <Form.Item
-              name="NicName"
+              name="Nick"
               label="닉네임"
               rules={[
                 {
@@ -212,7 +192,7 @@ const SignUp = (props) => {
 
           <DivInner>
             <Form.Item
-              name="password"
+              name="PW"
               label="비밀번호"
               rules={[
                 {
@@ -229,7 +209,7 @@ const SignUp = (props) => {
             </Form.Item>
           </DivInner>
 
-          <DivInner>
+          {/* <DivInner>
             <Form.Item
               name="pwconfirm"
               label="비밀번호 확인"
@@ -246,10 +226,10 @@ const SignUp = (props) => {
                 placeholder="비밀번호 확인"
               />
             </Form.Item>
-          </DivInner>
+          </DivInner> */}
 
           <DivInner>
-            <Form.Item
+            {/* <Form.Item
               name="Email"
               label="이메일"
               rules={[
@@ -262,8 +242,56 @@ const SignUp = (props) => {
               <Input
                 prefix={<MailOutlined className="site-form-item-icon" />}
                 addonAfter={selectAfter}
-                type="email"
+                type="text"
                 placeholder="이메일"
+              />
+            </Form.Item> */}
+            {/* 
+            <Form.Item
+              name={["address", "province"]}
+              rules={[
+                {
+                  required: true,
+                  message: "Province is required",
+                },
+              ]}
+            >
+              <Select placeholder="Select province">
+                <Option value="Zhejiang">Zhejiang</Option>
+                <Option value="Jiangsu">Jiangsu</Option>
+              </Select>
+            </Form.Item> */}
+            <Form.Item
+              label="이메일"
+              name={["address", "province"]}
+              noStyle
+              rules={[
+                {
+                  required: true,
+                  message: "Province is required",
+                },
+              ]}
+            >
+              <Select placeholder="Select province">
+                <Option value="Zhejiang">Zhejiang</Option>
+                <Option value="Jiangsu">Jiangsu</Option>
+              </Select>
+            </Form.Item>
+            <Form.Item
+              name={["address", "street"]}
+              noStyle
+              rules={[
+                {
+                  required: true,
+                  message: "Street is required",
+                },
+              ]}
+            >
+              <Input
+                style={{
+                  width: "50%",
+                }}
+                placeholder="Input street"
               />
             </Form.Item>
           </DivInner>
@@ -283,6 +311,7 @@ const SignUp = (props) => {
               {() => (
                 <Button
                   type="default"
+                  htmlType="submit"
                   style={{
                     backgroundColor: "#7fb77e",
                     color: "#ffffff",

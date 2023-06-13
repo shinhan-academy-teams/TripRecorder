@@ -37,7 +37,7 @@ public class TripController {
 	
 	// 여행 카테고리 등록
 	@PostMapping("/registertrip") 
-	public TripVO postRegisterTrip(HttpServletRequest request, @RequestBody TripVO trip) {
+	public String postRegisterTrip(HttpServletRequest request, @RequestBody TripVO trip) {
 		String jwt = request.getHeader("Authorization");
 		String decodeStr = EncodingUtil.getDecodedStr(jwt.replace('.', '@').split("@")[1]);
 		JSONObject jsonObj = JsonUtil.getStringToJsonObj(decodeStr);
@@ -48,6 +48,6 @@ public class TripController {
 		trip.setUser(user);
 		
 		trepo.save(trip);
-		return trip;
+		return "OK";
 	}
 }

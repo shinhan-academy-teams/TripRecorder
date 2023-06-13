@@ -14,6 +14,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -51,24 +53,30 @@ public class UserVO {
 	private Role userRole;
 	
 	// 프로필
+	@JsonIgnore
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	private ProfileVO profile;
 	
 	// 팔로워
+	@JsonIgnore
 	@OneToMany(mappedBy = "follower", cascade = CascadeType.ALL)
 	private List<FollowVO> follower;
+	@JsonIgnore
 	@OneToMany(mappedBy = "following", cascade = CascadeType.ALL)
 	private List<FollowVO> following;
 	
 	// 여행
+	@JsonIgnore
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<TripVO> trip;
 	
 	// 댓글
+	@JsonIgnore
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<ReplyVO> reply;
 	
 	// 좋아요
+	@JsonIgnore
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<HeartVO> heart;
 }

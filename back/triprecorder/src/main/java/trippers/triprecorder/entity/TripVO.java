@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -48,10 +50,12 @@ public class TripVO {
 	private Long tripExp;
 	
 	// sns 게시글
+	@JsonIgnore
 	@OneToMany(mappedBy = "sns", cascade = CascadeType.ALL)
 	private List<SnsVO> sns;
 	
 	// 여행 경비 (영수증)
+	@JsonIgnore
 	@OneToMany(mappedBy = "trip", cascade = CascadeType.ALL)
 	private List<ExpVO> exp;
 }
