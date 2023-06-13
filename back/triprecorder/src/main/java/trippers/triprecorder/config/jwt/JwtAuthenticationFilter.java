@@ -32,6 +32,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	public JwtAuthenticationFilter(AuthenticationManager authenticationManager, ProfileRepository prepo) {
 		super(authenticationManager);
 		this.prepo = prepo;
+		this.setFilterProcessesUrl("/auth/login");
 	}
 
 	@Override
