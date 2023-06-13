@@ -25,43 +25,6 @@ const SignIn = (props) => {
     height: 42rem;
   `;
 
-  // const Input = styled.input`
-  //   display: block;
-  //   padding-top: 0.25rem;
-  //   padding-bottom: 0.25rem;
-  //   padding-left: 0.375rem;
-  //   padding-right: 0.375rem;
-  //   color: #6b7280;
-  //   width: 100%;
-  //   border-radius: 0.375rem;
-  //   border-width: 1px;
-  //   border-color: #d1d5db;
-  //   background-color: #d9d9d9;
-  // `;
-  // const Label = styled.label`
-  //   display: inline;
-  //   margin-bottom: 0.5rem;
-  //   font-size: 0.75rem;
-  //   line-height: 1rem;
-  //   font-weight: 600;
-  // `;
-  // const Button = styled.button`
-  //   display: block;
-  //   padding-top: 0.375rem;
-  //   padding-bottom: 0.375rem;
-  //   padding-left: 0.5rem;
-  //   padding-right: 0.5rem;
-  //   margin-bottom: 0.375rem;
-  //   background-color: #7fb77e;
-  //   color: #ffffff;
-  //   text-align: center;
-  //   width: 100%;
-  //   border-radius: 0.375rem;
-
-  //   :hover {
-  //     background-color: #649364;
-  //   }
-  // `;
   const Link = styled.a`
     color: #7fb77e;
     font-size: 0.75rem;
@@ -88,12 +51,17 @@ const SignIn = (props) => {
   const onFinish = async (values) => {
     console.log("Success:", values);
     await authService
-      .checkDuplicateId(values["ID"])
-      .then((res) => console.log(res));
+      .login(values["ID"], values["PW"])
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
   };
-  // const onFinish = (values) => {
-  //   console.log( values["ID"], values["password"]);
-  // };
+  // const onFinish = async (values) => {
+  //   console.log("Success:", values);
+  //   await authService
+  //     .checkDuplicateId(values["ID"])
+  //     .then((res) => console.log(res));
+  //   };
+
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
@@ -151,7 +119,7 @@ const SignIn = (props) => {
           <DivInner>
             <Form.Item
               label="비밀번호"
-              name="password"
+              name="PW"
               rules={[
                 {
                   required: true,
