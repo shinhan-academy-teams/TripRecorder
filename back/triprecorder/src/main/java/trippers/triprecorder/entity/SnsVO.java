@@ -17,6 +17,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -48,18 +50,22 @@ public class SnsVO {
 	private Integer snsScope;
 	
 	// 댓글
+	@JsonIgnore
 	@OneToMany(mappedBy = "sns", cascade = CascadeType.ALL)
 	private List<ReplyVO> reply;
 	
 	// 좋아요
+	@JsonIgnore
 	@OneToMany(mappedBy = "sns", cascade = CascadeType.ALL)
 	private List<HeartVO> heart;
 
 	// 해시태그
+	@JsonIgnore
 	@OneToMany(mappedBy = "sns", cascade = CascadeType.ALL)
 	private List<HashtagVO> hashtag;
 
 	// 여행 경비 (영수증)
+	@JsonIgnore
 	@OneToOne(mappedBy = "sns")
 	private ExpVO exp;
 }
