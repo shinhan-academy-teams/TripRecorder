@@ -12,6 +12,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -39,10 +41,12 @@ public class CardVO {
 	private String cardPhoto;
 	
 	// 할인정보
+	@JsonIgnore
 	@OneToMany(mappedBy = "card", cascade = CascadeType.ALL)
 	private List<DiscountVO> dc;
 	
 	// 여행 경비 (영수증)
+	@JsonIgnore
 	@OneToOne(mappedBy = "card")
 	private ExpVO exp;
 }
