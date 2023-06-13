@@ -22,16 +22,17 @@ public class PrincipalDetails implements UserDetails{
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Collection<GrantedAuthority> authorities = new ArrayList<>();
-		authorities.add(new SimpleGrantedAuthority(user.getUserRole().toString()));
+		if(user != null)
+			authorities.add(new SimpleGrantedAuthority(user.getUserRole().toString()));
 		return authorities;
 	}
 	@Override
 	public String getPassword() {
-		return user.getUserPw();
+		return user != null ? user.getUserPw() : null;
 	}
 	@Override
 	public String getUsername() {
-		return user.getUserId();
+		return user != null ? user.getUserId() : null;
 	}
 	@Override
 	public boolean isAccountNonExpired() {

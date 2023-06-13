@@ -9,22 +9,27 @@ const HashTag = () => {
   const [inputVisible, setInputVisible] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const inputRef = useRef(null);
+  
   useEffect(() => {
     if (inputVisible) {
       inputRef.current?.focus();
     }
   }, [inputVisible]);
+ 
   const handleClose = (removedTag) => {
     const newTags = tags.filter((tag) => tag !== removedTag);
     console.log(newTags);
     setTags(newTags);
   };
+  
   const showInput = () => {
     setInputVisible(true);
   };
+  
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
   };
+  
   const handleInputConfirm = () => {
     if (inputValue && tags.indexOf(inputValue) === -1) {
       setTags([...tags, inputValue]);
@@ -32,6 +37,7 @@ const HashTag = () => {
     setInputVisible(false);
     setInputValue("");
   };
+  
   const forMap = (tag) => {
     const tagElem = (
       <Tag
