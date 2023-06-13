@@ -5,7 +5,7 @@ import {
   Row,
   Checkbox,
   Form,
-  Radio,
+  // Radio,
   Input,
   InputNumber,
   DatePicker,
@@ -15,6 +15,9 @@ import {
 import dayjs from "dayjs";
 import UploadPic from "components/UploadPic";
 import HashTag from "components/HashTag";
+import CashCardRadio from "components/CashCardRadio";
+import logo from "assets/tripRecorder.png";
+import OpenRangeRadio from "components/OpenRangeRadio";
 
 const RegistrationAll = () => {
   const DivBox = styled.div`
@@ -29,6 +32,14 @@ const RegistrationAll = () => {
     transform: translate(-30%, -50%);
     text-align: center;
   `;
+  const LogoImg = styled.img`
+    width: 40%;
+    margin: auto;
+    padding-top: 35px;
+    padding-bottom: 10px;
+    display: inline-block;
+  `;
+
   const { TextArea } = Input;
   const [componentDisabled1, setComponentDisabled1] = useState(true);
   const [componentDisabled2, setComponentDisabled2] = useState(true);
@@ -39,19 +50,30 @@ const RegistrationAll = () => {
     }
     return result;
   };
-  const disabledDate = (current) => {
-    // Can not select days before today and today
-    return current && current < dayjs().endOf("day");
-  };
+
   const disabledDateTime = () => ({
-    disabledHours: () => range(0, 24).splice(4, 20),
-    disabledMinutes: () => range(30, 60),
+    disabledHours: () => range(0, 24).splice(), //splice(4, 20) : 4~비활성화
+    disabledMinutes: () => range(), //range(30, 60) : 30~비활성화
   });
-  const [size, setSize] = useState("none");
+
+  const onFinish = (values) => {
+    //values : DB에 저장할 입력값
+    console.log("Success:", values);
+  };
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
   return (
     <DivBox>
+      <LogoImg alt="tripRecorder" src={logo} />
+      <small style={{ color: "#9CA3AF", paddingBottom: 10 }}>
+        여행 경비 및 게시글을 등록하세요.
+      </small>
+
       <Row>
+        {/* ###########경비######### */}
         <Col span={12}>
+          <hr style={{ border: "solid 1.5px #7fb77e" }} />
           <Checkbox
             checked={componentDisabled1}
             onChange={(e) => setComponentDisabled1(e.target.checked)}
@@ -71,32 +93,74 @@ const RegistrationAll = () => {
             style={{
               maxWidth: 600,
             }}
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            autoComplete="off"
           >
-            <Button type="dashed">영수증 등록</Button>
+            <Button type="dashed" style={{ margin: 5 }}>
+              영수증 등록
+            </Button>
 
-            <Form.Item label="결제 방식">
-              <Radio.Group>
-                <Radio value="cash"> 현금 </Radio>
-                <Radio value="card"> 카드 </Radio>
-              </Radio.Group>
-            </Form.Item>
+            <br />
 
-            <Form.Item label="사용처">
+            <CashCardRadio />
+
+            <Form.Item
+              label="사용처"
+              name="whereToUse"
+              rules={[
+                {
+                  required: true,
+                  message: "사용처를 입력해주세요!",
+                },
+              ]}
+            >
               <Input />
             </Form.Item>
 
-            <Form.Item label="장소">
+            <Form.Item
+              label="장소"
+              name="address"
+              rules={[
+                {
+                  required: true,
+                  message: "장소를 입력해주세요!",
+                },
+              ]}
+            >
               <Input />
             </Form.Item>
 
-            <Form.Item label="지출">
-              <InputNumber />
+            <Form.Item
+              label="여행 경비"
+              name="tripexpense"
+              rules={[
+                {
+                  required: true,
+                  message: "여행 경비를 입력해주세요!",
+                },
+              ]}
+            >
+              <InputNumber
+                formatter={(value) =>
+                  `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                }
+                parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+              />
             </Form.Item>
 
-            <Form.Item label="날짜+시간">
+            <Form.Item
+              label="날짜+시간"
+              name="dateTime"
+              rules={[
+                {
+                  required: true,
+                  message: "결제 날짜/시간을 설정해주세요!",
+                },
+              ]}
+            >
               <DatePicker
                 format="YYYY-MM-DD HH:mm"
-                disabledDate={disabledDate}
                 disabledTime={disabledDateTime}
                 showTime={{
                   defaultValue: dayjs("00:00", "HH:mm"),
@@ -104,20 +168,16 @@ const RegistrationAll = () => {
               />
             </Form.Item>
 
-            {/* 현금이라면 보이지 않음 */}
-            <Form.Item label="카드사">
-              <Input />
-            </Form.Item>
-
-            <Form.Item label="결제 카드">
-              <Select>
-                <Select.Option value="a">a카드</Select.Option>
-                <Select.Option value="b">b카드</Select.Option>
-                <Select.Option value="c">c카드</Select.Option>
-              </Select>
-            </Form.Item>
-
-            <Form.Item label="카테고리">
+            <Form.Item
+              label="카테고리"
+              name="category"
+              rules={[
+                {
+                  required: true,
+                  message: "사용 카테고리를 입력해주세요!",
+                },
+              ]}
+            >
               <Select>
                 <Select.Option value="숙박">숙박</Select.Option>
                 <Select.Option value="교통">교통</Select.Option>
@@ -128,16 +188,26 @@ const RegistrationAll = () => {
               </Select>
             </Form.Item>
 
-            <Button type="dashed" style={{ margin: "5px 5px" }}>
+            <Button
+              type="dashed"
+              htmlType="submit"
+              style={{ margin: "5px 5px" }}
+            >
               경비 등록
             </Button>
-            <Button type="dashed" style={{ margin: "5px 5px" }}>
+            <Button
+              type="dashed"
+              htmlType="reset"
+              style={{ margin: "5px 5px" }}
+            >
               경비 리셋
             </Button>
           </Form>
         </Col>
 
+        {/* ###########게시글######### */}
         <Col span={12}>
+          <hr style={{ border: "solid 1.5px #7fb77e" }} />
           <Checkbox
             checked={componentDisabled2}
             onChange={(e) => setComponentDisabled2(e.target.checked)}
@@ -157,31 +227,38 @@ const RegistrationAll = () => {
             style={{
               maxWidth: 600,
             }}
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            autoComplete="off"
           >
-            <Form.Item label="메모">
+            <Form.Item label="메모" name="memo">
               <TextArea rows={3} />
             </Form.Item>
 
-            {/* 사진 업로드 */}
+            {/* 사진 업로드 - 여러장 리스트로 값 전달 받기*/}
             <UploadPic />
             <br />
             <br />
-            {/* 해시 태그 */}
+            {/* 해시 태그 - 해시태그 여러개 리스트로 전달 받기 */}
             <HashTag />
             <br />
             <br />
-            <Radio.Group value={size} onChange={(e) => setSize(e.target.value)}>
-              <Radio.Button value="all">전체 공개</Radio.Button>
-              <Radio.Button value="fallower">팔로워 공개</Radio.Button>
-              <Radio.Button value="none">비공개</Radio.Button>
-            </Radio.Group>
-
+            {/* 공개 범위 */}
+            <OpenRangeRadio />
             <br />
             <br />
-            <Button type="dashed" style={{ margin: "5px 5px" }}>
+            <Button
+              type="dashed"
+              htmlType="submit"
+              style={{ margin: "5px 5px" }}
+            >
               게시글 등록
             </Button>
-            <Button type="dashed" style={{ margin: "5px 5px" }}>
+            <Button
+              type="dashed"
+              htmlType="reset"
+              style={{ margin: "5px 5px" }}
+            >
               게시글 리셋
             </Button>
           </Form>

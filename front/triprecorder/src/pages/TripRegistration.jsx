@@ -1,7 +1,7 @@
-import React from "react";
+import React from "react"; //, { useState }
 import logo from "assets/tripRecorder.png";
 import styled from "@emotion/styled";
-import { DatePicker, Form, Input } from "antd";
+import { DatePicker, Form, Input, InputNumber } from "antd";
 
 const { RangePicker } = DatePicker;
 const TripRegistration = (props) => {
@@ -36,10 +36,15 @@ const TripRegistration = (props) => {
   `;
 
   const onFinish = (values) => {
+    //values : DB에 저장할 입력값
     console.log("Success:", values);
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
+  };
+
+  const onChange = (value) => {
+    console.log("changed", value);
   };
   return (
     <DivBox>
@@ -56,6 +61,7 @@ const TripRegistration = (props) => {
         }}
         initialValues={{
           remember: true,
+          tripexpense: 1000,
         }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
@@ -110,7 +116,14 @@ const TripRegistration = (props) => {
             },
           ]}
         >
-          <Input />
+          <InputNumber
+            // defaultValue={1000}
+            formatter={(value) =>
+              `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            }
+            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+            onChange={onChange}
+          />
         </Form.Item>
         <Btn htmlType="submit">Submit</Btn>
       </Form>
