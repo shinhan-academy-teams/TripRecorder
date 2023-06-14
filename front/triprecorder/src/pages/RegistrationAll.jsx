@@ -241,7 +241,10 @@ const RegistrationAll = () => {
             <S3Upload />
             <br />
             <br />
-
+            {/* <img
+              src="https://trip-recorder.s3.ap-northeast-2.amazonaws.com/upload/%EC%A7%B1%EA%B5%AC.jpg"
+              alt="짱구"
+            /> */}
             {/* 해시 태그 - 해시태그 여러개 리스트로 전달 받기 */}
             <HashTag />
             <br />

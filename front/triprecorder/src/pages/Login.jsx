@@ -49,7 +49,7 @@ const Login = ({ setIsShow }) => {
     line-height: 1rem;
     font-weight: 600;
   `;
-  const [loginstate, setLoginState] = useState(false);
+  let [loginstate, setLoginState] = useState(false);
 
   const handleLoginState = () => {
     setLoginState(!loginstate);

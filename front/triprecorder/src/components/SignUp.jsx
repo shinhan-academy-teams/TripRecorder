@@ -8,16 +8,8 @@ import {
   SmileOutlined,
   MailOutlined,
 } from "@ant-design/icons";
-import {
-  Form,
-  Input,
-  Button,
-  // Dropdown,
-  // Space,
-  Radio,
-  Select,
-  // Cascader,
-} from "antd";
+import { Form, Input, Button, Radio, Select, Space, Dropdown } from "antd";
+import authService from "api/auth.service";
 const { Option } = Select;
 const SignUp = (props) => {
   const DivInner = styled.div`
@@ -39,43 +31,6 @@ const SignUp = (props) => {
     height: 42rem;
   `;
 
-  //   const Input = styled.input`
-  //     display: block;
-  //     padding-top: 0.25rem;
-  //     padding-bottom: 0.25rem;
-  //     padding-left: 0.375rem;
-  //     padding-right: 0.375rem;
-  //     color: #6b7280;
-  //     width: 100%;
-  //     border-radius: 0.375rem;
-  //     border-width: 1px;
-  //     border-color: #d1d5db;
-  //     background-color: #d9d9d9;
-  //   `;
-  // const Label = styled.label`
-  //   display: block;
-  //   margin-bottom: 0.5rem;
-  //   font-size: 0.75rem;
-  //   line-height: 1rem;
-  //   font-weight: 600;
-  // `;
-  //   const Button = styled.button`
-  //     display: block;
-  //     padding-top: 0.375rem;
-  //     padding-bottom: 0.375rem;
-  //     padding-left: 0.5rem;
-  //     padding-right: 0.5rem;
-  //     margin-bottom: 0.375rem;
-  //     background-color: #7fb77e;
-  //     color: #ffffff;
-  //     text-align: center;
-  //     width: 100%;
-  //     border-radius: 0.375rem;
-
-  //     :hover {
-  //       background-color: #649364;
-  //     }
-  //   `;
   const Link = styled.a`
     color: #7fb77e;
     font-size: 0.75rem;
@@ -98,17 +53,19 @@ const SignUp = (props) => {
     forceUpdate({});
   }, []);
 
-  const onFinish = (values) => {
-    console.log("Finish:", values);
+  const onFinish = async (values) => {
+    await authService
+      .signup(
+        values["ID"],
+        values["PW"],
+        values["Name"],
+        values["Nick"],
+        values["email"].key + values["email"].value,
+        values["Gender"]
+      )
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
   };
-  const selectAfter = (
-    <Select defaultValue="@naver.com">
-      <Option value="@daum.net">@daum.net</Option>
-      <Option value="@gmail.com">@gmail.com</Option>
-      <Option value="@kakao.com">@kakao.com</Option>
-      <Option value="@yahoo.com">@yahoo.com</Option>
-    </Select>
-  );
 
   return (
     <LoginForm>
@@ -125,9 +82,13 @@ const SignUp = (props) => {
             <ImgComponent src={tripRecorder} id="logo" />
           </Link>
         </h1>
-        <small style={{ color: "#9CA3AF", 
+        <small
+          style={{
+            color: "#9CA3AF",
             display: "flex",
-            justifyContent: "center" }}>
+            justifyContent: "center",
+          }}
+        >
           당신의 지갑을 지켜주는 여행용 SNS 플랫폼 TripRecoder
         </small>
         {/* Form */}
@@ -185,16 +146,16 @@ const SignUp = (props) => {
                 },
               ]}
             >
-              <Radio.Group defaultValue="a" size="middle">
-                <Radio.Button value="man">남성</Radio.Button>
-                <Radio.Button value="woman">여성</Radio.Button>
+              <Radio.Group size="middle">
+                <Radio.Button value="남자">남자</Radio.Button>
+                <Radio.Button value="여자">여자</Radio.Button>
               </Radio.Group>
             </Form.Item>
           </DivInner>
 
           <DivInner>
             <Form.Item
-              name="NicName"
+              name="Nick"
               label="닉네임"
               rules={[
                 {
@@ -212,7 +173,7 @@ const SignUp = (props) => {
 
           <DivInner>
             <Form.Item
-              name="password"
+              name="PW"
               label="비밀번호"
               rules={[
                 {
@@ -228,44 +189,65 @@ const SignUp = (props) => {
               />
             </Form.Item>
           </DivInner>
-
           <DivInner>
-            <Form.Item
-              name="pwconfirm"
-              label="비밀번호 확인"
-              rules={[
-                {
-                  required: true,
-                  message: "비밀번호 한번 더 적어주세요 !",
-                },
-              ]}
-            >
-              <Input.Password
-                prefix={<LockOutlined className="site-form-item-icon" />}
-                type="password"
-                placeholder="비밀번호 확인"
-              />
-            </Form.Item>
-          </DivInner>
-
-          <DivInner>
-            <Form.Item
-              name="Email"
-              label="이메일"
-              rules={[
-                {
-                  required: true,
-                  message: "이메일을 적어주세요 !",
-                },
-              ]}
-            >
-              <Input
-                prefix={<MailOutlined className="site-form-item-icon" />}
-                addonAfter={selectAfter}
-                type="email"
-                placeholder="이메일"
-              />
-            </Form.Item>
+            <Space.Compact>
+              <Form.Item
+                label="이메일"
+                name={["email", "key"]}
+                rules={[
+                  {
+                    required: true,
+                    message: "Email을 적어주세요 !",
+                  },
+                ]}
+              >
+                <Input
+                  prefix={<MailOutlined className="site-form-item-icon" />}
+                  style={{
+                    width: "100%",
+                  }}
+                  placeholder="Email"
+                />
+              </Form.Item>
+              <Form.Item
+                style={{ textTransform: "lowercase" }}
+                name={["email", "value"]}
+              >
+                <Select placeholder="@naver.com">
+                  <Option
+                    value="@naver.com"
+                    style={{ textTransform: "lowercase" }}
+                  >
+                    @naver.com
+                  </Option>
+                  <Option
+                    value="@daum.net"
+                    style={{ textTransform: "lowercase" }}
+                  >
+                    @daum.net
+                  </Option>
+                  <Option
+                    value="@gmail.com"
+                    style={{ textTransform: "lowercase" }}
+                  >
+                    @gmail.com
+                  </Option>
+                  <Option
+                    value="@kakao.com"
+                    style={{ textTransform: "lowercase" }}
+                  >
+                    @kakao.com
+                  </Option>
+                  <Option
+                    value="@yahoo.com"
+                    style={{ textTransform: "lowercase" }}
+                  >
+                    @yahoo.com
+                  </Option>
+                </Select>
+              </Form.Item>
+            </Space.Compact>
+            {/* </Form.Item> */}
           </DivInner>
 
           <DivInner
@@ -283,6 +265,7 @@ const SignUp = (props) => {
               {() => (
                 <Button
                   type="default"
+                  htmlType="submit"
                   style={{
                     backgroundColor: "#7fb77e",
                     color: "#ffffff",
