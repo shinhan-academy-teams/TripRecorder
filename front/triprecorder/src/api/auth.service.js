@@ -37,9 +37,22 @@ const signup = (userId, userPw, userName, userNick, userEmail, userGender) => {
 
 const login = (userId, userPw) => {
   return api
-    .post("/login", {
+    .post("/auth/login", {
       userId,
       userPw,
+    })
+    .then((res) => console.log(res))
+    .catch((err) => console.log(err));
+};
+
+const TripRegistration = (tripName, tripDest, tripStart, tripEnd, tripExp) => {
+  return api
+    .post("/trip/register", {
+      tripName,
+      tripDest,
+      tripStart,
+      tripEnd,
+      tripExp,
     })
     .then((res) => console.log(res))
     .catch((err) => console.log(err));
@@ -51,6 +64,7 @@ const authService = {
   checkDuplicateEmail,
   login,
   signup,
+  TripRegistration,
 };
 
 export default authService;
