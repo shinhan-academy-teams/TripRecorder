@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import AWS from "aws-sdk";
 import { Row, Col, Button, Input, Alert } from "reactstrap";
-// import Secret from "./secret/Secret";
 
 function S3Upload(props) {
   const [progress, setProgress] = useState(0); //업로드 진행률
@@ -23,7 +22,7 @@ function S3Upload(props) {
   });
 
   const handleFileInput = (e) => {
-    console.log(e.target.files); //선택한 파일들
+    // console.log(e.target.files); //선택한 파일들
     for (let i = 0; i < e.target.files.length; i++) {
       //파일 갯수만큼 for
       //console.log(e.target.files[i].name); //파일명...
@@ -37,34 +36,36 @@ function S3Upload(props) {
         return;
       }
       setProgress(0);
-      setSelectedFile([...selectedFile, file]);
-      console.log(file);
-      console.log(selectedFile);
+      setSelectedFile(e.target.files);
+      //   console.log(file);
+      //   console.log(selectedFile);
     }
   };
 
-  const uploadFile = (file) => {
-    const params = {
-      ACL: "public-read",
-      Body: file,
-      Bucket: S3_BUCKET,
-      Key: "sns/" + file.name,
-      ContentType: file.type,
-    };
-
-    myBucket
-      .putObject(params)
-      .on("httpUploadProgress", (evt) => {
-        setProgress(Math.round((evt.loaded / evt.total) * 100));
-        setShowAlert(true);
-        setTimeout(() => {
-          setShowAlert(false);
-          setSelectedFile([]);
-        }, 3000);
-      })
-      .send((err) => {
-        if (err) console.log(err);
-      });
+  const uploadFile = (files) => {
+    console.log(files);
+    for (let i = 0; i < files.length; i++) {
+      const params = {
+        ACL: "public-read",
+        Body: files[i],
+        Bucket: S3_BUCKET,
+        Key: "sns/" + files[i].name, //"sns/유저id/tripid/snsid" 수정
+        ContentType: files[i].type,
+      };
+      myBucket
+        .putObject(params)
+        .on("httpUploadProgress", (evt) => {
+          setProgress(Math.round((evt.loaded / evt.total) * 100));
+          setShowAlert(true);
+          setTimeout(() => {
+            setShowAlert(false);
+            setSelectedFile([]);
+          }, 3000);
+        })
+        .send((err) => {
+          if (err) console.log(err);
+        });
+    }
   };
 
   return (
@@ -80,7 +81,7 @@ function S3Upload(props) {
             {showAlert ? (
               <Alert color="primary">업로드 진행률 : {progress}%</Alert>
             ) : (
-              <Alert color="primary">파일을 선택해 주세요.</Alert>
+              <Alert color="primary"></Alert>
             )}
           </Col>
         </Row>
@@ -92,6 +93,7 @@ function S3Upload(props) {
               multiple
               onChange={handleFileInput}
             />
+
             {selectedFile ? (
               <Button color="primary" onClick={() => uploadFile(selectedFile)}>
                 {" "}
