@@ -9,36 +9,38 @@ const HashTag = () => {
   const [inputVisible, setInputVisible] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const inputRef = useRef(null);
-  
+
   useEffect(() => {
     if (inputVisible) {
       inputRef.current?.focus();
     }
   }, [inputVisible]);
- 
+
   const handleClose = (removedTag) => {
     const newTags = tags.filter((tag) => tag !== removedTag);
-    console.log(newTags);
+    //console.log(newTags);
     setTags(newTags);
   };
-  
+
   const showInput = () => {
     setInputVisible(true);
   };
-  
+
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
   };
-  
+
   const handleInputConfirm = () => {
     if (inputValue && tags.indexOf(inputValue) === -1) {
       setTags([...tags, inputValue]);
+      console.log([...tags, inputValue]);
     }
     setInputVisible(false);
     setInputValue("");
   };
-  
+
   const forMap = (tag) => {
+    // 태그내용(입력 내용))
     const tagElem = (
       <Tag
         closable
@@ -103,7 +105,7 @@ const HashTag = () => {
           type="text"
           size="small"
           style={{
-            width: 78,
+            width: 100,
           }}
           value={inputValue}
           onChange={handleInputChange}
@@ -112,7 +114,7 @@ const HashTag = () => {
         />
       ) : (
         <Tag onClick={showInput} style={tagPlusStyle}>
-          <PlusOutlined /> New Tag
+          <PlusOutlined /> HashTag
         </Tag>
       )}
     </>

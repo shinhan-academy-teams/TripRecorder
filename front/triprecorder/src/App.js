@@ -10,10 +10,16 @@ import {
 
 import NotFound from "NotFound";
 import Navbar from "components/common/Navbar";
-import RegistrationAll from "pages/RegistrationAll";
+// import RegistrationAll from "pages/RegistrationAll";
 import { useState } from "react";
 import "style/main.scss";
 import Profile from "pages/Profile";
+
+import RegisterAll from "pages/RegisterAll";
+import RegisterExp from "components/RegisterExp";
+import RegisterSns from "components/RegisterSns";
+import S3Upload from "components/S3Upload";
+import HashTag from "components/HashTag";
 
 const App = () => {
   const [isShow, setIsShow] = useState(true);
@@ -30,7 +36,18 @@ const App = () => {
             <Route path="/tripregistration" element={<TripRegistration />} />
             <Route path="/popularcard" element={<PopularCard />} />
             <Route path="*" element={<NotFound />} />
-            <Route path="/registerationall" element={<RegistrationAll />} />
+            <Route
+              path="/registerationall"
+              element={
+                <RegisterAll>
+                  <RegisterExp />
+                  <RegisterSns>
+                    <S3Upload/>
+                    <HashTag/>
+                  </RegisterSns>
+                </RegisterAll>
+              }
+            />
           </Routes>
         </div>
       </BrowserRouter>

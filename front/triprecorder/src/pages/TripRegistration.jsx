@@ -2,6 +2,8 @@ import React from "react"; //, { useState }
 import logo from "assets/tripRecorder.png";
 import styled from "@emotion/styled";
 import { DatePicker, Form, Input, InputNumber } from "antd";
+import authService from "api/auth.service";
+// import dayjs from "dayjs";
 
 const { RangePicker } = DatePicker;
 const TripRegistration = (props) => {
@@ -35,17 +37,58 @@ const TripRegistration = (props) => {
     font: bold;
   `;
 
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
     //values : DB에 저장할 입력값
     console.log("Success:", values);
+    const tripStart = values["tripperiod"][0];
+    const tripEnd = values["tripperiod"][1];
+    // console.log(tripStart.$y);
+    if (tripStart.$M + 1 < 10) {
+      var tripStartM = "0" + (tripStart.$M + 1);
+    } else {
+      tripStartM = tripStart.$M + 1;
+    }
+    if (tripStart.$D < 10) {
+      var tripStartD = "0" + tripStart.$D;
+    } else {
+      tripStartD = tripStart.$D;
+    }
+
+    if (tripEnd.$M + 1 < 10) {
+      var tripEndM = "0" + (tripEnd.$M + 1);
+    } else {
+      tripEndM = tripEnd.$M + 1;
+    }
+    if (tripEnd.$D < 10) {
+      var tripEndD = "0" + tripEnd.$D;
+    } else {
+      tripEndD = tripEnd.$D;
+    }
+    const tripStart_str =
+      tripStart.$y + "-" + tripStartM + "-" + tripStartD + "T00:00:00.000Z";
+    const tripEnd_str =
+      tripEnd.$y + "-" + tripEndM + "-" + tripEndD + "T00:00:00.000Z";
+    console.log(tripStart_str);
+    console.log(tripEnd_str);
+    await authService
+      .TripRegistration(
+        values["tripName"],
+        values["tripDest"],
+        tripStart_str,
+        tripEnd_str,
+        values["tripExp"]
+      )
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
 
-  const onChange = (value) => {
-    console.log("changed", value);
-  };
+  // const onChange = (value) => {
+  //   console.log("changed", value);
+  // };
+
   return (
     <DivBox>
       <LogoImg alt="tripRecorder" src={logo} />
@@ -69,7 +112,7 @@ const TripRegistration = (props) => {
       >
         <Form.Item
           label="여행 이름"
-          name="tripname"
+          name="tripName"
           rules={[
             {
               required: true,
@@ -82,7 +125,7 @@ const TripRegistration = (props) => {
 
         <Form.Item
           label="여행지"
-          name="tripspace"
+          name="tripDest"
           rules={[
             {
               required: true,
@@ -108,7 +151,7 @@ const TripRegistration = (props) => {
 
         <Form.Item
           label="여행 경비"
-          name="tripexpense"
+          name="tripExp"
           rules={[
             {
               required: true,
@@ -122,7 +165,7 @@ const TripRegistration = (props) => {
               `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
             }
             parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-            onChange={onChange}
+            // onChange={onChange}
           />
         </Form.Item>
         <Btn htmlType="submit">Submit</Btn>
