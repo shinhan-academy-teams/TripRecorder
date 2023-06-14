@@ -4,6 +4,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class JsonUtil {
 	public static JSONObject getStringToJsonObj(String str) {
 		JSONParser parser = new JSONParser();
@@ -15,5 +18,10 @@ public class JsonUtil {
 		}
 		
 		return jsonObj; 
+	}
+	
+	public static String getObjectToJsonString(Object obj) throws JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper.writeValueAsString(obj);
 	}
 }

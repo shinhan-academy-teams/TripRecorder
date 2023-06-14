@@ -3,6 +3,8 @@ package trippers.triprecorder.util;
 import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.json.simple.JSONObject;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -33,5 +35,13 @@ public class EncodingUtil {
 		}
 		
 		return decodeStr;
+	}
+	
+	// 토큰에서 userNo 받아오기
+	public static Long getUserNo(HttpServletRequest request) {
+		String jwt = request.getHeader("Authorization");
+		String decodeStr = EncodingUtil.getDecodedStr(jwt.replace('.', '@').split("@")[1]);
+		JSONObject jsonObj = JsonUtil.getStringToJsonObj(decodeStr);
+		return (Long) jsonObj.get("userno");
 	}
 }
