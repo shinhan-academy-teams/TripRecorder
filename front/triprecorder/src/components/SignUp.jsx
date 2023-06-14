@@ -8,7 +8,8 @@ import {
   SmileOutlined,
   MailOutlined,
 } from "@ant-design/icons";
-import { Form, Input, Button, Radio, Select } from "antd";
+import { Form, Input, Button, Radio, Select, Space, Dropdown } from "antd";
+import authService from "api/auth.service";
 const { Option } = Select;
 const SignUp = (props) => {
   const DivInner = styled.div`
@@ -51,39 +52,20 @@ const SignUp = (props) => {
   useEffect(() => {
     forceUpdate({});
   }, []);
-  const [email, setEmail] = useState([]);
 
-  const onFinish = (values) => {
-    console.log(
-      values["ID"],
-      values["Name"],
-      values["Gender"],
-      values["Nick"],
-      values["PW"],
-      values["Email"],
-      values
-    );
+  const onFinish = async (values) => {
+    await authService
+      .signup(
+        values["ID"],
+        values["PW"],
+        values["Name"],
+        values["Nick"],
+        values["email"].key + values["email"].value,
+        values["Gender"]
+      )
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
   };
-
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-  };
-
-  const selectAfter = (
-    <Select
-      defaultValue="@naver.com"
-      onSelect={(e) => {
-        setEmail(e);
-        console.log(email);
-      }}
-    >
-      <Option value="@naver.com">@naver.com</Option>
-      <Option value="@daum.net">@daum.net</Option>
-      <Option value="@gmail.com">@gmail.com</Option>
-      <Option value="@kakao.com">@kakao.com</Option>
-      <Option value="@yahoo.com">@yahoo.com</Option>
-    </Select>
-  );
 
   return (
     <LoginForm>
@@ -114,7 +96,6 @@ const SignUp = (props) => {
           form={form}
           name="horizontal_login"
           onFinish={onFinish}
-          onFieldsChange={onFinishFailed}
           style={{ marginTop: "1rem" }}
           labelCol={{ span: 8 }}
         >
@@ -208,92 +189,65 @@ const SignUp = (props) => {
               />
             </Form.Item>
           </DivInner>
-
-          {/* <DivInner>
-            <Form.Item
-              name="pwconfirm"
-              label="비밀번호 확인"
-              rules={[
-                {
-                  required: true,
-                  message: "비밀번호 한번 더 적어주세요 !",
-                },
-              ]}
-            >
-              <Input.Password
-                prefix={<LockOutlined className="site-form-item-icon" />}
-                type="password"
-                placeholder="비밀번호 확인"
-              />
-            </Form.Item>
-          </DivInner> */}
-
           <DivInner>
-            {/* <Form.Item
-              name="Email"
-              label="이메일"
-              rules={[
-                {
-                  required: true,
-                  message: "이메일을 적어주세요 !",
-                },
-              ]}
-            >
-              <Input
-                prefix={<MailOutlined className="site-form-item-icon" />}
-                addonAfter={selectAfter}
-                type="text"
-                placeholder="이메일"
-              />
-            </Form.Item> */}
-            {/* 
-            <Form.Item
-              name={["address", "province"]}
-              rules={[
-                {
-                  required: true,
-                  message: "Province is required",
-                },
-              ]}
-            >
-              <Select placeholder="Select province">
-                <Option value="Zhejiang">Zhejiang</Option>
-                <Option value="Jiangsu">Jiangsu</Option>
-              </Select>
-            </Form.Item> */}
-            <Form.Item
-              label="이메일"
-              name={["address", "province"]}
-              noStyle
-              rules={[
-                {
-                  required: true,
-                  message: "Province is required",
-                },
-              ]}
-            >
-              <Select placeholder="Select province">
-                <Option value="Zhejiang">Zhejiang</Option>
-                <Option value="Jiangsu">Jiangsu</Option>
-              </Select>
-            </Form.Item>
-            <Form.Item
-              name={["address", "street"]}
-              noStyle
-              rules={[
-                {
-                  required: true,
-                  message: "Street is required",
-                },
-              ]}
-            >
-              <Input
-                style={{
-                  width: "50%",
-                }}
-                placeholder="Input street"
-              />
-            </Form.Item>
+            <Space.Compact>
+              <Form.Item
+                label="이메일"
+                name={["email", "key"]}
+                rules={[
+                  {
+                    required: true,
+                    message: "Email을 적어주세요 !",
+                  },
+                ]}
+              >
+                <Input
+                  prefix={<MailOutlined className="site-form-item-icon" />}
+                  style={{
+                    width: "100%",
+                  }}
+                  placeholder="Email"
+                />
+              </Form.Item>
+              <Form.Item
+                style={{ textTransform: "lowercase" }}
+                name={["email", "value"]}
+              >
+                <Select placeholder="@naver.com">
+                  <Option
+                    value="@naver.com"
+                    style={{ textTransform: "lowercase" }}
+                  >
+                    @naver.com
+                  </Option>
+                  <Option
+                    value="@daum.net"
+                    style={{ textTransform: "lowercase" }}
+                  >
+                    @daum.net
+                  </Option>
+                  <Option
+                    value="@gmail.com"
+                    style={{ textTransform: "lowercase" }}
+                  >
+                    @gmail.com
+                  </Option>
+                  <Option
+                    value="@kakao.com"
+                    style={{ textTransform: "lowercase" }}
+                  >
+                    @kakao.com
+                  </Option>
+                  <Option
+                    value="@yahoo.com"
+                    style={{ textTransform: "lowercase" }}
+                  >
+                    @yahoo.com
+                  </Option>
+                </Select>
+              </Form.Item>
+            </Space.Compact>
+            {/* </Form.Item> */}
           </DivInner>
 
           <DivInner

@@ -32,8 +32,8 @@ public class ProfileVO {
 	@JoinColumn(name="user_no")
 	UserVO user;
 	
-	@Column(nullable = false)
+	@Column(nullable = false, columnDefinition = "VARCHAR(255) default 'profile/default_profile.png'")
 	@Builder.Default
-	private String profilePhoto = "default_profile.png";
+	private String profilePhoto = "profile/default_profile.png";
 	private String profileMsg;
 }
