@@ -23,6 +23,8 @@ import trippers.triprecorder.config.auth.PrincipalDetails;
 import trippers.triprecorder.dto.LoginInfoDto;
 import trippers.triprecorder.dto.LoginRequestDto;
 import trippers.triprecorder.repository.ProfileRepository;
+import trippers.triprecorder.util.AwsUtil;
+import trippers.triprecorder.util.JsonUtil;
 
 @Log
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -76,11 +78,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 				.userNick(principalDetails.getUser().getUserNick()).build();
 
 		String profile = prepo.findById(user.getUserNo()).orElse(null).getProfilePhoto();
-		// S3에서 사진 주소 가져오는 작업 필요
-		user.setUserProfile(profile);
+		String profileUrl = AwsUtil.getImageURL(profile);
+		user.setUserProfile(profileUrl);
 
-		ObjectMapper mapper = new ObjectMapper();
-		String jsonString = mapper.writeValueAsString(user);
+		String jsonString = JsonUtil.getObjectToJsonString(user);
 
 		response.setCharacterEncoding("UTF-8");
 		response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + jwtToken);

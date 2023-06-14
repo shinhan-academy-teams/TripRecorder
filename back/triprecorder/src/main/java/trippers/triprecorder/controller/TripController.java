@@ -30,18 +30,15 @@ public class TripController {
 	
 	// 여행 카테고리 등록 페이지 진입
 	// 로그인 후 진입 가능
-	@GetMapping("/registertrip")
+	@GetMapping("/register")
 	public void getRegisterTrip() {
 		
 	}
 	
 	// 여행 카테고리 등록
-	@PostMapping("/registertrip") 
+	@PostMapping("/register") 
 	public String postRegisterTrip(HttpServletRequest request, @RequestBody TripVO trip) {
-		String jwt = request.getHeader("Authorization");
-		String decodeStr = EncodingUtil.getDecodedStr(jwt.replace('.', '@').split("@")[1]);
-		JSONObject jsonObj = JsonUtil.getStringToJsonObj(decodeStr);
-		Long userNo = (Long) jsonObj.get("userno");
+		Long userNo = EncodingUtil.getUserNo(request);
 		System.out.println(userNo);
 		
 		UserVO user = urepo.findById(userNo).orElse(null);
