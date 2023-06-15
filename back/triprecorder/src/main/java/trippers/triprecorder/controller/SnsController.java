@@ -43,7 +43,7 @@ public class SnsController {
 
 	// sns 게시글 등록
 	@PostMapping("/register")
-	public JSONObject postRegisterSns(HttpServletRequest request, @RequestBody ObjectNode obj) throws JsonProcessingException {
+	public SnsVO postRegisterSns(@RequestBody ObjectNode obj) throws JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
 		Long tripNo = obj.get("tripNo").asLong();
 		Long expNo = obj.get("expNo").asLong();
@@ -69,10 +69,6 @@ public class SnsController {
 			erepo.save(exp);
 		});
 		
-		String jsonStr = JsonUtil.getObjectToJsonString(sns);
-		JSONObject jsonObj = JsonUtil.getStringToJsonObj(jsonStr);
-
-		
-		return jsonObj;
+		return sns;
 	}
 }

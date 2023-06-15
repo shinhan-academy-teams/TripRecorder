@@ -14,11 +14,11 @@ import {
 } from "antd";
 import dayjs from "dayjs";
 // import UploadPic from "components/UploadPic";
-import HashTag from "components/HashTag";
-import CashCardRadio from "components/CashCardRadio";
+import HashTag from "components/Register/Sns/HashTag";
+import CashCardRadio from "components/Register/Exp/CashCardRadio";
 import logo from "assets/tripRecorder.png";
-import OpenRangeRadio from "components/OpenRangeRadio";
-import S3Upload from "components/S3Upload";
+import OpenRangeRadio from "components/Register/Sns/OpenRangeRadio";
+import S3Upload from "components/Register/Sns/S3Upload";
 
 const RegistrationAll = () => {
   const DivBox = styled.div`

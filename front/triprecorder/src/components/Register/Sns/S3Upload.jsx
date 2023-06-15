@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import AWS from "aws-sdk";
 import { Row, Col, Button, Input, Alert } from "reactstrap";
+import { useRecoilState } from "recoil";
+import { filesAtom, progressAtom, showAlertAtom } from "recoil/RegisterSnsAtom";
 
 function S3Upload(props) {
-  const [progress, setProgress] = useState(0); //업로드 진행률
-  const [selectedFile, setSelectedFile] = useState([]);
-  const [showAlert, setShowAlert] = useState(false);
+  const [progress, setProgress] = useRecoilState(progressAtom); //업로드 진행률
+  const [selectedFile, setSelectedFile] = useRecoilState(filesAtom);
+  const [showAlert, setShowAlert] = useRecoilState(showAlertAtom);
+  
   const ACCESS_KEY = "AKIA2FRRYIXGMZUAI6VM"; //iam에 있음
   const SECRET_ACCESS_KEY = process.env.REACT_APP_SECRET_ACCESS_KEY;
   const REGION = "ap-northeast-2";

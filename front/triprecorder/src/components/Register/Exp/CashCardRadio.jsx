@@ -1,10 +1,10 @@
 import { Form, Input, Radio, Select, Space } from "antd";
-import { useState } from "react";
+import { useRecoilState } from "recoil";
+import { cardShow, payMethodAtom } from "recoil/RegisterExpAtom";
 
 const CashCardRadio = () => {
-  const [value, setValue] = useState("cash");
-
-  const [show, setShow] = useState(false);
+  const [value, setValue] = useRecoilState(payMethodAtom);
+  const [show, setShow] = useRecoilState(cardShow);
 
   return (
     <>

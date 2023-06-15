@@ -31,6 +31,8 @@ public class ExpVO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long expNo;
+	@Column(nullable = false)
+	private String expTitle;
 	@OneToOne
 	@JoinColumn(name = "card_no")
 	private CardVO card; // null 처리 백엔드에서 필요
