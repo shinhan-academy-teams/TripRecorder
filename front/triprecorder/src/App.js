@@ -15,6 +15,7 @@ import { useState } from "react";
 import "style/main.scss";
 import Profile from "pages/Profile";
 import RegisterAll from "pages/RegisterAll";
+import RegisterExp from "components/Register/RegisterExp";
 
 const App = () => {
   const [isShow, setIsShow] = useState(true);
@@ -31,6 +32,7 @@ const App = () => {
             <Route path="/tripregistration" element={<TripRegistration />} />
             <Route path="/popularcard" element={<PopularCard />} />
             <Route path="/registerall" element={<RegisterAll />} />
+            <Route path="/registerexp" element={<RegisterExp />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
