@@ -3,8 +3,10 @@ import styled from "@emotion/styled";
 import tripRecorder from "assets/tripRecorder.png";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Form, Input, Button } from "antd";
-import axios from "api/axios";
+import Cookies from "js-cookie";
 import authService from "api/auth.service";
+import { useNavigate } from "react-router-dom";
+
 const SignIn = (props) => {
   const DivInner = styled.div`
     margin-bottom: 0.75rem;
@@ -43,24 +45,27 @@ const SignIn = (props) => {
 
   const [form] = Form.useForm();
   const [, forceUpdate] = useState({});
+  let jwtToken = Cookies.get("jwtToken");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     forceUpdate({});
   }, []);
-
   const onFinish = async (values) => {
     console.log("Success:", values);
     await authService
       .login(values["ID"], values["PW"])
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      .then((res) => {
+        if (res.status === 200) {
+          // navigate("/");
+          window.location.href = "/";
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
-  // const onFinish = async (values) => {
-  //   console.log("Success:", values);
-  //   await authService
-  //     .checkDuplicateId(values["ID"])
-  //     .then((res) => console.log(res));
-  //   };
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);

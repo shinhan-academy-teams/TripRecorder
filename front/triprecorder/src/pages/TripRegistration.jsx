@@ -1,8 +1,9 @@
 import React from "react"; //, { useState }
 import logo from "assets/tripRecorder.png";
 import styled from "@emotion/styled";
-import { DatePicker, Form, Input, InputNumber } from "antd";
+import { DatePicker, Form, Input, InputNumber, message } from "antd";
 import authService from "api/auth.service";
+import axios from "api/axios";
 // import dayjs from "dayjs";
 
 const { RangePicker } = DatePicker;
@@ -70,6 +71,7 @@ const TripRegistration = (props) => {
       tripEnd.$y + "-" + tripEndM + "-" + tripEndD + "T00:00:00.000Z";
     console.log(tripStart_str);
     console.log(tripEnd_str);
+
     await authService
       .TripRegistration(
         values["tripName"],
@@ -80,14 +82,17 @@ const TripRegistration = (props) => {
       )
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
+
+      //등록후 alert
+      await axios.get("/trip/regoster").then((res)=>{
+        message.success("여행 등록이 완료되었습니다. 😊");
+      }).catch((err)=>message.error("여행 등록이 되지 않았습니다. 😥"))
   };
+
+
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
-
-  // const onChange = (value) => {
-  //   console.log("changed", value);
-  // };
 
   return (
     <DivBox>
@@ -105,6 +110,7 @@ const TripRegistration = (props) => {
         initialValues={{
           remember: true,
           tripexpense: 1000,
+          tripExp: 100,
         }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
@@ -160,15 +166,15 @@ const TripRegistration = (props) => {
           ]}
         >
           <InputNumber
-            // defaultValue={1000}
             formatter={(value) =>
               `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
             }
             parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-            // onChange={onChange}
           />
         </Form.Item>
-        <Btn htmlType="submit">Submit</Btn>
+        <Btn htmlType="submit" >
+          Submit
+        </Btn>
       </Form>
     </DivBox>
   );

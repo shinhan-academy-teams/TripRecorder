@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import trippers.triprecorder.dto.HeaderInfoDto;
+import trippers.triprecorder.entity.SnsVO;
 import trippers.triprecorder.entity.UserVO;
+import trippers.triprecorder.repository.SnsRepository;
 import trippers.triprecorder.repository.UserRepository;
+import trippers.triprecorder.util.AwsUtil;
 import trippers.triprecorder.util.EncodingUtil;
 import trippers.triprecorder.util.JsonUtil;
 
@@ -21,7 +24,8 @@ import trippers.triprecorder.util.JsonUtil;
 public class TmpController {
 	@Autowired
 	UserRepository urepo;
-
+	@Autowired
+	SnsRepository srepo;
 	
 	// 회원가입 - 아이디 중복 체크
 	// 중복이다 - true, 중복이 아니다 - false
@@ -56,6 +60,36 @@ public class TmpController {
 
 		return EncodingUtil.verifyUserPw(test, user1) ? "같아" : "달라";
 
+	}
+	
+	// 게시글 가져올 데이터 설정 (사진 가져오기)
+	@GetMapping("/getSns") 
+	public JSONObject getSnsTest() {
+		SnsVO savedSns = srepo.findById(66L).orElse(null); 
+
+		// 데이터는 나중에 snsDto 설정하자
+		JSONObject jsonObj = new JSONObject();
+		jsonObj.put("tripNo", savedSns.getSns().getTripNo());
+		jsonObj.put("snsNo", savedSns.getSnsNo());
+		jsonObj.put("snsTitle", savedSns.getSnsTitle());
+		jsonObj.put("snsContent", savedSns.getSnsContent());
+		
+		String images = "";
+		String[] tmpImage = savedSns.getSnsPhoto().split("@");
+		for(String img : tmpImage) {
+			if(!img.equals("")) {
+				images += AwsUtil.getImageURL(img) + "@";
+			}
+		}
+		if(images.length() != 1) {
+			images = images.substring(0, images.length() - 1);
+		}
+		
+		jsonObj.put("snsPhoto", images);
+		jsonObj.put("snsRegdate", savedSns.getSnsRegdate());
+		jsonObj.put("snsScope", savedSns.getSnsScope());
+		
+		return jsonObj;
 	}
 
 }

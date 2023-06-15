@@ -14,12 +14,8 @@ import Navbar from "components/common/Navbar";
 import { useState } from "react";
 import "style/main.scss";
 import Profile from "pages/Profile";
-
 import RegisterAll from "pages/RegisterAll";
-import RegisterExp from "components/RegisterExp";
-import RegisterSns from "components/RegisterSns";
-import S3Upload from "components/S3Upload";
-import HashTag from "components/HashTag";
+import RegisterExp from "components/Register/RegisterExp";
 
 const App = () => {
   const [isShow, setIsShow] = useState(true);
@@ -35,19 +31,9 @@ const App = () => {
             <Route path="/profile" element={<Profile />} />
             <Route path="/tripregistration" element={<TripRegistration />} />
             <Route path="/popularcard" element={<PopularCard />} />
+            <Route path="/registerall" element={<RegisterAll />} />
+            <Route path="/registerexp" element={<RegisterExp />} />
             <Route path="*" element={<NotFound />} />
-            <Route
-              path="/registerationall"
-              element={
-                <RegisterAll>
-                  <RegisterExp />
-                  <RegisterSns>
-                    <S3Upload/>
-                    <HashTag/>
-                  </RegisterSns>
-                </RegisterAll>
-              }
-            />
           </Routes>
         </div>
       </BrowserRouter>
