@@ -39,7 +39,6 @@ public class TripController {
 	@PostMapping("/register") 
 	public String postRegisterTrip(HttpServletRequest request, @RequestBody TripVO trip) {
 		Long userNo = EncodingUtil.getUserNo(request);
-		System.out.println(userNo);
 		
 		UserVO user = urepo.findById(userNo).orElse(null);
 		trip.setUser(user);
