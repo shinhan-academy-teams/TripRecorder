@@ -1,0 +1,26 @@
+@import "./_variables";
+
+.divbox {
+  position: absolute;
+  width: 50%;
+  border: 3px solid #7fb77e;
+  border-radius: 30px;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  align-items: center;
+  transform: translate(-30%, -50%);
+  text-align: center;
+}
+
+.logoimg {
+  width: 40%;
+  margin: auto;
+  padding-top: 35px;
+  padding-bottom: 10px;
+  display: inline-block;
+}
+
+.divform {
+  margin: 30px;
+}
