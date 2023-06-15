@@ -66,7 +66,16 @@ const SignUp = (props) => {
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
   };
-
+  const [checkIDResult, setCheckIDResult] = useState(true);
+  let [ID, setID] = useState("");
+  const handleIDChange = (event) => {
+    setID(event.target.value);
+    // console.log(ID);
+    authService.checkDuplicateId(ID).then((res) => {
+      console.log(ID);
+      console.log(res);
+    });
+  };
   return (
     <LoginForm>
       <div style={{ width: "22rem" }}>
@@ -103,6 +112,8 @@ const SignUp = (props) => {
             <Form.Item
               name="ID"
               label="아이디"
+              validateStatus={checkIDResult ? "warning" : "success"}
+              hasFeedback
               rules={[
                 {
                   required: true,
@@ -112,9 +123,21 @@ const SignUp = (props) => {
             >
               <Input
                 prefix={<UserOutlined className="site-form-item-icon" />}
+                onBlur={handleIDChange}
                 placeholder="너의 ID는"
               />
             </Form.Item>
+          </DivInner>
+
+          <DivInner
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              alignContent: "center",
+              justifyContent: "flex-end",
+            }}
+          >
+            <Link href="#">ID 중복체크</Link>
           </DivInner>
 
           <DivInner>

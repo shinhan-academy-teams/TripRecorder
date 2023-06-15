@@ -1,9 +1,13 @@
 import api from "./axios";
+import Cookies from "js-cookie";
 
 const checkDuplicateId = (userId) => {
   return api
     .post("/auth/signup/useridCheck", { userId })
-    .then((res) => console.log(res))
+    .then((res) => {
+      console.log(res);
+      return res.data;
+    })
     .catch((err) => console.log(err));
 };
 
@@ -41,7 +45,12 @@ const login = (userId, userPw) => {
       userId,
       userPw,
     })
-    .then((res) => console.log(res))
+    .then((res) => {
+      const token = res.headers.authorization;
+      Cookies.set("jwtToken", token, { expires: 1, secure: true });
+
+      return res;
+    })
     .catch((err) => console.log(err));
 };
 
