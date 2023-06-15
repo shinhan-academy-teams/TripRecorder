@@ -6,7 +6,14 @@ export const payMethodAtom = atom({
   default: "cash",
 });
 
-export const cardShow = atom({
-  key: "cardShow",
+//현금, 카드 중에 카드 선택시 카드사, 카드 정보 입력폼 보이기
+export const showAtom = atom({
+  key: "show",
   default: false,
+});
+
+//카드사 선택시 해당 카드 보이기
+export const cardShowAtom = atom({
+  key: "cardShow",
+  default: "",
 });
