@@ -20,7 +20,7 @@ public class ExpController {
 
 
     //경비등록
-    @PostMapping("/registerexp")
+    @PostMapping("/register")
     public String ocr(@RequestBody ExpVO exp) {
         ExpVO savedExp = erepo.save(exp);
         

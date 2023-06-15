@@ -38,6 +38,8 @@ public class SnsVO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long snsNo;
+	@Column(nullable = false)
+	private String snsTitle;
 	@ManyToOne
 	@JoinColumn(name="trip_no")
 	private TripVO sns;
