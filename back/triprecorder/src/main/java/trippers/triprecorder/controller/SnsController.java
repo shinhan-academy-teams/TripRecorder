@@ -3,9 +3,6 @@ package trippers.triprecorder.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +19,6 @@ import trippers.triprecorder.entity.SnsVO;
 import trippers.triprecorder.repository.ExpRepository;
 import trippers.triprecorder.repository.SnsRepository;
 import trippers.triprecorder.repository.TripRepository;
-import trippers.triprecorder.util.JsonUtil;
 
 @RestController
 @RequestMapping("/sns")
@@ -41,34 +37,36 @@ public class SnsController {
 
 	}
 
-	// sns 게시글 등록
 	@PostMapping("/register")
-	public SnsVO postRegisterSns(@RequestBody ObjectNode obj) throws JsonProcessingException {
+	public String postRegisterSns(@RequestBody ObjectNode obj) throws JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
 		Long tripNo = obj.get("tripNo").asLong();
 		Long expNo = obj.get("expNo").asLong();
-		String hashtag = obj.get("hashtag").asText();
+		List<String> hashtag = mapper.treeToValue(obj.get("hashtag"), List.class);
 		SnsVO sns = mapper.treeToValue(obj.get("sns"), SnsVO.class);
-		
+
 		List<HashtagVO> tagList = new ArrayList<>();
-		String[] tags = hashtag.split("@");
-		for(String tag : tags) {
+
+		for (String tag : hashtag) {
 			HashtagVO t = HashtagVO.builder().htHashtag("#" + tag).sns(sns).build();
 			tagList.add(t);
 		}
-		
-		if(tagList.size() > 1) {
+
+		if (tagList.size() > 1) {
 			sns.setHashtag(tagList);
 		}
-		
+
 		trepo.findById(tripNo).ifPresent(trip -> sns.setSns(trip));
-		
+		if (sns.getSnsContent().equals("")) {
+			sns.setSnsContent(null);
+		}
+
 		SnsVO savedSns = srepo.save(sns);
 		erepo.findById(expNo).ifPresent(exp -> {
 			exp.setSns(savedSns);
 			erepo.save(exp);
 		});
-		
-		return sns;
+
+		return "OK";
 	}
 }
