@@ -8,7 +8,7 @@ import {
   SmileOutlined,
   MailOutlined,
 } from "@ant-design/icons";
-import { Form, Input, Button, Radio, Select, Space, Dropdown } from "antd";
+import { Form, Input, Button, Radio, Select, Space } from "antd";
 import authService from "api/auth.service";
 const { Option } = Select;
 const SignUp = (props) => {
