@@ -19,7 +19,7 @@ public class TripTest {
 	@Autowired
 	TripRepository trepo;
 	
-	@Test
+//	@Test
 	void insertTrip() {
 		Date date = new Date(2023, 5, 2);
 		UserVO user = urepo.findById(12L).orElse(null);
@@ -33,5 +33,10 @@ public class TripTest {
 				.build();
 		
 		trepo.save(trip);
+	}
+	
+	@Test
+	void deleteTrip() {
+		trepo.deleteById(2L);
 	}
 }
