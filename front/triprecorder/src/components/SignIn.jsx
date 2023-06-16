@@ -59,6 +59,7 @@ const SignIn = (props) => {
       .then((res) => {
         if (res.status === 200) {
           console.log(res.data);
+          console.log(Cookies.get("jwtToken"));
           localStorage.clear();
           localStorage.setItem("userNo", res.data.userNo);
           localStorage.setItem("userNick", res.data.userNick);
