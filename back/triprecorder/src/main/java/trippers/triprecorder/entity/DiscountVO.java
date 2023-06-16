@@ -33,7 +33,10 @@ public class DiscountVO {
 	private CardVO card;
 	@Column(nullable = false)
 	private String dcCate;
-	private Integer dcDiscount;
-	private Integer dcCashback;
-	private Integer dcPoint;
+	@Column(nullable = false)
+	private String dcDiscount;
+	@Column(nullable = false)
+	private Double dcAmount; 
+	@Column(nullable = false)
+	private String dcWay;
 }
