@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,9 +35,9 @@ public class ExpVO {
 	private Long expNo;
 	@Column(nullable = false)
 	private String expTitle;
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "card_no")
-	private CardVO card; // null 처리 백엔드에서 필요
+	private CardVO card; // null 처리 백엔드에서 필요 
 	@ManyToOne
 	@JoinColumn(name = "trip_no")
 	private TripVO trip;

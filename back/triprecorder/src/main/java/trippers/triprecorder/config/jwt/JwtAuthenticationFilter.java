@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.java.Log;
 import trippers.triprecorder.config.auth.PrincipalDetails;
-import trippers.triprecorder.dto.LoginInfoDto;
+import trippers.triprecorder.dto.UserSimpleDto;
 import trippers.triprecorder.dto.LoginRequestDto;
 import trippers.triprecorder.repository.ProfileRepository;
 import trippers.triprecorder.util.AwsUtil;
@@ -69,12 +69,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 		String jwtToken = JWT.create().withSubject("userinfo")
 				.withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME))
-				.withClaim("userno", principalDetails.getUser().getUserNo())
-				.withClaim("userid", principalDetails.getUser().getUserId())
-				.withClaim("usernick", principalDetails.getUser().getUserNick())
+				.withClaim("userNo", principalDetails.getUser().getUserNo())
+				.withClaim("userId", principalDetails.getUser().getUserId())
+				.withClaim("userNick", principalDetails.getUser().getUserNick())
 				.sign(Algorithm.HMAC512(JwtProperties.SECRET));
 
-		LoginInfoDto user = LoginInfoDto.builder().userNo(principalDetails.getUser().getUserNo())
+		UserSimpleDto user = UserSimpleDto.builder().userNo(principalDetails.getUser().getUserNo())
 				.userNick(principalDetails.getUser().getUserNick()).build();
 
 		String profile = prepo.findById(user.getUserNo()).orElse(null).getProfilePhoto();

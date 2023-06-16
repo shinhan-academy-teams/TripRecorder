@@ -46,8 +46,8 @@ public class TmpController {
 		String decodeStr = EncodingUtil.getDecodedStr(jwt.replace('.', '@').split("@")[1]);
 		JSONObject jsonObj = JsonUtil.getStringToJsonObj(decodeStr);
 
-		HeaderInfoDto info = HeaderInfoDto.builder().userno(jsonObj.get("userno")).uesrid(jsonObj.get("userid"))
-				.usernick(jsonObj.get("usernick")).build();
+		HeaderInfoDto info = HeaderInfoDto.builder().userNo(jsonObj.get("userNo")).uesrId(jsonObj.get("userId"))
+				.userNick(jsonObj.get("userNick")).build();
 		System.out.println(jsonObj.get("userId"));
 		return info;
 	}

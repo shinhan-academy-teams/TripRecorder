@@ -11,10 +11,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import trippers.triprecorder.dto.ReplyDto;
+import trippers.triprecorder.dto.UserSimpleDto;
+import trippers.triprecorder.entity.ProfileVO;
 import trippers.triprecorder.entity.ReplyVO;
+import trippers.triprecorder.entity.UserVO;
+import trippers.triprecorder.repository.ProfileRepository;
 import trippers.triprecorder.repository.ReplyRepository;
 import trippers.triprecorder.repository.SnsRepository;
 import trippers.triprecorder.repository.UserRepository;
+import trippers.triprecorder.util.AwsUtil;
 import trippers.triprecorder.util.EncodingUtil;
 
 @RestController
@@ -26,21 +31,33 @@ public class ReplyController {
 	SnsRepository srepo;
 	@Autowired
 	ReplyRepository rrepo;
+	@Autowired
+	ProfileRepository prepo;
 	
+	// 댓글 등록
 	@PostMapping("/register/{snsNo}")
 	public ReplyDto postRegisterReply(HttpServletRequest request, @RequestBody ReplyVO reply, @PathVariable Long snsNo) {
 		Long userNo = EncodingUtil.getUserNo(request);
-		reply.setUser(urepo.findById(userNo).orElse(null));
+		UserVO user = urepo.findById(userNo).orElse(null);
+		reply.setUser(user);
 		reply.setSns(srepo.findById(snsNo).orElse(null));
 		ReplyVO savedReply = rrepo.save(reply);
 		
+		ProfileVO profile = prepo.findById(userNo).orElse(null);
+		UserSimpleDto myUser = UserSimpleDto.builder()
+				.userNo(userNo)
+				.userNick(user.getUserNick())
+				.userProfile(AwsUtil.getImageURL(profile.getProfilePhoto()))
+				.build();
+		
 		ReplyDto myReply = ReplyDto.builder()
-				.userNo(savedReply.getUser().getUserNo())
 				.snsNo(savedReply.getSns().getSnsNo())
 				.replyNo(savedReply.getReplyNo())
 				.replyContent(savedReply.getReplyContent())
 				.replyRegdate(savedReply.getReplyRegdate())
+				.replyUser(myUser)
 				.build();
+		
 		return myReply;
 	}
 }

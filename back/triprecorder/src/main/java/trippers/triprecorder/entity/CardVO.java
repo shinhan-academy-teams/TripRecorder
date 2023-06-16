@@ -5,11 +5,11 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -34,11 +34,11 @@ public class CardVO {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long cardNo;
 	@Column(nullable = false)
-	private String cardBank;
-	@Column(nullable = false)
 	private String cardName;
 	@Column(nullable = false)
 	private String cardPhoto;
+	@Column(nullable = false)
+	private String cardAnnual;
 	
 	// 할인정보
 	@JsonIgnore
@@ -46,7 +46,7 @@ public class CardVO {
 	private List<DiscountVO> dc;
 	
 	// 여행 경비 (영수증)
-	@JsonIgnore
-	@OneToOne(mappedBy = "card")
-	private ExpVO exp;
+	@JsonIgnore 
+	@OneToMany(mappedBy = "card", fetch = FetchType.LAZY)
+	private List<ExpVO> exp;
 }
