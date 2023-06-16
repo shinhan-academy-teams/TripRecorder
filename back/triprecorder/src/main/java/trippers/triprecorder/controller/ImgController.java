@@ -9,21 +9,21 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.Base64.Encoder;
-import java.util.List;
+import java.util.Date;
 
 import javax.imageio.ImageIO;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import trippers.triprecorder.dto.ExpDto;
@@ -50,7 +50,7 @@ public class ImgController {
 	}
 
 	@PostMapping("/imgrequest")
-	public JSONObject processReceipt(@RequestBody JSONObject imageObj) throws IOException {
+	public ExpDto processReceipt(@RequestBody JSONObject imageObj) throws IOException, ParseException {
 		URL urlInput = new URL(imageObj.get("imageUrl").toString());
 		BufferedImage urlImage = ImageIO.read(urlInput);
 
@@ -70,7 +70,7 @@ public class ImgController {
 	    // Request 형식 설정
 	    conn.setRequestMethod("POST");
 	    conn.setRequestProperty("Content-Type", "application/json");
-	    conn.setRequestProperty("X-OCR-SECRET", " ");
+	    conn.setRequestProperty("X-OCR-SECRET", "VWVBVEVrYXlyQnpoSFdEd0pPeU5Qa2tZWmJSY05UVWw=");
 	    conn.setDoOutput(true);
 	    
 	    ArrayList<JSONObject> imgObjArray = new ArrayList<>();
@@ -108,11 +108,59 @@ public class ImgController {
 	    rd.close();
 	    conn.disconnect();
 	    
-	    System.out.println(sb);
-	    
 	    JSONObject resultObj = JsonUtil.getStringToJsonObj(sb.toString());
+	    
+	    JSONArray imagesArray = (JSONArray) resultObj.get("images");
 
-	    return resultObj;
+	    JSONObject result = (JSONObject)((JSONObject)((JSONObject)imagesArray.get(0)).get("receipt")).get("result");
+	    
+	    //사용처 추출
+	    String storeInfo = ((String)((JSONObject)((JSONObject)((JSONObject)result.get("storeInfo")).get("name")).get("formatted")).get("value"));
+	    
+	    //주소 추출
+	    JSONObject addressesObj = (JSONObject)result.get("storeInfo");
+	    JSONArray addressesArray = (JSONArray)addressesObj.get("addresses");
+	    String addresses = ((String)((JSONObject)((JSONObject)addressesArray.get(0)).get("formatted")).get("value"));
+	    
+	    //가격 추출
+	    int totalPrice = Integer.valueOf((String)((JSONObject)((JSONObject)((JSONObject)result.get("totalPrice")).get("price")).get("formatted")).get("value"));
+	    
+	    //날짜 추출
+	    String date = ((String)((JSONObject)((JSONObject)result.get("paymentInfo")).get("date")).get("text"));
+	    
+	    //시간 추출
+	    String time = ((String)((JSONObject)((JSONObject)result.get("paymentInfo")).get("time")).get("text"));
+	   
+	    //날짜+시간
+	    String datetime = date + " " +time;
+	    
+	    // 날짜 포맷팅
+	    DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+	    Date totaldate = formatter.parse(datetime);
+	    Timestamp timestamp = new Timestamp(totaldate.getTime());
+
+		// Timestamp를 문자열로 변환
+		String dateString = formatter.format(timestamp);
+		String yearString = dateString.substring(0, 4);
+	
+		// 앞에 00인 경우 20으로 변경
+		if (yearString.startsWith("00")) {
+		    yearString = "20" + yearString.substring(2);
+		}
+	
+		// 변경된 연도로 문자열 조합
+		String finalDateString = yearString + dateString.substring(4);
+	    
+	    //ExpDto에 담아서 리턴
+	    ExpDto expDto = ExpDto.builder()
+	            .expPlace(storeInfo)
+	            .expAddress(addresses)
+	            .expMoney(Long.valueOf(totalPrice))
+	            .expTime(finalDateString)
+	            .build();
+
+	    return expDto;
+	    
     }
 }
 

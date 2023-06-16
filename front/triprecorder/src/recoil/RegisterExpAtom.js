@@ -12,8 +12,28 @@ export const showAtom = atom({
   default: false,
 });
 
-//카드사 선택시 해당 카드 보이기
-export const cardShowAtom = atom({
-  key: "cardShow",
-  default: "",
+// //카드사 선택시 해당 카드 보이기
+// export const cardShowAtom = atom({
+//   key: "cardShow",
+//   default: "",
+// });
+
+export const showBtnAtom = atom({
+  key : "showBtn",
+  default : false
+});
+
+export const cardsAtom = atom({
+  key:"cards",
+  default : []
+});
+
+export const cardNoAtom = atom({
+  key:"cardNo",
+  default : []
+});
+
+export const tripSnsAtom = atom({
+  key:"tripSns",
+  default : []
 });
