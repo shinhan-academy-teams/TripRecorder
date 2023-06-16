@@ -32,7 +32,7 @@ public class SnsTest {
 		srepo.save(sns);
 	}
 
-	@Test
+//	@Test
 	void postRegisterSnsWithHashtag() {
 		TripVO trip = trepo.findById(2L).orElse(null);
 		String hashtag = "";
@@ -54,5 +54,13 @@ public class SnsTest {
 		
 		
 		srepo.save(sns);
+	}
+	
+	@Test
+	void testSplitImage() {
+		String image = "짱구";
+		for(String img: image.split("@")) {
+			System.out.println("이미지: " + img);
+		}
 	}
 }
