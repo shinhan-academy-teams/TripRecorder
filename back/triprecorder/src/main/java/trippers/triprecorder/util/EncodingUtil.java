@@ -42,6 +42,7 @@ public class EncodingUtil {
 		String jwt = request.getHeader("Authorization");
 		String decodeStr = EncodingUtil.getDecodedStr(jwt.replace('.', '@').split("@")[1]);
 		JSONObject jsonObj = JsonUtil.getStringToJsonObj(decodeStr);
-		return (Long) jsonObj.get("userno");
+		System.out.println(jsonObj.get("userNo"));
+		return (Long) jsonObj.get("userNo");
 	}
 }
