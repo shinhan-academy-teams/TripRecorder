@@ -49,10 +49,6 @@ const SignUp = (props) => {
   const [form] = Form.useForm();
   const [, forceUpdate] = useState({});
 
-  useEffect(() => {
-    forceUpdate({});
-  }, []);
-
   const onFinish = async (values) => {
     await authService
       .signup(
@@ -66,16 +62,31 @@ const SignUp = (props) => {
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
   };
-  const [checkIDResult, setCheckIDResult] = useState(true);
+  const [checkIDResult, setCheckIDResult] = useState(false);
   let [ID, setID] = useState("");
-  const handleIDChange = (event) => {
-    setID(event.target.value);
-    // console.log(ID);
-    authService.checkDuplicateId(ID).then((res) => {
-      console.log(ID);
-      console.log(res);
+
+  const handleIDChange = async (event) => {
+    setID(() => {
+      // console.log(event.target.value);
+      return event.target.value;
     });
+    // console.log(event.target.value);
   };
+  useEffect(() => {
+    // console.log(ID, "@@@");
+
+    authService.checkDuplicateId(ID).then((res) => {
+      // console.log(ID);
+      // console.log(res);
+      if (res === false) {
+        setCheckIDResult(false);
+      } else {
+        setCheckIDResult(true);
+      }
+    });
+
+    forceUpdate({});
+  }, [ID]);
   return (
     <LoginForm>
       <div style={{ width: "22rem" }}>
@@ -124,6 +135,7 @@ const SignUp = (props) => {
               <Input
                 prefix={<UserOutlined className="site-form-item-icon" />}
                 onBlur={handleIDChange}
+                value={ID}
                 placeholder="너의 ID는"
               />
             </Form.Item>
@@ -137,7 +149,21 @@ const SignUp = (props) => {
               justifyContent: "flex-end",
             }}
           >
-            <Link href="#">ID 중복체크</Link>
+            <Button
+              type="default"
+              htmlType="submit"
+              style={{
+                backgroundColor: "#7fb77e",
+                color: "#ffffff",
+              }}
+              onClick={() => {
+                if (checkIDResult === false) {
+                }
+              }}
+              size="small"
+            >
+              ID 중복체크
+            </Button>
           </DivInner>
 
           <DivInner>
