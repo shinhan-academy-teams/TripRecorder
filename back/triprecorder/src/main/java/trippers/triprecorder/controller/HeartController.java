@@ -25,6 +25,7 @@ public class HeartController {
 	@Autowired
 	SnsRepository srepo;
 	
+	// 좋아요 등록 및 취소
 	@PostMapping("/register/{snsNo}")
 	public boolean postRegisterHeart(HttpServletRequest request, @PathVariable Long snsNo) {
 		Long userNo = EncodingUtil.getUserNo(request);
