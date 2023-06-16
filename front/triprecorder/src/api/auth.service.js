@@ -67,6 +67,69 @@ const TripRegistration = (tripName, tripDest, tripStart, tripEnd, tripExp) => {
     .catch((err) => console.log(err));
 };
 
+const ResigerExpCard = (
+  tripNo,
+  snsNo,
+  cardNo,
+  expTitle,
+  expPlace,
+  expAddress,
+  expMoney,
+  expTime,
+  expWay,
+  expCate
+) => {
+  return api
+    .post("/exp/register", {
+      tripNo,
+      snsNo,
+      cardNo,
+      exp: {
+        expTitle,
+        expPlace,
+        expAddress,
+        expMoney,
+        expTime,
+        expWay,
+        expCate,
+      },
+    })
+    .then((res) => console.log(res))
+    .catch((err) => console.log(err));
+};
+
+
+const RegisterExpCash = (
+  tripNo,
+  snsNo,
+  cardNo,
+  expTitle,
+  expPlace,
+  expAddress,
+  expMoney,
+  expTime,
+  expWay,
+  expCate
+) => {
+  return api
+    .post("/exp/register", {
+      tripNo,
+      snsNo,
+      cardNo,
+      exp: {
+        expTitle,
+        expPlace,
+        expAddress,
+        expMoney,
+        expTime,
+        expWay,
+        expCate,
+      },
+    })
+    .then((res) => console.log(res))
+    .catch((err) => console.log(err));
+};
+
 const authService = {
   checkDuplicateId,
   checkDuplicateNick,
@@ -74,6 +137,8 @@ const authService = {
   login,
   signup,
   TripRegistration,
+  ResigerExpCard,
+  RegisterExpCash
 };
 
 export default authService;
