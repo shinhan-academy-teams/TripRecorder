@@ -80,15 +80,20 @@ const TripRegistration = (props) => {
         tripEnd_str,
         values["tripExp"]
       )
-      .then((res) => console.log(res))
+      .then((res) => {
+        console.log(res);
+        window.location.href = "/";
+      })
       .catch((err) => console.log(err));
 
-      //등록후 alert
-      await axios.get("/trip/regoster").then((res)=>{
+    //등록후 alert
+    await axios
+      .get("/trip/regoster")
+      .then((res) => {
         message.success("여행 등록이 완료되었습니다. 😊");
-      }).catch((err)=>message.error("여행 등록이 되지 않았습니다. 😥"))
+      })
+      .catch((err) => message.error("여행 등록이 되지 않았습니다. 😥"));
   };
-
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -172,9 +177,7 @@ const TripRegistration = (props) => {
             parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
           />
         </Form.Item>
-        <Btn htmlType="submit" >
-          Submit
-        </Btn>
+        <Btn htmlType="submit">Submit</Btn>
       </Form>
     </DivBox>
   );
