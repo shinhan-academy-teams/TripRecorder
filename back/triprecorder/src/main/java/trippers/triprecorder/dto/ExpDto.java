@@ -30,11 +30,8 @@ public class ExpDto {
 	private String expAddress;
 	
 	@JsonProperty("totalPrice")
-	private Long expMoney;
+	private Long expMoney;	
 	
-	@JsonProperty("company")
-	private String cardBank;
-	
-	@JsonProperty("date")
-	private Timestamp expTime;
+	@JsonProperty("timestamp")
+	private String expTime;
 }
