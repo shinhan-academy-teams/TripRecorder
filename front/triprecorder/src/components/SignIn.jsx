@@ -58,7 +58,11 @@ const SignIn = (props) => {
       .login(values["ID"], values["PW"])
       .then((res) => {
         if (res.status === 200) {
-          // navigate("/");
+          console.log(res.data);
+          localStorage.clear();
+          localStorage.setItem("userNo", res.data.userNo);
+          localStorage.setItem("userNick", res.data.userNick);
+          localStorage.setItem("userProfile", res.data.userProfile);
           window.location.href = "/";
         }
       })
