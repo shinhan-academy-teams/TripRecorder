@@ -10,11 +10,11 @@ import {
 
 import NotFound from "NotFound";
 import Navbar from "components/common/Navbar";
-// import RegistrationAll from "pages/RegistrationAll";
 import { useState } from "react";
 import "style/main.scss";
 import Profile from "pages/Profile";
 import RegisterExp from "components/Register/RegisterExp";
+import RegisterSns from "components/Register/RegisterSns";
 
 const App = () => {
   const [isShow, setIsShow] = useState(true);
@@ -31,6 +31,7 @@ const App = () => {
             <Route path="/tripregistration" element={<TripRegistration />} />
             <Route path="/popularcard" element={<PopularCard />} />
             <Route path="/registerexp" element={<RegisterExp />} />
+            <Route path="/registersns" element={<RegisterSns />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
