@@ -158,14 +158,27 @@ const RegisterSns = () => {
       .catch((err) => console.log(err));
   };
 
+  useEffect(() => {
+    console.log(selectedFile);
+  }, [selectedFile]);
+  var fileString = "";
+  // const [fileStr, setFileStr] = useRecoilState()
+  for (var i = 0; i < selectedFile.length; i++) {
+    console.log("사진 이름", selectedFile[i].name);
+
+    fileString += "sns/4/" + selectedFile[i].name + "@";
+  }
+  console.log("String : ", fileString);
+
   const uploadFile = (files) => {
-    console.log("사진파일 :", files);
+    console.log("사진파일 :", files[0].name);
+
     for (let i = 0; i < files.length; i++) {
       const params = {
         ACL: "public-read",
         Body: files[i],
         Bucket: S3_BUCKET,
-        Key: "sns/" + files[i].name, //"sns/유저id/tripid/snsid" 수정
+        Key: "sns/4/" + files[i].name, //"sns/유저id/tripid/snsid" 수정
         ContentType: files[i].type,
       };
       myBucket

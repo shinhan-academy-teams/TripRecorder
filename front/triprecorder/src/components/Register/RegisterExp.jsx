@@ -22,11 +22,11 @@ import {
   // showBtnAtom,
   tripSnsAtom,
   ReceiptAtom,
-  ReceiptDataAtom,
-  // expPlaceAtom,
-  // expAddressAtom,
-  // expMoneyAtom,
-  // dateTimeAtom,
+  // ReceiptDataAtom,
+  expPlaceAtom,
+  expAddressAtom,
+  expMoneyAtom,
+  dateTimeAtom,
 } from "recoil/RegisterExpAtom";
 import api from "api/axios";
 import AWS from "aws-sdk";
@@ -206,8 +206,6 @@ const RegisterExp = () => {
       myBucket
         .putObject(params)
         .on("httpUploadProgress", () => {
-          // setProgress(Math.round((evt.loaded / evt.total) * 100));
-          // setShowAlert(true);
           setTimeout(() => {
             // setShowAlert(false);
             setSelectedReceipt([]);
@@ -219,42 +217,58 @@ const RegisterExp = () => {
     }
   };
 
+  //initialValues에 담을 useState
+  const [expPlace, setexpPlace] = useRecoilState(expPlaceAtom);
+  const [expAddress, setexpAddress] = useRecoilState(expAddressAtom);
+  const [expMoney, setexpMoney] = useRecoilState(expMoneyAtom);
+  const [dateTime, setdateTime] = useRecoilState(dateTimeAtom);
+
   //데이터 추출
   //백엔드로 파일 주소 전송 및 데이터 받아오기
-  const [receiptData, setReceiptData] = useRecoilState(ReceiptDataAtom);
+  useEffect(() => {
+    console.log(expPlace);
+    console.log("expPlace : ", typeof expPlace);
+  }, [expPlace]);
+  useEffect(() => {
+    console.log(expAddress);
+  }, [expAddress]);
+  useEffect(() => {
+    console.log(expMoney);
+  }, [expMoney]);
+  useEffect(() => {
+    console.log(dateTime);
+  }, [dateTime]);
+
   const ReceiptDataEx = (file) => {
     console.log("파일명", file[0].name); //영수증 파일명
-    //영수증 주소 전달
-    var receiptAddress =
-      "https://trip-recorder.s3.ap-northeast-2.amazonaws.com/receipt/" +
-      file[0].name;
-    var receiptKey = "receipt/" + file[0].name;
 
-    console.log("url : ", receiptAddress);
-    console.log("key : ", receiptKey);
-    
-    authService
-      .ReceiptAddress(receiptAddress, receiptKey)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
-
-    //데이터 전달 받기
+    var imageKey = "receipt/" + file[0].name;
     api
-      .post("/img/imgrequest")
-      .then((res) => {
-        const receiptDatas = res.data;
-        setReceiptData(receiptDatas);
-        console.log(receiptData);
+      .post("/img/imgrequest", {
+        imageKey,
       })
-      .catch((err) => console.log("error", err));
+      .then((res) => {
+        var receiptD = res.data;
+        setexpPlace(receiptD.storeInfo);
+        setexpAddress(() => {
+          return receiptD.addresses;
+        });
+        setexpMoney(() => {
+          return receiptD.totalPrice;
+        });
+        setdateTime(() => {
+          return receiptD.timestamp;
+        });
+      })
+      .catch((err) => console.log(err));
   };
 
-  //initialValues에 담을 useState
-  // const [expPlace, setexpPlace] = useRecoilState(expPlaceAtom);
-  // const [expAddress, setexpAddress] = useRecoilState(expAddressAtom);
-  // const [expMoney, setexpMoney] = useRecoilState(expMoneyAtom);
-  // const [dateTime, setdateTime] = useRecoilState(dateTimeAtom);
-
+  const fields = [
+    { name: ["expPlace"], value: expPlace },
+    { name: ["expAddress"], value: expAddress },
+    { name: ["expMoney"], value: expMoney },
+    { name: ["dateTime"], value: dayjs(dateTime, "YYYY-MM-DD HH:mm") },
+  ];
   return (
     <div className="divbox">
       <img alt="tripRecorder" src={logo} className="logoimg" />
@@ -268,14 +282,8 @@ const RegisterExp = () => {
             maxWidth: 450,
             margin: "0 auto",
           }}
-          initialValues={
-            {
-              // expPlace: {expPlace},
-              // expAddress: {expAddress},
-              // expMoney: {expMoney},
-              // dateTime: dayjs({dateTime}, "YYYY-MM-DD HH:mm"),
-            }
-          }
+          initialValues={{}}
+          fields={fields}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           autoComplete="off"

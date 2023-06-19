@@ -129,17 +129,6 @@ const RegisterExpCash = (
     .catch((err) => console.log(err));
 };
 
-//영수증 주소 전달
-const ReceiptAddress = (imageUrl, imageKey) => {
-  return api
-    .post("/img/imgrequest", {
-      imageUrl,
-      imageKey,
-    })
-    .then((res) => console.log(res))
-    .catch((err) => console.log(err));
-};
-
 //sns등록
 const RegisterSns = (
   tripNo,
@@ -170,7 +159,6 @@ const authService = {
   TripRegistration,
   ResigerExpCard,
   RegisterExpCash,
-  ReceiptAddress,
   RegisterSns,
 };
 
