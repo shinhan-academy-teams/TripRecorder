@@ -9,4 +9,7 @@ import trippers.triprecorder.entity.TripVO;
 
 public interface SnsRepository extends JpaRepository<SnsVO, Long>{
 	List<SnsVO> findBySnsAndExpNull(TripVO trip);
+	List<SnsVO> findBySnsInAndSnsScopeInOrSnsInOrderBySnsNoDesc(List<TripVO> following, Integer[] scope, List<TripVO> my);
+	List<SnsVO> findBySnsScopeOrderBySnsNoDesc(Integer scope);
+	List<SnsVO> findBySnsOrderBySnsNoDesc(TripVO trip);
 }
