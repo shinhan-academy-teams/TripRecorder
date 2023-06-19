@@ -18,3 +18,35 @@ export const showAlertAtom = atom({
   key: "showAlert",
   default: false,
 });
+
+//공개 범위
+export const openRangeAtom = atom({
+  key: "openRangeAtom",
+  default: 1, //비공개
+});
+
+//해시태그 배열
+export const tagsAtom = atom({
+  key: "tagsAtom",
+  default: [],
+});
+
+export const inputVisibleAtom = atom({
+  key: "inputVisibleAtom",
+  default: false,
+});
+
+export const inputValueAtom = atom({
+  key: "inputValueAtom",
+  default: "",
+});
+
+export const editInputIndexAtom = atom({
+  key: "editInputIndexAtom",
+  default: -1,
+});
+
+export const editInputValueAtom = atom({
+  key: "editInputValueAtom",
+  default: "",
+});

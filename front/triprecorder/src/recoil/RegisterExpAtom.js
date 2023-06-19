@@ -37,3 +37,16 @@ export const tripSnsAtom = atom({
   key:"tripSns",
   default : []
 });
+
+//영수증 s3
+export const ReceiptAtom = atom({
+  key : "receipt",
+  default : [],
+  dangerouslyAllowMutability: true,
+});
+
+//영수증에서 추출한 데이터
+export const ReceiptDataAtom = atom({
+  key:"receiptData",
+  default : {}
+});

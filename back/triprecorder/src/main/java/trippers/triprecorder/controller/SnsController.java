@@ -23,12 +23,14 @@ import trippers.triprecorder.dto.MultiKey;
 import trippers.triprecorder.dto.ReplyDto;
 import trippers.triprecorder.dto.SnsDto;
 import trippers.triprecorder.dto.UserSimpleDto;
+import trippers.triprecorder.entity.FollowVO;
 import trippers.triprecorder.entity.HashtagVO;
 import trippers.triprecorder.entity.ReplyVO;
 import trippers.triprecorder.entity.SnsVO;
 import trippers.triprecorder.entity.TripVO;
 import trippers.triprecorder.entity.UserVO;
 import trippers.triprecorder.repository.ExpRepository;
+import trippers.triprecorder.repository.FollowRepository;
 import trippers.triprecorder.repository.HashtagRepository;
 import trippers.triprecorder.repository.HeartRepository;
 import trippers.triprecorder.repository.ReplyRepository;
@@ -36,6 +38,7 @@ import trippers.triprecorder.repository.SnsRepository;
 import trippers.triprecorder.repository.TripRepository;
 import trippers.triprecorder.repository.UserRepository;
 import trippers.triprecorder.util.AwsUtil;
+import trippers.triprecorder.util.EncodingUtil;
 
 @RestController
 @RequestMapping("/sns")
@@ -54,6 +57,8 @@ public class SnsController {
 	HeartRepository hrepo;
 	@Autowired
 	HashtagRepository tagrepo;
+	@Autowired
+	FollowRepository frepo;
 
 	// sns 게시글 등록 페이지 진입
 	// 로그인 후 진입 가능
@@ -96,13 +101,27 @@ public class SnsController {
 		return "OK";
 	}
 	
-	// 게시글 조회
+	// 게시글 조회 (메인페이지)
 	@GetMapping("/list")
 	public List<SnsDto> getSnsList(HttpServletRequest request) {
-		String obj = (String)request.getAttribute("Authorization");
-		System.out.println("헤더 있음: " + obj);
+		String obj = request.getHeader("Authorization");
+		List<SnsVO> tmpSnsList = new ArrayList<>();
 		
-		List<SnsVO> tmpSnsList = srepo.findAll();
+		if(obj != null) {
+			Long userNo = EncodingUtil.getUserNo(request);
+			UserVO user = urepo.findById(userNo).orElse(null);
+			List<FollowVO> following = frepo.findByFollower(user);
+			
+			List<TripVO> myTrip = trepo.findByUser(user);
+			List<TripVO> followingTrip = new ArrayList<>();
+			following.forEach(f -> {
+				trepo.findByUser(f.getFollowing()).forEach(t -> followingTrip.add(t));
+			});
+			
+			tmpSnsList = srepo.findBySnsInAndSnsScopeInOrSnsInOrderBySnsNoDesc(followingTrip, new Integer[] {0, 1}, myTrip);
+		} else {
+			tmpSnsList = srepo.findBySnsScopeOrderBySnsNoDesc(1);
+		}
 		
 		JSONObject snsObj = new JSONObject();
 		List<SnsDto> snsList = new ArrayList<>();
@@ -115,6 +134,7 @@ public class SnsController {
 					.snsContent(tmpSns.getSnsContent())
 					.snsPhoto(getSnsImages(tmpSns.getSnsPhoto()))
 					.snsRegdate(tmpSns.getSnsRegdate())
+					.snsScope(tmpSns.getSnsScope())
 					.snsUser(getAnyUser(tmpSns.getSns().getUser().getUserNo()))
 					.reply(getSnsReply(tmpSns))
 					.heart(getSnsHeart(tmpSns, tmpSns.getSns().getUser().getUserNo()))
@@ -129,6 +149,25 @@ public class SnsController {
 			snsList.add(sns);
 		});
 		
+		System.out.println(tmpSnsList.size());
+		return snsList;
+	}
+	
+	// 게시글 조회(사용자 프로필)
+	@GetMapping("/{tripNo}/list")
+	public List<JSONObject> getTripSnsList(@PathVariable Long tripNo) {
+		List<JSONObject> snsList = new ArrayList<>();
+		TripVO trip = trepo.findById(tripNo).orElse(null);
+		
+		srepo.findBySnsOrderBySnsNoDesc(trip).forEach(sns -> {
+			JSONObject obj = new JSONObject();
+			obj.put("snsNo", sns.getSnsNo());	
+			
+			String imgKey = sns.getSnsPhoto().split("@")[0];
+			obj.put("thumbnail", AwsUtil.getImageURL(imgKey));
+			
+			snsList.add(obj);
+		});
 		
 		return snsList;
 	}
