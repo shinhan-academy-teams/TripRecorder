@@ -53,14 +53,17 @@ public class ImgController {
 
 	@PostMapping("/imgrequest")
 	public ExpDto processReceipt(@RequestBody JSONObject imageObj) throws IOException, ParseException {
-		URL urlInput = new URL(imageObj.get("imageUrl").toString());
-		BufferedImage urlImage = ImageIO.read(urlInput);
+		String img = imageObj.get("imageKey").toString();
+		URL urlInput = new URL(AwsUtil.getImageURL(img));
+		HttpURLConnection connection = (HttpURLConnection) urlInput.openConnection();
+		connection.setRequestProperty("Referer", img);
+		BufferedImage urlImage = ImageIO.read(connection.getInputStream());
 
 		//프론트에서 이미지를 줄 때 파일명까지 받아서 끝에 .split으로 마지막 인덱스를 집어넣기(확장자를 얻기위해)
-//		String fileType = urlImage.spl
-//		
+		String fileType = img.substring(img.lastIndexOf(".") + 1);
+		
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		ImageIO.write(urlImage, "png", bos);
+		ImageIO.write(urlImage, fileType, bos);
 		Encoder encoder = Base64.getEncoder(); // java.util.Base64.Encoder
 
 		String encodedString = encoder.encodeToString(bos.toByteArray());
@@ -79,7 +82,7 @@ public class ImgController {
 	     
 	    ArrayList<JSONObject> imgObjArray = new ArrayList<>();
 	    JSONObject imgObj = new JSONObject();
-	    imgObj.put("format", "png"); // 가변으로 받아서 수정해야 한다
+	    imgObj.put("format", fileType); // 가변으로 받아서 수정해야 한다
 	    imgObj.put("name", "영수증1");
 	    imgObj.put("data", encodedString);
 	    imgObjArray.add(imgObj);
@@ -133,11 +136,11 @@ public class ImgController {
 	    String date = ((String)((JSONObject)((JSONObject)result.get("paymentInfo")).get("date")).get("text"));
 	    
 	    //시간 추출
-	    String time = ((String)((JSONObject)((JSONObject)result.get("paymentInfo")).get("time")).get("text"));
+	    String time = ((String)((JSONObject)((JSONObject)result.get("paymentInfo")).get("time")).get("text")).replace(" ", "");
 	   
 	    //날짜+시간
 	    String datetime = date + " " +time;
-	    
+	    System.out.println(datetime);
 	    // 날짜 포맷팅
 	    DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 	    Date totaldate = formatter.parse(datetime);
@@ -147,11 +150,12 @@ public class ImgController {
 		String dateString = formatter.format(timestamp);
 		String yearString = dateString.substring(0, 4);
 	
+		
 		// 앞에 00인 경우 20으로 변경
 		if (yearString.startsWith("00")) {
 		    yearString = "20" + yearString.substring(2);
 		}
-	
+
 		// 변경된 연도로 문자열 조합
 		String finalDateString = yearString + dateString.substring(4);
 	    
@@ -163,9 +167,8 @@ public class ImgController {
 	            .expTime(finalDateString)
 	            .build();
 
-	    AwsUtil.deleteBucketObjects(new String[] {imageObj.get("imageKey").toString()});
+	    //AwsUtil.deleteBucketObjects(new String[] {imageObj.get("imageKey").toString()});
 	    return expDto;
 	    
     }
 }
-
