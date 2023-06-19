@@ -1,6 +1,6 @@
 package trippers.triprecorder.controller;
 
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import trippers.triprecorder.dto.ProfileDto;
-import trippers.triprecorder.entity.FollowVO;
 import trippers.triprecorder.entity.UserVO;
 import trippers.triprecorder.repository.FollowRepository;
 import trippers.triprecorder.repository.UserRepository;
 import trippers.triprecorder.util.AwsUtil;
+import trippers.triprecorder.util.EncodingUtil;
 
 @RestController
 @RequestMapping("/profile")
@@ -25,10 +25,21 @@ public class ProfileController {
 	
 	// 사용자 프로필 조회
 	@GetMapping("/{userNo}")
-	public ProfileDto getUserProfile(@PathVariable Long userNo) {
+	public ProfileDto getUserProfile(HttpServletRequest request, @PathVariable Long userNo) {
+		String obj = request.getHeader("Authorization");
 		UserVO user = urepo.findById(userNo).orElse(null);
 		Integer following = frepo.findByFollower(user).size();
 		Integer follower = frepo.findByFollowing(user).size();
+		// 팔로잉하지 않은 상태
+		Integer isFollowing = -1;
+		
+		if(obj != null) {
+			Long loginNo = EncodingUtil.getUserNo(request);
+			// 내 계정일 때
+			if(userNo == loginNo) isFollowing = 0;
+			// 팔로잉중
+			else if (frepo.findByFollowing(user).size() != 0) isFollowing = 1;
+		}
 		
 		ProfileDto profile = ProfileDto.builder()
 				.userNo(user.getUserNo())
@@ -38,6 +49,7 @@ public class ProfileController {
 				.userLevel(user.getUserLevel())
 				.follower(follower)
 				.following(following)
+				.isFollowing(isFollowing)
 				.build();
 		
 		return profile;

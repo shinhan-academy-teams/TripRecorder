@@ -1,7 +1,5 @@
 package trippers.triprecorder.dto;
 
-import java.util.List;
-
 import lombok.Builder;
 import lombok.Data;
 
@@ -16,4 +14,6 @@ public class ProfileDto {
 	private String userLevel;
 	private Integer follower;
 	private Integer following;
+	
+	private Integer isFollowing;
 }
