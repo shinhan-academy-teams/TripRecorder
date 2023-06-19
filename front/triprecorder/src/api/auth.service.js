@@ -5,7 +5,7 @@ const checkDuplicateId = (userId) => {
   return api
     .post("/auth/signup/useridCheck", { userId })
     .then((res) => {
-      console.log(res);
+      // console.log(res);
       return res.data;
     })
     .catch((err) => console.log(err));
@@ -14,14 +14,20 @@ const checkDuplicateId = (userId) => {
 const checkDuplicateNick = (userNick) => {
   return api
     .post("/auth/signup/usernickCheck", { userNick })
-    .then((res) => console.log(res))
+    .then((res) => {
+      // console.log(res);
+      return res.data;
+    })
     .catch((err) => console.log(err));
 };
 
 const checkDuplicateEmail = (userEmail) => {
   return api
     .post("/auth/signup/useremailCheck", { userEmail })
-    .then((res) => console.log(res))
+    .then((res) => {
+      // console.log(res);
+      return res.data;
+    })
     .catch((err) => console.log(err));
 };
 
@@ -132,25 +138,31 @@ const RegisterExpCash = (
 //영수증 주소 전달
 const ReceiptAddress = (receiptAddress) => {
   return api
-    .post("img/imgrequest", {receiptAddress})
+    .post("img/imgrequest", { receiptAddress })
     .then((res) => console.log(res))
     .catch((err) => console.log(err));
 };
 
 //sns등록
-const RegisterSns = (tripNo, hashTag, snsTitle, snsContent, snsPhoto, snsScope)=>{
-  return api
-  .post("/sns/register",{
+const RegisterSns = (
+  tripNo,
+  hashTag,
+  snsTitle,
+  snsContent,
+  snsPhoto,
+  snsScope
+) => {
+  return api.post("/sns/register", {
     tripNo,
     hashTag,
-    sns : {
-      snsTitle, 
+    sns: {
+      snsTitle,
       snsContent,
       snsPhoto,
-      snsScope
-    }
-  })
-}
+      snsScope,
+    },
+  });
+};
 
 const authService = {
   checkDuplicateId,
@@ -162,7 +174,7 @@ const authService = {
   ResigerExpCard,
   RegisterExpCash,
   ReceiptAddress,
-  RegisterSns
+  RegisterSns,
 };
 
 export default authService;
