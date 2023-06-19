@@ -61,11 +61,13 @@ public class TripController {
 			obj.put("tripName", trip.getTripName());
 			
 			List<SnsVO> tmpTripList = srepo.findBySnsOrderBySnsNoDesc(trip);
-			String firstImg = "";
+			String firstImg = "sns/default_thumbnail.png";
 			if(tmpTripList.size() != 0) {
 				SnsVO sns = tmpTripList.get(0);
 				String imgKey = sns.getSnsPhoto().split("@")[0];
 				firstImg = AwsUtil.getImageURL(imgKey);
+			} else {
+				firstImg = AwsUtil.getImageURL(firstImg);
 			}
 
 			obj.put("thumbnail", firstImg);

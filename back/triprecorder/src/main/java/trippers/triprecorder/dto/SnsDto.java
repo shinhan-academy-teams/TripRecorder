@@ -22,5 +22,5 @@ public class SnsDto {
 	
 	private List<ReplyDto> reply;
 	private boolean heart;
-	private List<HashtagDto> hashtag;
+	private String hashtag;
 }
