@@ -56,7 +56,7 @@ public class ImgController {
 
 		//프론트에서 이미지를 줄 때 파일명까지 받아서 끝에 .split으로 마지막 인덱스를 집어넣기(확장자를 얻기위해)
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		ImageIO.write(urlImage, "jpg", bos);
+		ImageIO.write(urlImage, "png", bos);
 		Encoder encoder = Base64.getEncoder(); // java.util.Base64.Encoder
 
 		String encodedString = encoder.encodeToString(bos.toByteArray());
@@ -70,12 +70,12 @@ public class ImgController {
 	    // Request 형식 설정
 	    conn.setRequestMethod("POST");
 	    conn.setRequestProperty("Content-Type", "application/json");
-	    conn.setRequestProperty("X-OCR-SECRET", "VWVBVEVrYXlyQnpoSFdEd0pPeU5Qa2tZWmJSY05UVWw=");
+	    conn.setRequestProperty("X-OCR-SECRET", "TWRaWFJXWlFlSWNEZHNSTm5FeVdKdkJ1V1ZwZ01JVmU=");
 	    conn.setDoOutput(true);
 	    
 	    ArrayList<JSONObject> imgObjArray = new ArrayList<>();
 	    JSONObject imgObj = new JSONObject();
-	    imgObj.put("format", "jpg"); // 가변으로 받아서 수정해야 한다
+	    imgObj.put("format", "png"); // 가변으로 받아서 수정해야 한다
 	    imgObj.put("name", "영수증1");
 	    imgObj.put("data", encodedString);
 	    imgObjArray.add(imgObj);

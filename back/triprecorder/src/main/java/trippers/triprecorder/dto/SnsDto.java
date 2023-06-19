@@ -17,6 +17,7 @@ public class SnsDto {
 	private String snsContent;
 	private String snsPhoto;
 	private Timestamp snsRegdate;
+	private Integer snsScope;
 	private UserSimpleDto snsUser;
 	
 	private List<ReplyDto> reply;
