@@ -3,7 +3,8 @@ import logo from "assets/tripRecorder.png";
 import styled from "@emotion/styled";
 import { DatePicker, Form, Input, InputNumber, message } from "antd";
 import authService from "api/auth.service";
-import axios from "api/axios";
+import api from "api/axios";
+
 // import dayjs from "dayjs";
 
 const { RangePicker } = DatePicker;
@@ -87,7 +88,7 @@ const TripRegistration = (props) => {
       .catch((err) => console.log(err));
 
     //등록후 alert
-    await axios
+    await api
       .get("/trip/regoster")
       .then((res) => {
         message.success("여행 등록이 완료되었습니다. 😊");

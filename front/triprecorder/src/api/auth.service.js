@@ -129,28 +129,26 @@ const RegisterExpCash = (
     .catch((err) => console.log(err));
 };
 
-//영수증 주소 전달
-const ReceiptAddress = (receiptAddress) => {
-  return api
-    .post("img/imgrequest", {receiptAddress})
-    .then((res) => console.log(res))
-    .catch((err) => console.log(err));
-};
-
 //sns등록
-const RegisterSns = (tripNo, hashTag, snsTitle, snsContent, snsPhoto, snsScope)=>{
-  return api
-  .post("/sns/register",{
+const RegisterSns = (
+  tripNo,
+  hashTag,
+  snsTitle,
+  snsContent,
+  snsPhoto,
+  snsScope
+) => {
+  return api.post("/sns/register", {
     tripNo,
     hashTag,
-    sns : {
-      snsTitle, 
+    sns: {
+      snsTitle,
       snsContent,
       snsPhoto,
-      snsScope
-    }
-  })
-}
+      snsScope,
+    },
+  });
+};
 
 const authService = {
   checkDuplicateId,
@@ -161,8 +159,7 @@ const authService = {
   TripRegistration,
   ResigerExpCard,
   RegisterExpCash,
-  ReceiptAddress,
-  RegisterSns
+  RegisterSns,
 };
 
 export default authService;
