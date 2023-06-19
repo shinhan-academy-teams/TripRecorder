@@ -26,7 +26,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import trippers.triprecorder.api.OcrSecretKey;
 import trippers.triprecorder.dto.ExpDto;
+import trippers.triprecorder.util.AwsUtil;
 import trippers.triprecorder.util.JsonUtil;
 
 @RestController
@@ -55,6 +57,8 @@ public class ImgController {
 		BufferedImage urlImage = ImageIO.read(urlInput);
 
 		//프론트에서 이미지를 줄 때 파일명까지 받아서 끝에 .split으로 마지막 인덱스를 집어넣기(확장자를 얻기위해)
+//		String fileType = urlImage.spl
+//		
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		ImageIO.write(urlImage, "png", bos);
 		Encoder encoder = Base64.getEncoder(); // java.util.Base64.Encoder
@@ -70,9 +74,9 @@ public class ImgController {
 	    // Request 형식 설정
 	    conn.setRequestMethod("POST");
 	    conn.setRequestProperty("Content-Type", "application/json");
-	    conn.setRequestProperty("X-OCR-SECRET", "TWRaWFJXWlFlSWNEZHNSTm5FeVdKdkJ1V1ZwZ01JVmU=");
+	    conn.setRequestProperty("X-OCR-SECRET", OcrSecretKey.SECRET_KEY);
 	    conn.setDoOutput(true);
-	    
+	     
 	    ArrayList<JSONObject> imgObjArray = new ArrayList<>();
 	    JSONObject imgObj = new JSONObject();
 	    imgObj.put("format", "png"); // 가변으로 받아서 수정해야 한다
@@ -159,6 +163,7 @@ public class ImgController {
 	            .expTime(finalDateString)
 	            .build();
 
+	    AwsUtil.deleteBucketObjects(new String[] {imageObj.get("imageKey").toString()});
 	    return expDto;
 	    
     }
