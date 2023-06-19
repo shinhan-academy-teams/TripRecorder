@@ -93,4 +93,17 @@ public class ExpController {
     	return expList;
     }
     
+    // 게시글과 연동된 경비 정보
+    @PostMapping("/sns/{expNo}")
+    public JSONObject postExpWithSns(@PathVariable Long expNo) {
+    	ExpVO tmpExp = erepo.findById(expNo).orElse(null);
+    	
+    	JSONObject exp = new JSONObject();
+    	exp.put("expTitle", tmpExp.getExpTitle());
+    	exp.put("expPlace", tmpExp.getExpPlace());
+    	exp.put("expMoney", tmpExp.getExpMoney());
+    	
+    	return exp;
+    }
+    
 }

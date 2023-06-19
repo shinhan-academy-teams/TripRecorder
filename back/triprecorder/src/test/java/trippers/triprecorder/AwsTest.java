@@ -21,7 +21,7 @@ public class AwsTest {
 	
 	@Test
 	void deleteImage() {
-		String[] objectName = {"sns/zzangu.jpg", "sns/짱짱구.jpg"};
+		String[] objectName = {"upload/짱구.jpg"};
 		AwsUtil.deleteBucketObjects(objectName);
 	}
 }

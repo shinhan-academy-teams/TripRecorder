@@ -22,9 +22,13 @@ import {
   // showBtnAtom,
   tripSnsAtom,
   ReceiptAtom,
-  ReceiptDataAtom,
+  // ReceiptDataAtom,
+  expPlaceAtom,
+  expAddressAtom,
+  expMoneyAtom,
+  dateTimeAtom,
 } from "recoil/RegisterExpAtom";
-import axios from "axios";
+import api from "api/axios";
 import AWS from "aws-sdk";
 
 const { Option } = Select;
@@ -36,20 +40,26 @@ const RegisterExp = () => {
   const [cards, setCards] = useRecoilState(cardsAtom); //카드 이름
   const [tripSns, setTripSns] = useRecoilState(tripSnsAtom); //게시글
 
+  // 카드 리스트 가져오기
   useEffect(() => {
-    axios
+    api
       .post("/card/list")
       .then((res) => {
         const cardData = res.data;
         setCards(cardData.map((card) => card));
+        console.log(cardData);
       })
       .catch((err) => console.log("error", err));
+  }, []);
 
-    axios
+  // sns 리스트 가져오기
+  useEffect(() => {
+    api
       .post("/sns/list/4") //하드 코딩한 tripNo 수정 필요
       .then((res) => {
         const snsData = res.data;
         setTripSns(snsData.map((sns) => sns));
+        console.log(snsData);
       })
       .catch((err) => console.log("error : ", err));
   }, []);
@@ -191,14 +201,11 @@ const RegisterExp = () => {
         ACL: "public-read",
         Body: files[i],
         Bucket: S3_BUCKET,
-        Key: "receipt/" + files[i].name, //"sns/유저id/tripid/snsid" 수정
-        ContentType: files[i].type,
+        Key: "receipt/" + files[i].name,
       };
       myBucket
         .putObject(params)
         .on("httpUploadProgress", () => {
-          // setProgress(Math.round((evt.loaded / evt.total) * 100));
-          // setShowAlert(true);
           setTimeout(() => {
             // setShowAlert(false);
             setSelectedReceipt([]);
@@ -210,31 +217,58 @@ const RegisterExp = () => {
     }
   };
 
+  //initialValues에 담을 useState
+  const [expPlace, setexpPlace] = useRecoilState(expPlaceAtom);
+  const [expAddress, setexpAddress] = useRecoilState(expAddressAtom);
+  const [expMoney, setexpMoney] = useRecoilState(expMoneyAtom);
+  const [dateTime, setdateTime] = useRecoilState(dateTimeAtom);
+
   //데이터 추출
   //백엔드로 파일 주소 전송 및 데이터 받아오기
-  const [receiptData, setReceiptData] = useRecoilState(ReceiptDataAtom);
-  const ReceiptDataEx = (file) => {
-    console.log(file[0].name); //영수증 파일명
-    //영수증 주소 전달
-    authService
-      .ReceiptAddress(
-        "https://trip-recorder.s3.ap-northeast-2.amazonaws.com/receipt/" +
-          file[0].name
-      )
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+  useEffect(() => {
+    console.log(expPlace);
+    console.log("expPlace : ", typeof expPlace);
+  }, [expPlace]);
+  useEffect(() => {
+    console.log(expAddress);
+  }, [expAddress]);
+  useEffect(() => {
+    console.log(expMoney);
+  }, [expMoney]);
+  useEffect(() => {
+    console.log(dateTime);
+  }, [dateTime]);
 
-    //데이터 전달 받기
-    axios
-      .post("/img/imgrequest")
-      .then((res) => {
-        const receiptDatas = res.data;
-        setReceiptData(receiptDatas);
-        console.log(receiptData);
+  const ReceiptDataEx = (file) => {
+    console.log("파일명", file[0].name); //영수증 파일명
+
+    var imageKey = "receipt/" + file[0].name;
+    api
+      .post("/img/imgrequest", {
+        imageKey,
       })
-      .catch((err) => console.log("error", err));
+      .then((res) => {
+        var receiptD = res.data;
+        setexpPlace(receiptD.storeInfo);
+        setexpAddress(() => {
+          return receiptD.addresses;
+        });
+        setexpMoney(() => {
+          return receiptD.totalPrice;
+        });
+        setdateTime(() => {
+          return receiptD.timestamp;
+        });
+      })
+      .catch((err) => console.log(err));
   };
 
+  const fields = [
+    { name: ["expPlace"], value: expPlace },
+    { name: ["expAddress"], value: expAddress },
+    { name: ["expMoney"], value: expMoney },
+    { name: ["dateTime"], value: dayjs(dateTime, "YYYY-MM-DD HH:mm") },
+  ];
   return (
     <div className="divbox">
       <img alt="tripRecorder" src={logo} className="logoimg" />
@@ -248,12 +282,8 @@ const RegisterExp = () => {
             maxWidth: 450,
             margin: "0 auto",
           }}
-          initialValues={{
-            expPlace: "사용처",
-            expAddress: "주소",
-            expMoney: "100",
-            dateTime: dayjs("2023-06-18 19:14", "YYYY-MM-DD HH:mm"),
-          }}
+          initialValues={{}}
+          fields={fields}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           autoComplete="off"
