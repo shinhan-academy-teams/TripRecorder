@@ -50,3 +50,9 @@ export const editInputValueAtom = atom({
   key: "editInputValueAtom",
   default: "",
 });
+
+//sns 파일 String
+export const fileStrAtom = atom({
+  key: "fileStrAtom",
+  default: "",
+});
