@@ -60,7 +60,7 @@ const RegisterSns = () => {
   }, [inputValue]);
 
   useEffect(() => {
-    // console.log(tags);
+    console.log(tags);
   }, [tags]);
 
   const handleClose = (removedTag) => {

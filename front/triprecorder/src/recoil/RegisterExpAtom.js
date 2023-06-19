@@ -50,3 +50,27 @@ export const ReceiptDataAtom = atom({
   key:"receiptData",
   default : {}
 });
+
+//사용처 상태
+export const expPlaceAtom = atom({
+  key : "expPlaceAtom",
+  default : ''
+});
+
+// 주소 상태
+export const expAddressAtom = atom({
+  key : "expAddressAtom",
+  default : ''
+});
+
+//경비 상태
+export const expMoneyAtom = atom({
+  key : "expMoneyAtom",
+  default : ''
+});
+
+//날짜+시간 상태
+export const dateTimeAtom = atom({
+  key : "dateTimeAtom",
+  default : ''
+});

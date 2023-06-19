@@ -23,8 +23,12 @@ import {
   tripSnsAtom,
   ReceiptAtom,
   ReceiptDataAtom,
+  // expPlaceAtom,
+  // expAddressAtom,
+  // expMoneyAtom,
+  // dateTimeAtom,
 } from "recoil/RegisterExpAtom";
-import axios from "axios";
+import api from "api/axios";
 import AWS from "aws-sdk";
 
 const { Option } = Select;
@@ -36,20 +40,26 @@ const RegisterExp = () => {
   const [cards, setCards] = useRecoilState(cardsAtom); //카드 이름
   const [tripSns, setTripSns] = useRecoilState(tripSnsAtom); //게시글
 
+  // 카드 리스트 가져오기
   useEffect(() => {
-    axios
+    api
       .post("/card/list")
       .then((res) => {
         const cardData = res.data;
         setCards(cardData.map((card) => card));
+        console.log(cardData);
       })
       .catch((err) => console.log("error", err));
+  }, []);
 
-    axios
+  // sns 리스트 가져오기
+  useEffect(() => {
+    api
       .post("/sns/list/4") //하드 코딩한 tripNo 수정 필요
       .then((res) => {
         const snsData = res.data;
         setTripSns(snsData.map((sns) => sns));
+        console.log(snsData);
       })
       .catch((err) => console.log("error : ", err));
   }, []);
@@ -191,8 +201,7 @@ const RegisterExp = () => {
         ACL: "public-read",
         Body: files[i],
         Bucket: S3_BUCKET,
-        Key: "receipt/" + files[i].name, //"sns/유저id/tripid/snsid" 수정
-        ContentType: files[i].type,
+        Key: "receipt/" + files[i].name,
       };
       myBucket
         .putObject(params)
@@ -214,18 +223,23 @@ const RegisterExp = () => {
   //백엔드로 파일 주소 전송 및 데이터 받아오기
   const [receiptData, setReceiptData] = useRecoilState(ReceiptDataAtom);
   const ReceiptDataEx = (file) => {
-    console.log(file[0].name); //영수증 파일명
+    console.log("파일명", file[0].name); //영수증 파일명
     //영수증 주소 전달
+    var receiptAddress =
+      "https://trip-recorder.s3.ap-northeast-2.amazonaws.com/receipt/" +
+      file[0].name;
+    var receiptKey = "receipt/" + file[0].name;
+
+    console.log("url : ", receiptAddress);
+    console.log("key : ", receiptKey);
+    
     authService
-      .ReceiptAddress(
-        "https://trip-recorder.s3.ap-northeast-2.amazonaws.com/receipt/" +
-          file[0].name
-      )
+      .ReceiptAddress(receiptAddress, receiptKey)
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
 
     //데이터 전달 받기
-    axios
+    api
       .post("/img/imgrequest")
       .then((res) => {
         const receiptDatas = res.data;
@@ -234,6 +248,12 @@ const RegisterExp = () => {
       })
       .catch((err) => console.log("error", err));
   };
+
+  //initialValues에 담을 useState
+  // const [expPlace, setexpPlace] = useRecoilState(expPlaceAtom);
+  // const [expAddress, setexpAddress] = useRecoilState(expAddressAtom);
+  // const [expMoney, setexpMoney] = useRecoilState(expMoneyAtom);
+  // const [dateTime, setdateTime] = useRecoilState(dateTimeAtom);
 
   return (
     <div className="divbox">
@@ -248,12 +268,14 @@ const RegisterExp = () => {
             maxWidth: 450,
             margin: "0 auto",
           }}
-          initialValues={{
-            expPlace: "사용처",
-            expAddress: "주소",
-            expMoney: "100",
-            dateTime: dayjs("2023-06-18 19:14", "YYYY-MM-DD HH:mm"),
-          }}
+          initialValues={
+            {
+              // expPlace: {expPlace},
+              // expAddress: {expAddress},
+              // expMoney: {expMoney},
+              // dateTime: dayjs({dateTime}, "YYYY-MM-DD HH:mm"),
+            }
+          }
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           autoComplete="off"
