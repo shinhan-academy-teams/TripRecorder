@@ -5,7 +5,7 @@ const checkDuplicateId = (userId) => {
   return api
     .post("/auth/signup/useridCheck", { userId })
     .then((res) => {
-      console.log(res);
+      // console.log(res);
       return res.data;
     })
     .catch((err) => console.log(err));
@@ -14,14 +14,20 @@ const checkDuplicateId = (userId) => {
 const checkDuplicateNick = (userNick) => {
   return api
     .post("/auth/signup/usernickCheck", { userNick })
-    .then((res) => console.log(res))
+    .then((res) => {
+      // console.log(res);
+      return res.data;
+    })
     .catch((err) => console.log(err));
 };
 
 const checkDuplicateEmail = (userEmail) => {
   return api
     .post("/auth/signup/useremailCheck", { userEmail })
-    .then((res) => console.log(res))
+    .then((res) => {
+      // console.log(res);
+      return res.data;
+    })
     .catch((err) => console.log(err));
 };
 
