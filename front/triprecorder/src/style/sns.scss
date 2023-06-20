@@ -35,3 +35,25 @@
   width: 600px;
   height: 600px;
 }
+
+.reply {
+  display: flex;
+  align-items: center;
+  background-color: $lightGrey;
+  // border-radius: 5%;
+  margin: 10px;
+  padding: 5px;
+
+  .repProfile {
+    width: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-left: 20px;
+  }
+
+  h3 {
+    object-fit: cover;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+}
