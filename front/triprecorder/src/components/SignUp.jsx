@@ -65,28 +65,66 @@ const SignUp = (props) => {
   const [checkIDResult, setCheckIDResult] = useState(false);
   let [ID, setID] = useState("");
 
+  const [checkNickResult, setCheckNickResult] = useState(false);
+  let [Nick, setNick] = useState("");
+
+  const [checkEmailResult, setCheckEmailResult] = useState(false);
+  let [Email, setEmail] = useState("");
+
   const handleIDChange = async (event) => {
     setID(() => {
-      // console.log(event.target.value);
+      authService.checkDuplicateId(event.target.value).then((res) => {
+        if (res === false) {
+          setCheckIDResult(true);
+        } else {
+          setCheckIDResult(false);
+        }
+      });
+      if (event.target.value === "") setCheckIDResult(true);
+
       return event.target.value;
     });
-    // console.log(event.target.value);
   };
-  useEffect(() => {
-    // console.log(ID, "@@@");
 
-    authService.checkDuplicateId(ID).then((res) => {
-      // console.log(ID);
-      // console.log(res);
-      if (res === false) {
-        setCheckIDResult(false);
-      } else {
-        setCheckIDResult(true);
-      }
+  const handleNickChange = async (event) => {
+    setNick(() => {
+      authService.checkDuplicateNick(event.target.value).then((res) => {
+        if (res === false) {
+          setCheckNickResult(true);
+        }
+        // if (event.target.value === "") setCheckNickResult(true);
+        else {
+          setCheckNickResult(false);
+        }
+      });
+      if (event.target.value === "") setCheckNickResult(true);
+
+      return event.target.value;
     });
+  };
+  const handleEmailChange = async (event) => {
+    setEmail(() => {
+      authService.checkDuplicateEmail(event.target.value).then((res) => {
+        if (res === false) {
+          setCheckEmailResult(true);
+        } else {
+          setCheckEmailResult(false);
+        }
+      });
+      console.log(event.target.value);
 
+      if (event.target.value === "") {
+        setCheckEmailResult(true);
+      }
+
+      return event.target.value;
+    });
+  };
+
+  useEffect(() => {
     forceUpdate({});
-  }, [ID]);
+  }, [ID, Nick, Email]);
+
   return (
     <LoginForm>
       <div style={{ width: "22rem" }}>
@@ -123,7 +161,7 @@ const SignUp = (props) => {
             <Form.Item
               name="ID"
               label="아이디"
-              validateStatus={checkIDResult ? "warning" : "success"}
+              validateStatus={checkIDResult ? "success" : "warning"}
               hasFeedback
               rules={[
                 {
@@ -136,34 +174,9 @@ const SignUp = (props) => {
                 prefix={<UserOutlined className="site-form-item-icon" />}
                 onBlur={handleIDChange}
                 value={ID}
-                placeholder="너의 ID는"
+                placeholder="ID 중복체크"
               />
             </Form.Item>
-          </DivInner>
-
-          <DivInner
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              alignContent: "center",
-              justifyContent: "flex-end",
-            }}
-          >
-            <Button
-              type="default"
-              htmlType="submit"
-              style={{
-                backgroundColor: "#7fb77e",
-                color: "#ffffff",
-              }}
-              onClick={() => {
-                if (checkIDResult === false) {
-                }
-              }}
-              size="small"
-            >
-              ID 중복체크
-            </Button>
           </DivInner>
 
           <DivInner>
@@ -206,6 +219,8 @@ const SignUp = (props) => {
             <Form.Item
               name="Nick"
               label="닉네임"
+              validateStatus={checkNickResult ? "success" : "warning"}
+              hasFeedback
               rules={[
                 {
                   required: true,
@@ -215,7 +230,9 @@ const SignUp = (props) => {
             >
               <Input
                 prefix={<SmileOutlined className="site-form-item-icon" />}
-                placeholder="너의 NicName은"
+                onBlur={handleNickChange}
+                value={Nick}
+                placeholder="닉네임 중복체크"
               />
             </Form.Item>
           </DivInner>
@@ -242,7 +259,9 @@ const SignUp = (props) => {
             <Space.Compact>
               <Form.Item
                 label="이메일"
+                validateStatus={checkEmailResult ? "success" : "warning"}
                 name={["email", "key"]}
+                hasFeedback
                 rules={[
                   {
                     required: true,
@@ -255,7 +274,9 @@ const SignUp = (props) => {
                   style={{
                     width: "100%",
                   }}
-                  placeholder="Email"
+                  onBlur={handleEmailChange}
+                  value={Email}
+                  placeholder="Email 중복체크"
                 />
               </Form.Item>
               <Form.Item

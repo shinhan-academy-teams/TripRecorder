@@ -48,7 +48,7 @@ public class CardController {
 	public List<CardDto> getTopCardList(@RequestBody JSONObject obj) {
 
 		List<Object> tmpCardList = erepo.findTop3CardNumbersByExpCate(obj.get("category").toString());
-		System.out.println(tmpCardList);
+		
 		List<CardDto> topCardList = new ArrayList<>();
 
 		tmpCardList.forEach(cardObj -> {
@@ -60,6 +60,7 @@ public class CardController {
 				e.printStackTrace();
 			}
 			str = str.replace("[", "").replace("]", "").split(",")[0];
+			
 			CardVO tmpCard = crepo.findById(Long.valueOf(str)).orElse(null);
 
 			CardDto card = CardDto.builder().cardNo(tmpCard.getCardNo()).cardName(tmpCard.getCardName())
@@ -73,17 +74,67 @@ public class CardController {
 	// 카드에 해당하는 혜택 조회
 	@PostMapping("/carddiscount")
 	public List<DiscountDto> getCardDiscountList(@RequestBody JSONObject obj) {
-		Long cardNo = Long.valueOf(obj.get("cardNo").toString());
+		Long price = Long.valueOf(obj.get("price").toString());
+		
+		Object cards = obj.get("cardNo");
 
-		CardVO card = crepo.findByCardNo(cardNo);
-		List<DiscountVO> discountList = drepo.findByCard(card);
+		String category = obj.get("category").toString();
 
-		List<DiscountDto> discountDtoList = new ArrayList<>();
-		for (DiscountVO discount : discountList) {
-			
-		}
+		ArrayList<Integer> cardNoList = (ArrayList<Integer>) cards;
+		
+		ArrayList<CardVO> cardList = new ArrayList<>();
 
-		return discountDtoList;
+		cardNoList.forEach(cardNo -> {
+			CardVO card = crepo.findById(Long.valueOf(cardNo)).orElse(null);
+			cardList.add(card);
+		});
+
+		List<DiscountVO> dcList = drepo.findByDcCateAndCardIn(category, cardList);
+
+		List<DiscountDto> dcResult = new ArrayList<>();
+
+		dcList.forEach(dc -> {
+
+			dcResult.add(createDiscountDto(dc, price));
+
+		});
+		return dcResult;
 	}
 
+	//혜택, 연회비 적용 메서드
+	private DiscountDto createDiscountDto(DiscountVO discountVO, Long price) {
+
+		CardVO card = discountVO.getCard();
+		DiscountDto ddto = new DiscountDto();
+		Long discountAmount = null;
+
+		if (discountVO.getDcDiscount().equals("할인")) {
+			if (discountVO.getDcWay().equals("pct")) {
+				discountAmount = (long) Math.round(price * discountVO.getDcAmount() / 100);
+			} else {
+				discountAmount = (long) Math.round(discountVO.getDcAmount());
+			}
+			ddto.setDiscountAmount(discountAmount);
+			ddto.setTotalDiscountAmount(discountAmount);// 더할거 있으면 더하고
+		} else if (discountVO.getDcDiscount().equals("캐시백")) {
+			if (discountVO.getDcWay().equals("pct")) {
+				discountAmount = (long) Math.round(price * discountVO.getDcAmount() / 100);
+			} else {
+				discountAmount = (long) Math.round(discountVO.getDcAmount());
+			}
+			ddto.setPayback(discountAmount);
+			ddto.setTotalDiscountAmount(discountAmount);// 더할거 있으면 더하고
+		} else if (discountVO.getDcDiscount().equals("포인트")) {
+			if (discountVO.getDcWay().equals("pct")) {
+				discountAmount = (long) Math.round(price * discountVO.getDcAmount() / 100);
+			} else {
+				discountAmount = (long) Math.round(discountVO.getDcAmount());
+			}
+			ddto.setPoint(discountAmount);
+			ddto.setTotalDiscountAmount(discountAmount);// 더할거 있으면 더하고
+		}
+		ddto.setAnnual(Long.parseLong(card.getCardAnnual()));
+
+		return ddto;
+	}
 }
