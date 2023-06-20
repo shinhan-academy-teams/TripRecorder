@@ -1,0 +1,27 @@
+:root,
+.__insta-light-mode {
+  --ins-primary: hsl(204, 100%, 48%);
+  --ins-mono-700: hsl(0, 0%, 56%);
+
+  --ins-background-primary: hsl(0, 0%, 100%);
+  --ins-background-secondary: hsl(0, 0%, 98%);
+
+  --ins-content-primary: hsl(0, 0%, 0%);
+  --ins-content-secondary: hsl(0, 0%, 15%);
+  --ins-content-blue: hsl(209, 100%, 21%);
+
+  --ins-border-primary: hsl(0, 0%, 86%);
+  --ins-border-secondary: hsl(0, 0%, 82%);
+}
+
+.__insta-dark-mode {
+  --ins-background-primary: hsl(0, 0%, 7%);
+  --ins-background-secondary: hsl(0, 0%, 10%);
+
+  --ins-content-primary: hsl(0, 0%, 98%);
+  --ins-content-secondary: hsl(0, 0%, 90%);
+  --ins-content-blue: hsl(208, 83%, 93%);
+
+  --ins-border-primary: hsl(0, 0%, 15%);
+  --ins-border-secondary: hsl(0, 0%, 21%);
+}
