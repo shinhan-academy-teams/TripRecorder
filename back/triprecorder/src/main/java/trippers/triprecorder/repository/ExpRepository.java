@@ -16,7 +16,8 @@ public interface ExpRepository extends JpaRepository<ExpVO, Long> {
 
 	List<ExpVO> findByTripAndSnsNull(TripVO trip);
 
-	@Query("SELECT e.card, COUNT(*) AS usageCount " + "FROM ExpVO e " + "Where e.exp_cate= :category"
-			+ "GROUP BY e.card " + "ORDER BY usageCount DESC")
-	List<ExpVO> findTop3CardNumbersByExpCate(String category);
+	@Query(value = "SELECT e.card_no, COUNT(*) AS usageCount " + "FROM exp e "
+			+ "WHERE e.exp_cate = :category AND NOT e.exp_way = '현금' " + "GROUP BY e.card_no "
+			+ "ORDER BY usageCount DESC", nativeQuery = true)
+	List<Object> findTop3CardNumbersByExpCate(@Param("category")String category);
 }

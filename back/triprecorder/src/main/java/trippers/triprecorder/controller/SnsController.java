@@ -18,14 +18,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import trippers.triprecorder.dto.HashtagDto;
-import trippers.triprecorder.dto.MultiKey;
-import trippers.triprecorder.dto.ReplyDto;
 import trippers.triprecorder.dto.SnsDto;
-import trippers.triprecorder.dto.UserSimpleDto;
 import trippers.triprecorder.entity.FollowVO;
 import trippers.triprecorder.entity.HashtagVO;
-import trippers.triprecorder.entity.ReplyVO;
 import trippers.triprecorder.entity.SnsVO;
 import trippers.triprecorder.entity.TripVO;
 import trippers.triprecorder.entity.UserVO;
@@ -39,6 +34,7 @@ import trippers.triprecorder.repository.TripRepository;
 import trippers.triprecorder.repository.UserRepository;
 import trippers.triprecorder.util.AwsUtil;
 import trippers.triprecorder.util.EncodingUtil;
+import trippers.triprecorder.util.MakeSnsUtil;
 
 @RestController
 @RequestMapping("/sns")
@@ -79,7 +75,7 @@ public class SnsController {
 		List<HashtagVO> tagList = new ArrayList<>();
 
 		for (String tag : hashtag) {
-			HashtagVO t = HashtagVO.builder().htHashtag("#" + tag).sns(sns).build();
+			HashtagVO t = HashtagVO.builder().htHashtag(tag).sns(sns).build();
 			tagList.add(t);
 		}
 
@@ -123,7 +119,6 @@ public class SnsController {
 			tmpSnsList = srepo.findBySnsScopeOrderBySnsNoDesc(1);
 		}
 		
-		JSONObject snsObj = new JSONObject();
 		List<SnsDto> snsList = new ArrayList<>();
 		
 		tmpSnsList.forEach(tmpSns -> {
@@ -132,13 +127,13 @@ public class SnsController {
 					.snsNo(tmpSns.getSnsNo())
 					.snsTitle(tmpSns.getSnsTitle())
 					.snsContent(tmpSns.getSnsContent())
-					.snsPhoto(getSnsImages(tmpSns.getSnsPhoto()))
+					.snsPhoto(MakeSnsUtil.getSnsImages(tmpSns.getSnsPhoto()))
 					.snsRegdate(tmpSns.getSnsRegdate())
 					.snsScope(tmpSns.getSnsScope())
-					.snsUser(getAnyUser(tmpSns.getSns().getUser().getUserNo()))
-					.reply(getSnsReply(tmpSns))
-					.heart(getSnsHeart(tmpSns, tmpSns.getSns().getUser().getUserNo()))
-					.hashtag(getSnsHashtag(tmpSns))
+					.snsUser(MakeSnsUtil.getAnyUser(tmpSns.getSns().getUser().getUserNo(), urepo))
+					.reply(MakeSnsUtil.getSnsReply(tmpSns, rrepo, urepo))
+					.heart(MakeSnsUtil.getSnsHeart(tmpSns, tmpSns.getSns().getUser().getUserNo(), hrepo))
+					.hashtag(MakeSnsUtil.getSnsHashtag(tmpSns, tagrepo))
 					.build();
 			
 
@@ -160,8 +155,13 @@ public class SnsController {
 		TripVO trip = trepo.findById(tripNo).orElse(null);
 		
 		srepo.findBySnsOrderBySnsNoDesc(trip).forEach(sns -> {
+			Integer heartCnt = hrepo.findBySns(sns).size();
+			Integer replyCnt = rrepo.findBySns(sns).size();
+			
 			JSONObject obj = new JSONObject();
 			obj.put("snsNo", sns.getSnsNo());	
+			obj.put("heartCnt", heartCnt);
+			obj.put("replyCnt", replyCnt);
 			
 			String imgKey = sns.getSnsPhoto().split("@")[0];
 			obj.put("thumbnail", AwsUtil.getImageURL(imgKey));
@@ -189,73 +189,4 @@ public class SnsController {
 		return snsList;
 	}
 	
-	// 게시글 이미지 주소로 가져오기 
-	private String getSnsImages(String snsPhoto) {
-		String photo = "";
-		String[] images = snsPhoto.split("@");
-		for(int i = 0; i < images.length; i++) {
-			photo += AwsUtil.getImageURL(images[i]);
-			if(i != images.length - 1) {
-				photo += "@";
-			}
-		}
-		
-		return photo;
-	}
-	
-	// 작성자 가져오기
-	private UserSimpleDto getAnyUser(Long userNo) {
-		UserVO tmpUser = urepo.findById(userNo).orElse(null);
-		
-		UserSimpleDto user = UserSimpleDto.builder()
-				.userNo(tmpUser.getUserNo())
-				.userNick(tmpUser.getUserNick())
-				.userProfile(AwsUtil.getImageURL(tmpUser.getProfile().getProfilePhoto()))
-				.build();
-		return user;
-	}
-	
-	// 게시글 댓글 가져오기
-	private List<ReplyDto> getSnsReply(SnsVO sns) {
-		List<ReplyVO> tmpReplyList = rrepo.findBySns(sns);
-		
-		List<ReplyDto> replyList = new ArrayList<>();
-		tmpReplyList.forEach(tmpReply -> {
-			ReplyDto reply = ReplyDto.builder()
-					.snsNo(sns.getSnsNo())
-					.replyNo(tmpReply.getReplyNo())
-					.replyContent(tmpReply.getReplyContent())
-					.replyRegdate(tmpReply.getReplyRegdate())
-					.replyUser(getAnyUser(tmpReply.getUser().getUserNo()))
-					.build();
-			replyList.add(reply);
-		});
-		
-		return replyList;
-	}
-	
-	// 게시글 좋아요 여부 가져오기
-	private boolean getSnsHeart(SnsVO sns, Long userNo) {
-		MultiKey key = MultiKey.builder()
-				.sns(sns.getSnsNo())
-				.user(userNo)
-				.build();
-		return hrepo.findById(key).orElse(null) != null;
-	}
-	
-	// 게시글 해시태그 가져오기
-	private List<HashtagDto> getSnsHashtag(SnsVO sns) {
-		List<HashtagVO> tmpHashtagList = tagrepo.findBySns(sns);
-		
-		List<HashtagDto> tagList = new ArrayList<>();
-		tmpHashtagList.forEach(tmpHashtag -> {
-			HashtagDto hashtag = HashtagDto.builder()
-					.htNo(tmpHashtag.getHtNo())
-					.htHashtag(tmpHashtag.getHtHashtag())
-					.build();
-			tagList.add(hashtag);
-		});
-		
-		return tagList;
-	}
 }

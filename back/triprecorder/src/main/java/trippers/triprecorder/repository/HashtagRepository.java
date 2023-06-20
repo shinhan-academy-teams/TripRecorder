@@ -9,4 +9,5 @@ import trippers.triprecorder.entity.SnsVO;
 
 public interface HashtagRepository extends JpaRepository<HashtagVO, Long>{
 	List<HashtagVO> findBySns(SnsVO sns);
+	List<HashtagVO> findByHtHashtag(String tag);
 }
