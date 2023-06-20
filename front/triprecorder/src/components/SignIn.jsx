@@ -5,7 +5,6 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Form, Input, Button } from "antd";
 import Cookies from "js-cookie";
 import authService from "api/auth.service";
-import { useNavigate } from "react-router-dom";
 
 const SignIn = (props) => {
   const DivInner = styled.div`
@@ -45,9 +44,7 @@ const SignIn = (props) => {
 
   const [form] = Form.useForm();
   const [, forceUpdate] = useState({});
-  let jwtToken = Cookies.get("jwtToken");
-
-  const navigate = useNavigate();
+  // let jwtToken = Cookies.get("jwtToken");
 
   useEffect(() => {
     forceUpdate({});

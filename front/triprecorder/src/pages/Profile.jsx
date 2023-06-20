@@ -80,6 +80,8 @@ const Profile = () => {
           {loading ? <div class="loader" /> : ""}
 
 
+
+
           {/* <!-- End of gallery --> */}
 
           {/* <div class="loader"></div> */}
@@ -91,3 +93,27 @@ const Profile = () => {
 };
 
 export default Profile;
+
+// items={new Array(2).fill(null).map((_, i) => {
+//   const id = String(i + 1);
+//   const label = ["게시물", "경비"];
+//   return {
+//     label: `${label[i]}`,
+//     key: id,
+//     children:
+//       label[i] === "게시물" ? (
+//         <div class="gallery">
+//           {images?.map((image, index) => (
+//             <GalleryItem
+// key={index}
+// src={image.thumbnail}
+// likes={image.heartCnt}
+// comments={image.replyCnt}
+//             />
+//           ))}
+//         </div>
+//       ) : (
+//         "hi"
+//       ),
+//   };
+// })}

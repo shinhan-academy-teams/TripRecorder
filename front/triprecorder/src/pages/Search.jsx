@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
-
+// import {userState}
 const Search = () => {
   const DivBox = styled.div`
     position: absolute;
@@ -16,6 +16,7 @@ const Search = () => {
   `;
   return (
     <DivBox>
+      {/* <useSta */}
       <p>Search</p>
       <p>검색입니당1</p>
       <p>검색입니당2</p>
