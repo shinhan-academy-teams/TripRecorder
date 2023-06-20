@@ -8,5 +8,6 @@ import trippers.triprecorder.entity.CardVO;
 import trippers.triprecorder.entity.DiscountVO;
 
 public interface DiscountRepository extends JpaRepository<DiscountVO, Long> {
-    List<DiscountVO> findByCard(CardVO card);
+    List<DiscountVO> findByDcCateAndCardIn(String category, List<CardVO> cards);
 }
+
