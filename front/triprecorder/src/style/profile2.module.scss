@@ -2,6 +2,18 @@
   font-size: 10px;
 }
 
+.divbox {
+  position: absolute;
+  width: 50%;
+  // border: 3px solid #7fb77e;
+  border-radius: 30px;
+  top: 50%;
+  left: 40%;
+  display: grid;
+  align-items: center;
+  transform: translate(-30%, -50%);
+  text-align: center;
+}
 // *,
 // *::before,
 // *::after {
