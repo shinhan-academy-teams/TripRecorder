@@ -1,13 +1,46 @@
 package trippers.triprecorder.dto;
 
+import lombok.Getter;
+import lombok.Setter;
 import trippers.triprecorder.entity.CardVO;
 
+
 public class DiscountDto {
-	private Long dcNo;
-	private CardVO card;
-	private String dcCate;
-	private String dcDiscount;
-	private Double dcAmount;
-	private String dcWay;
+
+	private Long discountAmount;
+	private Long payback;
+	private Long point;
+	private Long annual;
+	private Long totalDiscountAmount;
+	public Long getDiscountAmount() {
+		return discountAmount;
+	}
+	public void setDiscountAmount(Long discountAmount) {
+		this.discountAmount = discountAmount;
+	}
+	public Long getPayback() {
+		return payback;
+	}
+	public void setPayback(Long payback) {
+		this.payback = payback;
+	}
+	public Long getPoint() {
+		return point;
+	}
+	public void setPoint(Long point) {
+		this.point = point;
+	}
+	public Long getAnnual() {
+		return annual;
+	}
+	public void setAnnual(Long annual) {
+		this.annual = annual;
+	}
+	public Long getTotalDiscountAmount() {
+		return totalDiscountAmount;
+	}
+	public void setTotalDiscountAmount(Long totalDiscountAmount) {
+		this.totalDiscountAmount = totalDiscountAmount;
+	}
 
 }
