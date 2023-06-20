@@ -79,6 +79,9 @@ const Profile = () => {
           />
           {loading ? <div class="loader" /> : ""}
 
+
+
+
           {/* <!-- End of gallery --> */}
 
           {/* <div class="loader"></div> */}
