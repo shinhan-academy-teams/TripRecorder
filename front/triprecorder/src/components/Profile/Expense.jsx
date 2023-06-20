@@ -1,4 +1,4 @@
-import { Divider, List, Skeleton } from "antd";
+import { Button, Divider, List, Skeleton } from "antd";
 import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 const Expense = () => {
@@ -24,48 +24,62 @@ const Expense = () => {
   }, []);
   return (
     <div
-      id="scrollableDiv"
       style={{
-        height: 400,
-        overflow: "auto",
-        padding: "0 16px",
-        border: "1px solid rgba(140, 140, 140, 0.35)",
+        display: "flex",
+        justifyContent: "space-between",
+        flexDirection: "column",
+        // width: "2.5rem",
       }}
     >
-      <InfiniteScroll
-        dataLength={data.length}
-        next={loadMoreData}
-        hasMore={data.length < 50}
-        loader={
-          <Skeleton
-            avatar
-            paragraph={{
-              rows: 1,
-            }}
-            active
-          />
-        }
-        endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
-        scrollableTarget="scrollableDiv"
+      {/* <Button>ds</Button>
+      <Button>ds</Button>
+      <Button>ds</Button> */}
+      {/* <div style={{ display: "flex", flexDirection: "column" }}> */}
+      <div
+        id="scrollableDiv"
+        style={{
+          height: 400,
+          overflow: "auto",
+          padding: "0 16px",
+          border: "1px solid rgba(140, 140, 140, 0.35)",
+        }}
       >
-        <List
-          dataSource={data}
-          renderItem={(item) => (
-            <List.Item key={item.expTime}>
-              <List.Item.Meta
-                // avatar={<Avatar src={item.picture.large} />}
-                title={
-                  <a href="#">
-                    {item.exp.expTitle} {item.exp.expPlace}
-                  </a>
-                }
-                description={item.expTime}
-              />
-              <div>Content</div>
-            </List.Item>
-          )}
-        />
-      </InfiniteScroll>
+        <InfiniteScroll
+          dataLength={data.length}
+          next={loadMoreData}
+          hasMore={data.length < 50}
+          loader={
+            <Skeleton
+              avatar
+              paragraph={{
+                rows: 1,
+              }}
+              active
+            />
+          }
+          endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
+          scrollableTarget="scrollableDiv"
+        >
+          <List
+            dataSource={data}
+            renderItem={(item) => (
+              <List.Item key={item.expTime}>
+                <List.Item.Meta
+                  // avatar={<Avatar src={item.picture.large} />}
+                  title={
+                    <a href="#">
+                      {item.exp.expTitle} {item.exp.expPlace}
+                    </a>
+                  }
+                  description={item.expTime}
+                />
+                <div>Content</div>
+              </List.Item>
+            )}
+          />
+        </InfiniteScroll>
+        {/* </div> */}
+      </div>
     </div>
   );
 };

@@ -4,11 +4,12 @@ import styles from "../style/profile2.module.scss";
 import Header from "components/Profile/Header";
 import GalleryItem from "components/Profile/GalleryItem";
 import profileService from "api/profile.service";
-import { Tabs } from "antd";
+import { Button, Tabs } from "antd";
 import CategoryItem from "components/Profile/CategoryItem";
 import Expense from "components/Profile/Expense";
 import { useRecoilState } from "recoil";
 import { imagesState } from "../recoil/Profile";
+import { AppstoreAddOutlined } from "@ant-design/icons";
 const Profile = () => {
   const [image, setImageState] = useRecoilState(imagesState);
   const [loading, setLoading] = useState(true);
@@ -53,6 +54,16 @@ const Profile = () => {
                 children:
                   label[i] === "게시물" ? (
                     <div class="gallery">
+                      {/* <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          // width: "2.5rem",
+                        }}
+                      >
+                        <Button> dw</Button>
+                      </div> */}
+
                       {image?.map((imageItem, index) =>
                         imageItem.tripName ? (
                           <CategoryItem
@@ -78,9 +89,6 @@ const Profile = () => {
             })}
           />
           {loading ? <div class="loader" /> : ""}
-
-
-
 
           {/* <!-- End of gallery --> */}
 
