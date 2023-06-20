@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -59,5 +60,12 @@ public class ReplyController {
 				.build();
 		
 		return myReply;
+	}
+	
+	// 댓글 삭제
+	@DeleteMapping("/delete/{replyNo}")
+	public String deleteReply(@PathVariable Long replyNo) {
+		rrepo.findById(replyNo).ifPresent(reply -> rrepo.delete(reply));
+		return "OK";
 	}
 }
