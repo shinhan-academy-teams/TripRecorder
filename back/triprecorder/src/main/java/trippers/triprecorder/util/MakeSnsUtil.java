@@ -5,6 +5,7 @@ import java.util.List;
 
 import trippers.triprecorder.dto.MultiKey;
 import trippers.triprecorder.dto.ReplyDto;
+import trippers.triprecorder.dto.SnsDto;
 import trippers.triprecorder.dto.UserSimpleDto;
 import trippers.triprecorder.entity.HashtagVO;
 import trippers.triprecorder.entity.ReplyVO;
@@ -16,15 +17,28 @@ import trippers.triprecorder.repository.ReplyRepository;
 import trippers.triprecorder.repository.UserRepository;
 
 public class MakeSnsUtil {
+	// SnsDto 생성
+	public static SnsDto makeSnsDto(SnsVO tmpSns, Long userNo, UserRepository urepo, ReplyRepository rrepo,
+			HeartRepository hrepo, HashtagRepository tagrepo) {
+		SnsDto sns = SnsDto.builder().tripNo(tmpSns.getSns().getTripNo()).snsNo(tmpSns.getSnsNo())
+				.snsTitle(tmpSns.getSnsTitle()).snsContent(tmpSns.getSnsContent())
+				.snsPhoto(MakeSnsUtil.getSnsImages(tmpSns.getSnsPhoto())).snsRegdate(tmpSns.getSnsRegdate())
+				.snsScope(tmpSns.getSnsScope())
+				.snsUser(MakeSnsUtil.getAnyUser(tmpSns.getSns().getUser().getUserNo(), urepo))
+				.reply(MakeSnsUtil.getSnsReply(tmpSns, rrepo, urepo))
+				.isHeart(MakeSnsUtil.getSnsHeart(tmpSns, userNo, hrepo))
+				.heartCnt(hrepo.findBySns(tmpSns).size())
+				.hashtag(MakeSnsUtil.getSnsHashtag(tmpSns, tagrepo)).build();
+
+		return sns;
+	}
+
 	// 게시글 이미지 주소로 가져오기
-	public static String getSnsImages(String snsPhoto) {
-		String photo = "";
+	public static List<String> getSnsImages(String snsPhoto) {
+		List<String> photo = new ArrayList<>();
 		String[] images = snsPhoto.split("@");
 		for (int i = 0; i < images.length; i++) {
-			photo += AwsUtil.getImageURL(images[i]);
-			if (i != images.length - 1) {
-				photo += "@";
-			}
+			photo.add(AwsUtil.getImageURL(images[i]));
 		}
 
 		return photo;
@@ -61,16 +75,14 @@ public class MakeSnsUtil {
 	}
 
 	// 게시글 해시태그 가져오기
-	public static String getSnsHashtag(SnsVO sns, HashtagRepository tagrepo) {
+	public static List<String> getSnsHashtag(SnsVO sns, HashtagRepository tagrepo) {
 		List<HashtagVO> tagList = tagrepo.findBySns(sns);
-		String tag = "";
+		List<String> tag = new ArrayList<>();
 
 		for (int i = 0; i < tagList.size(); i++) {
 			HashtagVO tmpTag = tagList.get(i);
-			tag += "#" + tmpTag.getHtHashtag();
-			if (i != tagList.size() - 1) {
-				tag += "@";
-			}
+			tag.add("#" + tmpTag.getHtHashtag());
+
 		}
 
 		return tag;
