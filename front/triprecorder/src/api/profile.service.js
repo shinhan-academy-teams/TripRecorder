@@ -1,4 +1,5 @@
 import api from "./axios";
+
 import Cookies from "js-cookie";
 
 const getProfileInfo = (userId) => {
@@ -10,6 +11,7 @@ const getProfileInfo = (userId) => {
     })
     .catch((err) => console.log(err));
 };
+
 
 const getSnsPostList = (tripNum) => {
   return api

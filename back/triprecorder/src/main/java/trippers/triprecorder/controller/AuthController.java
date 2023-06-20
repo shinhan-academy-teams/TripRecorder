@@ -22,24 +22,41 @@ public class AuthController {
 	// 중복이다 - true, 중복이 아니다 - false
 	@PostMapping(value = "/signup/useridCheck")
 	public boolean postUseridCheck(@RequestBody UserVO user) {
-		UserVO findUser = urepo.findByUserId(user.getUserId());
-		return findUser != null;
+		boolean result = true;
+		String userId = user.getUserId();
+		if(!userId.equals("")) {
+			UserVO findUser = urepo.findByUserId(userId);
+			result = findUser != null;
+		}
+		return result;
 	}
 
 	// 회원가입 - 닉네임 중복 체크
 	// 중복이다 - true, 중복이 아니다 - false
 	@PostMapping(value = "/signup/usernickCheck")
 	public boolean postUsernickCheck(@RequestBody UserVO user) {
-		UserVO findUser = urepo.findByUserNick(user.getUserNick());
-		return findUser != null;
+		boolean result = true;
+		String userNick = user.getUserNick();
+		if(!userNick.equals("")) {
+			UserVO findUser = urepo.findByUserNick(userNick);
+			result = findUser != null;
+		}
+		
+		return result;
 	}
 
 	// 회원가입 - 이메일 중복 체크
 	// 중복이다 - true, 중복이 아니다 - false
 	@PostMapping(value = "/signup/useremailCheck")
 	public boolean postUseremailCheck(@RequestBody UserVO user) {
-		UserVO findUser = urepo.findByUserEmail(user.getUserEmail());
-		return findUser != null;
+		boolean result = true;
+		String userEmail = user.getUserEmail();
+		if(!userEmail.equals("")) {
+			UserVO findUser = urepo.findByUserEmail(userEmail);	
+			result = findUser != null;
+		}
+		
+		return result;
 	}
 
 	// 회원가입

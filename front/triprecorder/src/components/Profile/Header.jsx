@@ -40,8 +40,13 @@ const Header = () => {
 
           <div class="profile-bio">
             <p>
+
               <span class="profile-real-name">Jane Doe</span> Lorem ipsum dolor
               sit, amet consectetur adipisicing elit 📷✈️🏕️
+
+              <span class="profile-real-name">Apple(실명)</span> 여행을 떠나요
+              📷✈️🏕️
+
             </p>
           </div>
         </div>
