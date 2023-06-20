@@ -56,3 +56,9 @@ export const fileStrAtom = atom({
   key: "fileStrAtom",
   default: "",
 });
+
+//영수증 목록 가져오기
+export const tripReceiptAtom = atom({
+  key: "tripReceiptAtom",
+  default: [],
+});

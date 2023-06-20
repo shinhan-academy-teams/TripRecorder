@@ -102,9 +102,10 @@ public class SnsController {
 	public List<SnsDto> getSnsList(HttpServletRequest request) {
 		String obj = request.getHeader("Authorization");
 		List<SnsVO> tmpSnsList = new ArrayList<>();
+		Long userNo = null;
 		
 		if(obj != null) {
-			Long userNo = EncodingUtil.getUserNo(request);
+			userNo = EncodingUtil.getUserNo(request);
 			UserVO user = urepo.findById(userNo).orElse(null);
 			List<FollowVO> following = frepo.findByFollower(user);
 			
@@ -121,20 +122,9 @@ public class SnsController {
 		
 		List<SnsDto> snsList = new ArrayList<>();
 		
-		tmpSnsList.forEach(tmpSns -> {
-			SnsDto sns = SnsDto.builder()
-					.tripNo(tmpSns.getSns().getTripNo())
-					.snsNo(tmpSns.getSnsNo())
-					.snsTitle(tmpSns.getSnsTitle())
-					.snsContent(tmpSns.getSnsContent())
-					.snsPhoto(MakeSnsUtil.getSnsImages(tmpSns.getSnsPhoto()))
-					.snsRegdate(tmpSns.getSnsRegdate())
-					.snsScope(tmpSns.getSnsScope())
-					.snsUser(MakeSnsUtil.getAnyUser(tmpSns.getSns().getUser().getUserNo(), urepo))
-					.reply(MakeSnsUtil.getSnsReply(tmpSns, rrepo, urepo))
-					.heart(MakeSnsUtil.getSnsHeart(tmpSns, tmpSns.getSns().getUser().getUserNo(), hrepo))
-					.hashtag(MakeSnsUtil.getSnsHashtag(tmpSns, tagrepo))
-					.build();
+		for(int i = 0; i < tmpSnsList.size(); i++) {
+			SnsVO tmpSns = tmpSnsList.get(i);
+			SnsDto sns = MakeSnsUtil.makeSnsDto(tmpSns, userNo, urepo, rrepo, hrepo, tagrepo);
 			
 
 			if(tmpSns.getExp() != null) {
@@ -142,9 +132,8 @@ public class SnsController {
 			}
 			
 			snsList.add(sns);
-		});
+		}
 		
-		System.out.println(tmpSnsList.size());
 		return snsList;
 	}
 	
@@ -176,7 +165,7 @@ public class SnsController {
 	@PostMapping("/list/{tripNo}")
 	public List<JSONObject> postSnsList(@PathVariable Long tripNo) {
 		TripVO trip = trepo.findById(tripNo).orElse(null);
-		List<SnsVO> tmpSnsList = srepo.findBySnsAndExpNull(trip);
+		List<SnsVO> tmpSnsList = srepo.findBySnsAndExpNullOrderBySnsNoDesc(trip);
 		
 		List<JSONObject> snsList = new ArrayList<>();
 		tmpSnsList.forEach(sns -> {
@@ -187,6 +176,21 @@ public class SnsController {
 		});
 		
 		return snsList;
+	}
+	
+	// 게시글 상세보기
+	@GetMapping("/detail/{snsNo}")
+	public SnsDto getSnsDetail(HttpServletRequest request, @PathVariable Long snsNo) {
+		String obj = request.getHeader("Authorization");
+		Long userNo = null;
+		
+		if(obj != null) {
+			userNo = EncodingUtil.getUserNo(request);
+		}
+		SnsVO tmpSns = srepo.findById(snsNo).orElse(null);
+		SnsDto sns = MakeSnsUtil.makeSnsDto(tmpSns, userNo, urepo, rrepo, hrepo, tagrepo);
+		
+		return sns;
 	}
 	
 }

@@ -12,12 +12,26 @@ import {
   progressAtom,
   showAlertAtom,
   tagsAtom,
+  tripReceiptAtom,
 } from "recoil/RegisterSnsAtom";
 import "style/register.scss";
 import logo from "assets/tripRecorder.png";
-import { Button, Form, Input, Radio, Space, Tag, Tooltip, theme } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  Radio,
+  Select,
+  Space,
+  Tag,
+  Tooltip,
+  theme,
+} from "antd";
 import authService from "api/auth.service";
 import { PlusOutlined } from "@ant-design/icons";
+import api from "api/axios";
+
+const { Option } = Select;
 
 const RegisterSns = () => {
   const { TextArea } = Input;
@@ -46,6 +60,9 @@ const RegisterSns = () => {
     useRecoilState(editInputIndexAtom);
   const [editInputValue, setEditInputValue] =
     useRecoilState(editInputValueAtom);
+
+  const [tripReceipt, setTripReceipt] = useRecoilState(tripReceiptAtom); //게시글
+
   const inputRef = useRef(null);
   const editInputRef = useRef(null);
 
@@ -59,9 +76,20 @@ const RegisterSns = () => {
     editInputRef.current?.focus();
   }, [inputValue]);
 
+  // useEffect(() => {
+  //   console.log(tags);
+  // }, [tags]);
+
   useEffect(() => {
-    console.log(tags);
-  }, [tags]);
+    api
+      .post("/exp/list/4") //하드 코딩한 tripNo 수정 필요
+      .then((res) => {
+        const receiptData = res.data;
+        setTripReceipt(receiptData.map((receipt) => receipt));
+        console.log(receiptData);
+      })
+      .catch((err) => console.log("error : ", err));
+  }, []);
 
   const handleClose = (removedTag) => {
     const newTags = tags.filter((tag) => tag !== removedTag);
@@ -141,26 +169,10 @@ const RegisterSns = () => {
     }
   };
 
-  const onFinish = (values) => {
-    //values : DB에 저장할 입력값
-    console.log("Success:", values);
-    // console.log();
-    authService
-      .RegisterSns(
-        4, //tripNo
-        tags,
-        values["snsTitle"],
-        values["snsContent"],
-        values["snsPhoto"],
-        values["snsScope"]
-      )
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
-  };
-
   useEffect(() => {
     console.log(selectedFile);
   }, [selectedFile]);
+
   var fileString = "";
   // const [fileStr, setFileStr] = useRecoilState()
   for (var i = 0; i < selectedFile.length; i++) {
@@ -196,6 +208,28 @@ const RegisterSns = () => {
         });
     }
   };
+
+  const onFinish = (values) => {
+    //values : DB에 저장할 입력값
+    console.log("Success:", values);
+    // console.log();
+    authService
+      .RegisterSns(
+        4, //tripNo
+        values["receipt"],
+        tags,
+        values["snsTitle"],
+        values["snsContent"],
+        fileString,
+        values["snsScope"]
+      )
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+
+  const handleCardChange = (value) => {
+    console.log(value);
+  };
   return (
     <div className="divbox">
       <img alt="tripRecorder" src={logo} className="logoimg" />
@@ -211,6 +245,28 @@ const RegisterSns = () => {
           }}
           onFinish={onFinish}
         >
+          <Form.Item
+            label="영수증 선택"
+            name="receipt"
+            rules={[
+              {
+                required: true,
+                message: "경비 연결할 sns 게시글을 선택해주세요!",
+              },
+            ]}
+          >
+            <Select style={{ width: "350px" }} onChange={handleCardChange}>
+              <Option value="null">선택 안함</Option>
+              {tripReceipt.map((receipt, index) => {
+                return (
+                  <Option value={receipt.expNo} key={index}>
+                    {receipt.expTitle}
+                  </Option>
+                );
+              })}
+            </Select>
+          </Form.Item>
+
           {/* 제목 */}
           <Form.Item
             label="제목"
@@ -348,13 +404,13 @@ const RegisterSns = () => {
           >
             <Radio.Group onChange={setOpenRange} value={openRange}>
               <Space direction="horizontal" style={{ margin: 5 }}>
-                <Radio value={-1} onClick={() => setOpenRange(-1)}>
+                <Radio value={1} onClick={() => setOpenRange(-1)}>
                   전체 공개
                 </Radio>
                 <Radio value={0} onClick={() => setOpenRange(0)}>
                   팔로워 공개
                 </Radio>
-                <Radio value={1} onClick={() => setOpenRange(1)}>
+                <Radio value={-1} onClick={() => setOpenRange(1)}>
                   비공개
                 </Radio>
               </Space>
