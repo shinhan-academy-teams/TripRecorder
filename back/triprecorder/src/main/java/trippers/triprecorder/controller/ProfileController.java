@@ -57,7 +57,7 @@ public class ProfileController {
 		return profile;
 	}
 	// 사용자 프로필 수정
-    @GetMapping("/{userNo}")
+    @GetMapping("/update/{userNo}")
     public ProfileDto updateUserProfile(@PathVariable Long userNo, @RequestBody ProfileUpdateDto updateDto) {
         UserVO user = urepo.findById(userNo).orElse(null);
         if (user == null) {

@@ -75,7 +75,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 				.sign(Algorithm.HMAC512(JwtProperties.SECRET));
 
 		UserSimpleDto user = UserSimpleDto.builder().userNo(principalDetails.getUser().getUserNo())
-				.userNick(principalDetails.getUser().getUserNick()).build();
+				.userNick(principalDetails.getUser().getUserNick())
+				.userId(principalDetails.getUser().getUserId()).build();
 
 		String profile = prepo.findById(user.getUserNo()).orElse(null).getProfilePhoto();
 		String profileUrl = AwsUtil.getImageURL(profile);

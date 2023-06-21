@@ -44,7 +44,7 @@ public class CardController {
 	}
 
 	// 특정 카테고리에 속하는 카드번호 중 개수가 가장 많은 상위 3개 조회
-	@GetMapping("/topcard")
+	@PostMapping("/topcard")
 	public List<CardDto> getTopCardList(@RequestBody JSONObject obj) {
 
 		List<Object> tmpCardList = erepo.findTop3CardNumbersByExpCate(obj.get("category").toString());
@@ -92,12 +92,30 @@ public class CardController {
 		List<DiscountVO> dcList = drepo.findByDcCateAndCardIn(category, cardList);
 
 		List<DiscountDto> dcResult = new ArrayList<>();
-
-		dcList.forEach(dc -> {
-
-			dcResult.add(createDiscountDto(dc, price));
-
+		
+		cardList.forEach(card -> {
+			boolean loop = false;
+			for(int i = 0; i < dcList.size(); i++) {
+				DiscountVO dc = dcList.get(i);
+				
+				if(dc.getCard().getCardNo() == card.getCardNo()) {
+					dcResult.add(createDiscountDto(dc, price));
+					loop = true;
+					break;
+				} 
+			}
+			
+			// 해당 카테고리에 대한 혜택이 없는 카드인 경우
+			if(!loop) {
+				DiscountDto dto = DiscountDto.builder()
+						.annual(Long.valueOf(card.getCardAnnual()))
+						.totalDiscountAmount(0L)
+						.build();
+				
+				dcResult.add(dto);
+			}
 		});
+
 		return dcResult;
 	}
 
