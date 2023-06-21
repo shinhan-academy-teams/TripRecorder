@@ -1,14 +1,14 @@
 import React from "react";
 import Cookies from "js-cookie";
-import LoginSns from "./LoginSns";
 import LogoutSns from "./LogoutSns";
+import SnsLogin from "./SnsLogin";
 
 const Sns = () => {
   const token = Cookies.get("jwtToken");
 
   return (
     <div className="snsbox">
-      {token ? <LoginSns token={token} /> : <LogoutSns />}
+      {token ? <SnsLogin token={token} /> : <LogoutSns />}
     </div>
   );
 };
