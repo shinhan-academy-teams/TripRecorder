@@ -1,10 +1,52 @@
-import { AppstoreAddOutlined } from "@ant-design/icons";
-import { Button } from "antd";
-import React from "react";
+import { AppstoreAddOutlined, SettingOutlined } from "@ant-design/icons";
+import { Button, Modal } from "antd";
+import React, { useState } from "react";
 import { useRecoilState } from "recoil";
 import { imagesState } from "../../recoil/Profile";
+import User from "components/Search/User";
+import profileService from "api/profile.service";
+import { Link, useNavigate } from "react-router-dom";
 const Header = () => {
   const [image, setImageState] = useRecoilState(imagesState);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isfollowingOpen, setIsFollowingOpen] = useState(false);
+
+  const [follower, setFollower] = useState();
+  const [following, setFollowing] = useState();
+  const showFolloweModal = () => {
+    setIsModalOpen(true);
+    profileService.getFollowerList(155).then((res) => {
+      setFollower(res);
+      console.log(res);
+    });
+    // .getFollowerList(localStorage.getItem("userNo"))
+  };
+  const showFollowingModal = () => {
+    setIsFollowingOpen(true);
+    profileService.getFollowingList(155).then((res) => {
+      setFollowing(res);
+      console.log(res);
+    });
+    // .getFollowerList(localStorage.getItem("userNo"))
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleFollowerCancel = () => {
+    setIsModalOpen(false);
+  };
+  const handleFollowingCancel = () => {
+    setIsFollowingOpen(false);
+  };
+
+  const error = () => {
+    Modal.error({
+      title: "팔로우를 못합니다😠",
+      content: "로그인 하시고 다시 팔로우 해주세요🤔",
+    });
+  };
+
+  const navigate = useNavigate();
   return (
     <div id="header">
       <div class="container">
@@ -18,25 +60,54 @@ const Header = () => {
               {localStorage.getItem("userNick")}
             </h1>
 
-            <button class="btn profile-edit-btn">팔로우</button>
+            {localStorage.getItem("userNo") ? (
+              <button
+                class="btn profile-edit-btn"
+                // onClick={() => }
+                style={{
+                  opacity: 0.5,
+                  cursor: "not-allowed",
+                  backgroundColor: "#7fb77e",
+                  color: "#ffffff",
+                }}
+              >
+                나의 프로필
+              </button>
+            ) : (
+              <button
+                class="btn profile-edit-btn"
+                onClick={error}
+                style={{
+                  backgroundColor: "#7fb77e",
+                  color: "#ffffff",
+                }}
+              >
+                팔로우
+              </button>
+            )}
 
             <button
               class="btn profile-settings-btn"
               aria-label="profile settings"
             >
+              <SettingOutlined />
               <i class="fas fa-cog" aria-hidden="true"></i>
             </button>
           </div>
 
           <div class="profile-stats">
             <ul>
-              <li>
+              <li
+                onClick={() => {
+                  console.log("2");
+                }}
+              >
                 여행티어 <span class="profile-stat-count">🫅</span>
               </li>
-              <li>
+              <li onClick={showFolloweModal}>
                 팔로워 <span class="profile-stat-count">188</span>
               </li>
-              <li>
+              <li onClick={showFollowingModal}>
                 팔로우 <span class="profile-stat-count">206</span>
               </li>
             </ul>
@@ -52,24 +123,102 @@ const Header = () => {
           </div>
         </div>
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
-          {image[0]?.tripName ? (
-            <Button
-              onClick={() => {
-                console.log(image);
-              }}
-            >
-              이동1
-            </Button>
+          {image ? (
+            image[0]?.tripName ? (
+              <Link to={"/tripregistration"}>
+                <button
+                  class="btn profile-settings-btn"
+                  onClick={() => {
+                    // navigate("/tripregistration", {
+                    //   state: {
+                    //     id: 1,
+                    //     job: "개발자",
+                    //   },
+                    // });
+                    console.log(image, "category");
+                  }}
+                >
+                  <AppstoreAddOutlined />
+                </button>
+              </Link>
+            ) : (
+              // </Link>
+              <Link to={"/registersns"}>
+                <button
+                  class="btn profile-settings-btn"
+                  onClick={() => {
+                    console.log(image, "profile");
+                  }}
+                >
+                  <AppstoreAddOutlined />
+                </button>
+              </Link>
+            )
           ) : (
-            <Button
-              onClick={() => {
-                console.log(image);
-              }}
-            >
-              이동2
-            </Button>
+            ""
           )}
 
+          <Modal
+            title="팔로워"
+            open={isModalOpen}
+            onOk={false}
+            onCancel={handleFollowerCancel}
+            cancelButtonProps={{ style: { display: "none" } }}
+            okButtonProps={{ style: { display: "none" } }}
+            width={400}
+            bodyStyle={{
+              height: 320,
+              overflow: "auto",
+              borderTop: "1px solid",
+            }}
+          >
+            <div
+              style={{
+                overflow: "auto",
+              }}
+            >
+              {follower?.map((val, idx) => {
+                return (
+                  <User
+                    key={val?.userNo}
+                    src={val?.userProfile}
+                    userNick={val?.userNick}
+                  />
+                );
+              })}
+            </div>
+          </Modal>
+
+          <Modal
+            title="팔로우"
+            open={isfollowingOpen}
+            onOk={false}
+            onCancel={handleFollowingCancel}
+            cancelButtonProps={{ style: { display: "none" } }}
+            okButtonProps={{ style: { display: "none" } }}
+            width={400}
+            bodyStyle={{
+              height: 320,
+              overflow: "auto",
+              borderTop: "1px solid",
+            }}
+          >
+            <div
+              style={{
+                overflow: "auto",
+              }}
+            >
+              {following?.map((val, idx) => {
+                return (
+                  <User
+                    key={val?.userNo}
+                    src={val?.userProfile}
+                    userNick={val?.userNick}
+                  />
+                );
+              })}
+            </div>
+          </Modal>
           {/* <AppstoreAddOutlined /> */}
         </div>
         {/* <!-- End of profile section --> */}
