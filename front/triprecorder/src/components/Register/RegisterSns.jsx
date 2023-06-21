@@ -30,6 +30,7 @@ import {
 import authService from "api/auth.service";
 import { PlusOutlined } from "@ant-design/icons";
 import api from "api/axios";
+import { tripNoState } from "../../recoil/Profile";
 
 const { Option } = Select;
 
@@ -39,7 +40,7 @@ const RegisterSns = () => {
   const [progress, setProgress] = useRecoilState(progressAtom); //업로드 진행률
   const [selectedFile, setSelectedFile] = useRecoilState(filesAtom);
   const [showAlert, setShowAlert] = useRecoilState(showAlertAtom);
-
+  const [tno, setTno] = useRecoilState(tripNoState);
   //해시태그
 
   //s3
@@ -236,6 +237,14 @@ const RegisterSns = () => {
       <small style={{ color: "#9CA3AF", paddingBottom: 10 }}>
         여행 게시글 내용을 등록하세요.
       </small>
+      <Button
+        size="small"
+        onClick={() => {
+          console.log(tno);
+        }}
+      >
+        tripNo 확인
+      </Button>
       <div className="divform">
         <Form
           name="basic"
