@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,7 +42,7 @@ public class SearchController {
 	
 	
 	// 해시태그 검색
-	@GetMapping("/hashtag")
+	@PostMapping("/hashtag")
 	public List<SnsDto> postSearchHashtag(HttpServletRequest request, @RequestBody JSONObject tagObj) {
 		String obj = request.getHeader("Authorization");
 		String searchTag = tagObj.get("hashtag").toString();
@@ -75,7 +75,7 @@ public class SearchController {
 	}
 	
 	// 닉네임 검색
-	@GetMapping("/nickname")
+	@PostMapping("/nickname")
 	public List<UserSimpleDto> postSearchNickname(@RequestBody JSONObject obj) {
 		List<UserVO> tmpUserList = urepo.findByUserNickContaining(obj.get("nickname").toString());
 		List<UserSimpleDto> userList = new ArrayList<>();
@@ -84,6 +84,7 @@ public class SearchController {
 			UserSimpleDto u = UserSimpleDto.builder()
 					.userNo(user.getUserNo())
 					.userNick(user.getUserNick())
+					.userId(user.getUserId())
 					.userProfile(AwsUtil.getImageURL(user.getProfile().getProfilePhoto()))
 					.build();
 			
