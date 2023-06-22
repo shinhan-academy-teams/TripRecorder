@@ -9,10 +9,12 @@ import {
 } from "@ant-design/icons";
 import "style/navbar.scss";
 
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const location = useLocation();
+
+  const navigate = useNavigate();
 
   const [closeMenu, setCloseMenu] = useState(false);
 
@@ -53,7 +55,12 @@ const Navbar = () => {
         }
       >
         <img src={Profile} alt="profile" className="profile" />
-        <div className="profileContents">
+        <div className="profileContents" style={{ cursor: "pointer" }}
+                onClick={() => {
+                  console.log("h2");
+                  navigate(`/${localStorage.getItem('userNick')}`);
+                }}
+        >
           <p className="name">Hello, zzahee✈️</p>
           <p>zzahee366@gmail.com</p>
         </div>
