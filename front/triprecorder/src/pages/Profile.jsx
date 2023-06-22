@@ -54,16 +54,6 @@ const Profile = () => {
                 children:
                   label[i] === "게시물" ? (
                     <div class="gallery">
-                      {/* <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          // width: "2.5rem",
-                        }}
-                      >
-                        <Button> dw</Button>
-                      </div> */}
-
                       {image?.map((imageItem, index) =>
                         imageItem.tripName ? (
                           <CategoryItem
@@ -83,7 +73,21 @@ const Profile = () => {
                       )}
                     </div>
                   ) : (
-                    <Expense />
+                    // label[i] === "경비" ? <Expense />:
+                    <div class="gallery">
+                      {image?.map((imageItem, index) =>
+                        imageItem.tripName ? (
+                          <CategoryItem
+                            key={index}
+                            src={imageItem.thumbnail}
+                            tripName={imageItem.tripName}
+                            tripNo={imageItem.tripNo}
+                          />
+                        ) : (
+                          <Expense />
+                        )
+                      )}
+                    </div>
                   ),
               };
             })}

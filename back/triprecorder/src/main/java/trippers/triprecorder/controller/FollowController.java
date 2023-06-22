@@ -65,6 +65,7 @@ public class FollowController {
 			UserSimpleDto user = UserSimpleDto.builder()
 					.userNo(tmpUser.getUserNo())
 					.userNick(tmpUser.getUserNick())
+					.userId(tmpUser.getUserId())
 					.userProfile(AwsUtil.getImageURL(tmpUser.getProfile().getProfilePhoto()))
 					.build();
 			followingList.add(user);
@@ -86,6 +87,7 @@ public class FollowController {
 			UserSimpleDto user = UserSimpleDto.builder()
 					.userNo(tmpUser.getUserNo())
 					.userNick(tmpUser.getUserNick())
+					.userId(tmpUser.getUserId())
 					.userProfile(AwsUtil.getImageURL(tmpUser.getProfile().getProfilePhoto()))
 					.build();
 			followerList.add(user);

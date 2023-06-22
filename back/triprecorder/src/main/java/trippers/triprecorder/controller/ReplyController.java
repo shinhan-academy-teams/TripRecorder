@@ -48,6 +48,7 @@ public class ReplyController {
 		UserSimpleDto myUser = UserSimpleDto.builder()
 				.userNo(userNo)
 				.userNick(user.getUserNick())
+				.userId(user.getUserId())
 				.userProfile(AwsUtil.getImageURL(profile.getProfilePhoto()))
 				.build();
 		

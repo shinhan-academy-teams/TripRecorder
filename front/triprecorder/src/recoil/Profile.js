@@ -6,6 +6,11 @@ export const imagesState = atom({
   default: [], // 기본값
 });
 
+export const tripNoState = atom({
+  key: "tripNoState",
+  default: 0, // 기본값
+});
+
 // 전역 함수를 생성하는 Recoil selector 생성
 export const imagesSelector = selector({
   key: "imagesSelector",
