@@ -18,6 +18,6 @@ public interface ExpRepository extends JpaRepository<ExpVO, Long> {
 	// 결제 방식이 card인 경비에서 카테고리 별 사용 빈도가 높은 3개의 카드 (for. 인기 카드) 
 	@Query(value = "SELECT e.card_no, COUNT(*) AS usageCount " + "FROM exp e "
 			+ "WHERE e.exp_cate = :category AND NOT e.exp_way = 'cash' " + "GROUP BY e.card_no "
-			+ "ORDER BY usageCount DESC", nativeQuery = true)
+			+ "ORDER BY usageCount DESC LIMIT 3", nativeQuery = true)
 	List<Object> findTop3CardNumbersByExpCate(@Param("category")String category);
 }

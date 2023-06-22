@@ -1,10 +1,14 @@
 package trippers.triprecorder.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-import trippers.triprecorder.entity.CardVO;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class DiscountDto {
 
 	private Long discountAmount;
