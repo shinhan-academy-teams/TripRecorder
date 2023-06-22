@@ -122,105 +122,70 @@ const Header = () => {
             </p>
           </div>
         </div>
-        <div style={{ display: "flex", justifyContent: "flex-end" }}>
-          {image ? (
-            image[0]?.tripName ? (
-              <Link to={"/tripregistration"}>
-                <button
-                  class="btn profile-settings-btn"
-                  onClick={() => {
-                    // navigate("/tripregistration", {
-                    //   state: {
-                    //     id: 1,
-                    //     job: "개발자",
-                    //   },
-                    // });
-                    console.log(image, "category");
-                  }}
-                >
-                  <AppstoreAddOutlined />
-                </button>
-              </Link>
-            ) : (
-              // </Link>
-              <Link to={"/registersns"}>
-                <button
-                  class="btn profile-settings-btn"
-                  onClick={() => {
-                    console.log(image, "profile");
-                  }}
-                >
-                  <AppstoreAddOutlined />
-                </button>
-              </Link>
-            )
-          ) : (
-            ""
-          )}
 
-          <Modal
-            title="팔로워"
-            open={isModalOpen}
-            onOk={false}
-            onCancel={handleFollowerCancel}
-            cancelButtonProps={{ style: { display: "none" } }}
-            okButtonProps={{ style: { display: "none" } }}
-            width={400}
-            bodyStyle={{
-              height: 320,
+        <Modal
+          title="팔로워"
+          open={isModalOpen}
+          onOk={false}
+          onCancel={handleFollowerCancel}
+          cancelButtonProps={{ style: { display: "none" } }}
+          okButtonProps={{ style: { display: "none" } }}
+          width={400}
+          bodyStyle={{
+            height: 320,
+            overflow: "auto",
+            borderTop: "1px solid",
+          }}
+        >
+          <div
+            style={{
               overflow: "auto",
-              borderTop: "1px solid",
             }}
           >
-            <div
-              style={{
-                overflow: "auto",
-              }}
-            >
-              {follower?.map((val, idx) => {
-                return (
-                  <User
-                    key={val?.userNo}
-                    src={val?.userProfile}
-                    userNick={val?.userNick}
-                  />
-                );
-              })}
-            </div>
-          </Modal>
+            {follower?.map((val, idx) => {
+              return (
+                <User
+                  key={val?.userNo}
+                  src={val?.userProfile}
+                  userNick={val?.userNick}
+                />
+              );
+            })}
+          </div>
+        </Modal>
 
-          <Modal
-            title="팔로우"
-            open={isfollowingOpen}
-            onOk={false}
-            onCancel={handleFollowingCancel}
-            cancelButtonProps={{ style: { display: "none" } }}
-            okButtonProps={{ style: { display: "none" } }}
-            width={400}
-            bodyStyle={{
-              height: 320,
+        <Modal
+          title="팔로우"
+          open={isfollowingOpen}
+          onOk={false}
+          onCancel={handleFollowingCancel}
+          cancelButtonProps={{ style: { display: "none" } }}
+          okButtonProps={{ style: { display: "none" } }}
+          width={400}
+          bodyStyle={{
+            height: 320,
+            overflow: "auto",
+            borderTop: "1px solid",
+          }}
+        >
+          <div
+            style={{
               overflow: "auto",
-              borderTop: "1px solid",
             }}
           >
-            <div
-              style={{
-                overflow: "auto",
-              }}
-            >
-              {following?.map((val, idx) => {
-                return (
-                  <User
-                    key={val?.userNo}
-                    src={val?.userProfile}
-                    userNick={val?.userNick}
-                  />
-                );
-              })}
-            </div>
-          </Modal>
-          {/* <AppstoreAddOutlined /> */}
-        </div>
+            {following?.map((val) => {
+              return (
+                <User
+                  key={val?.userNo}
+                  src={val?.userProfile}
+                  userNick={val?.userNick}
+                  userNo={val?.userNo}
+                />
+              );
+            })}
+          </div>
+        </Modal>
+        {/* <AppstoreAddOutlined /> */}
         {/* <!-- End of profile section --> */}
       </div>
 
