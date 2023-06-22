@@ -26,7 +26,7 @@ import trippers.triprecorder.dto.Role;
 
 @Entity
 @Table(name = "user")
-@Getter @Setter @ToString(exclude = {"profile", "follower", "following", "trip", "reply", "heart"})
+@Getter @Setter @ToString(exclude = { "follower", "following", "trip", "reply", "heart"})
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

@@ -2,11 +2,12 @@ import { AppstoreOutlined } from "@ant-design/icons";
 import React from "react";
 // import { Link } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { imagesState } from "../../recoil/Profile";
+import { imagesState, tripNoState } from "../../recoil/Profile";
 import profileService from "api/profile.service";
 
 const CategoryItem = ({ src, tripName, tripNo }) => {
   const [image, setImageState] = useRecoilState(imagesState);
+  const [tno, setTno] = useRecoilState(tripNoState);
   //   const getProfile = (e) => {
   //     profileService.getSnsPostList(e).then((res) => console.log(res));
   //   };
@@ -23,6 +24,7 @@ const CategoryItem = ({ src, tripName, tripNo }) => {
           class="gallery-item-info"
           onClick={() => {
             console.log(tripNo);
+            setTno(tripNo);
             profileService.getSnsPostList(tripNo).then((res) => {
               setImageState(res);
               console.log(res);
