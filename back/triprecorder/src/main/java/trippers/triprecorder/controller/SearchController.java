@@ -45,7 +45,7 @@ public class SearchController {
 	@PostMapping("/hashtag")
 	public List<SnsDto> postSearchHashtag(HttpServletRequest request, @RequestBody JSONObject tagObj) {
 		String obj = request.getHeader("Authorization");
-		String searchTag = tagObj.get("hashtag").toString();
+		String searchTag = tagObj.get("search").toString();
 		List<HashtagVO> tagList = tagrepo.findByHtHashtag(searchTag);
 		List<SnsVO> tmpSnsList = null;
 		Long userNo = null;
@@ -77,7 +77,7 @@ public class SearchController {
 	// 닉네임 검색
 	@PostMapping("/nickname")
 	public List<UserSimpleDto> postSearchNickname(@RequestBody JSONObject obj) {
-		List<UserVO> tmpUserList = urepo.findByUserNickContaining(obj.get("nickname").toString());
+		List<UserVO> tmpUserList = urepo.findByUserNickContaining(obj.get("search").toString());
 		List<UserSimpleDto> userList = new ArrayList<>();
 		
 		tmpUserList.forEach(user -> {
