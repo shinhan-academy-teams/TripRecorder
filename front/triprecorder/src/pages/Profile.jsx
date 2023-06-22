@@ -9,7 +9,13 @@ import CategoryItem from "components/Profile/CategoryItem";
 import Expense from "components/Profile/Expense";
 import { useRecoilState } from "recoil";
 import { imagesState } from "../recoil/Profile";
-import { AppstoreAddOutlined } from "@ant-design/icons";
+import {
+  AppstoreAddOutlined,
+  RollbackOutlined,
+  SettingOutlined,
+} from "@ant-design/icons";
+import CategoryExpenseItem from "components/Profile/CategoryExpenseItem";
+import { Link, useParams } from "react-router-dom";
 const Profile = () => {
   const [image, setImageState] = useRecoilState(imagesState);
   const [loading, setLoading] = useState(true);
@@ -19,14 +25,14 @@ const Profile = () => {
   //     .getSnsPostList(localStorage.getItem("userNo"))
   //     .then((res) => console.log(res));
   // };
-
+  let { userNick } = useParams();
   useEffect(() => {
     // profileService.getSnsPostList(4).then((res) => {
     //   setImages(res);
     //   console.log("hi");
     //   console.log(images);
     // });
-
+    console.log(userNick, "##");
     profileService
       .getCategoryList(localStorage.getItem("userNo"))
       .then((res) => {
@@ -53,46 +59,162 @@ const Profile = () => {
                 key: id,
                 children:
                   label[i] === "게시물" ? (
-                    <div class="gallery">
-                      {image?.map((imageItem, index) =>
-                        imageItem.tripName ? (
-                          <CategoryItem
-                            key={index}
-                            src={imageItem.thumbnail}
-                            tripName={imageItem.tripName}
-                            tripNo={imageItem.tripNo}
-                          />
+                    <>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "flex-end",
+                          flexDirection: "row",
+                          padding: "20px",
+                        }}
+                      >
+                        {image[0]?.tripName ? (
+                          <Link to={"/tripregistration"}>
+                            <button
+                              class="btn profile-settings-btn"
+                              onClick={() => {
+                                // navigate("/tripregistration", {
+                                //   state: {
+                                //     id: 1,
+                                //     job: "개발자",
+                                //   },
+                                // });
+                                console.log(image, "category");
+                              }}
+                            >
+                              <AppstoreAddOutlined />
+                            </button>
+                          </Link>
                         ) : (
-                          <GalleryItem
-                            key={index}
-                            src={imageItem.thumbnail}
-                            likes={imageItem.heartCnt}
-                            comments={imageItem.replyCnt}
-                          />
-                        )
-                      )}
-                    </div>
+                          <Link to={"/registersns"}>
+                            <button
+                              class="btn profile-settings-btn"
+                              onClick={() => {
+                                console.log(image, "profile");
+                              }}
+                            >
+                              <AppstoreAddOutlined />
+                            </button>
+                          </Link>
+                        )}
+                        <button
+                          class="btn profile-settings-btn"
+                          onClick={() => {
+                            setImageState([]);
+                            setLoading(true);
+                            profileService
+                              .getCategoryList(localStorage.getItem("userNo"))
+                              .then((res) => {
+                                console.log(res);
+                                // setImages(res);
+                                setImageState(res);
+                                setLoading(false);
+                              });
+                          }}
+                        >
+                          <RollbackOutlined />
+                        </button>
+                      </div>
+                      {loading ? <div class="loader" /> : ""}
+
+                      <div class="gallery">
+                        {image?.map((imageItem, index) =>
+                          imageItem.tripName ? (
+                            <CategoryItem
+                              key={index}
+                              src={imageItem.thumbnail}
+                              tripName={imageItem.tripName}
+                              tripNo={imageItem.tripNo}
+                            />
+                          ) : (
+                            <GalleryItem
+                              key={index}
+                              src={imageItem.thumbnail}
+                              likes={imageItem.heartCnt}
+                              comments={imageItem.replyCnt}
+                            />
+                          )
+                        )}
+                      </div>
+                    </>
                   ) : (
-                    // label[i] === "경비" ? <Expense />:
-                    <div class="gallery">
-                      {image?.map((imageItem, index) =>
-                        imageItem.tripName ? (
-                          <CategoryItem
-                            key={index}
-                            src={imageItem.thumbnail}
-                            tripName={imageItem.tripName}
-                            tripNo={imageItem.tripNo}
-                          />
+                    <>
+                      {/* 비용쪽 카테*/}
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "flex-end",
+                          flexDirection: "row",
+                          padding: "20px",
+                        }}
+                      >
+                        {image[0]?.tripName ? (
+                          <Link to={"/tripregistration"}>
+                            <button
+                              class="btn profile-settings-btn"
+                              onClick={() => {
+                                // navigate("/tripregistration", {
+                                //   state: {
+                                //     id: 1,
+                                //     job: "개발자",
+                                //   },
+                                // });
+                                console.log(image, "category");
+                              }}
+                            >
+                              <AppstoreAddOutlined />
+                            </button>
+                          </Link>
                         ) : (
-                          <Expense />
-                        )
-                      )}
-                    </div>
+                          <Link to={"/registerexp"}>
+                            <button
+                              class="btn profile-settings-btn"
+                              onClick={() => {
+                                console.log(image, "profile");
+                              }}
+                            >
+                              <AppstoreAddOutlined />
+                            </button>
+                          </Link>
+                        )}
+                        <button
+                          class="btn profile-settings-btn"
+                          onClick={() => {
+                            setImageState([]);
+                            setLoading(true);
+                            profileService
+                              .getCategoryList(localStorage.getItem("userNo"))
+                              .then((res) => {
+                                console.log(res);
+                                // setImages(res);
+                                setImageState(res);
+                                setLoading(false);
+                              });
+                          }}
+                        >
+                          <RollbackOutlined />
+                        </button>
+                      </div>
+                      {loading ? <div class="loader" /> : ""}
+                      <div class="gallery">
+                        {image?.map((imageItem, index) =>
+                          imageItem.tripName ? (
+                            <CategoryExpenseItem
+                              key={index}
+                              src={imageItem.thumbnail}
+                              tripName={imageItem.tripName}
+                              tripNo={imageItem.tripNo}
+                            />
+                          ) : (
+                            <Expense />
+                          )
+                        )}
+                      </div>
+                    </>
                   ),
               };
             })}
           />
-          {loading ? <div class="loader" /> : ""}
 
           {/* <!-- End of gallery --> */}
 
