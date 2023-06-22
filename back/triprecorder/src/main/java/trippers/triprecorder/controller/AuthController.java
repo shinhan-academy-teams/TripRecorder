@@ -1,5 +1,7 @@
 package trippers.triprecorder.controller;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,13 +36,22 @@ public class AuthController {
 	// 회원가입 - 닉네임 중복 체크
 	// 중복이다 - true, 중복이 아니다 - false
 	@PostMapping(value = "/signup/usernickCheck")
-	public boolean postUsernickCheck(@RequestBody UserVO user) {
+	public boolean postUsernickCheck(HttpServletRequest request, @RequestBody UserVO user) {
+		String obj = request.getHeader("Authorization");
+		UserVO findUser = null;
 		boolean result = true;
 		String userNick = user.getUserNick();
+		
 		if(!userNick.equals("")) {
-			UserVO findUser = urepo.findByUserNick(userNick);
+			if(obj != null) {
+				Long userNo = EncodingUtil.getUserNo(request);
+				findUser = urepo.findByUserNickAndUserNoNot(userNick, userNo);
+			} else {
+				findUser = urepo.findByUserNick(userNick);	
+			}
+			
 			result = findUser != null;
-		}
+		}		
 		
 		return result;
 	}
@@ -48,11 +59,19 @@ public class AuthController {
 	// 회원가입 - 이메일 중복 체크
 	// 중복이다 - true, 중복이 아니다 - false
 	@PostMapping(value = "/signup/useremailCheck")
-	public boolean postUseremailCheck(@RequestBody UserVO user) {
+	public boolean postUseremailCheck(HttpServletRequest request, @RequestBody UserVO user) {
+		String obj = request.getHeader("Authorization");
+		UserVO findUser = null;
 		boolean result = true;
 		String userEmail = user.getUserEmail();
+		
 		if(!userEmail.equals("")) {
-			UserVO findUser = urepo.findByUserEmail(userEmail);	
+			if(obj != null) {
+				Long userNo = EncodingUtil.getUserNo(request);
+				findUser = urepo.findByUserEmailAndUserNoNot(userEmail, userNo);
+			} else {
+				findUser = urepo.findByUserEmail(userEmail);	
+			}
 			result = findUser != null;
 		}
 		

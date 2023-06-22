@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import trippers.triprecorder.dto.SnsDto;
+import trippers.triprecorder.entity.ExpVO;
 import trippers.triprecorder.entity.FollowVO;
 import trippers.triprecorder.entity.HashtagVO;
 import trippers.triprecorder.entity.SnsVO;
@@ -55,13 +57,6 @@ public class SnsController {
 	HashtagRepository tagrepo;
 	@Autowired
 	FollowRepository frepo;
-
-	// sns 게시글 등록 페이지 진입
-	// 로그인 후 진입 가능
-	@GetMapping("/register")
-	public void getRegisterSns() {
-
-	}
 
 	// 게시글 등록
 	@PostMapping("/register")
@@ -193,4 +188,20 @@ public class SnsController {
 		return sns;
 	}
 	
+	// 게시글 삭제
+	@DeleteMapping("/delete/{snsNo}")
+	public String deleteSns(@PathVariable Long snsNo) {
+		SnsVO sns = srepo.findById(snsNo).orElse(null);
+		
+		ExpVO exp = sns.getExp();
+		if(exp != null) {
+			exp.setSns(null);
+		}
+		
+		String[] images = sns.getSnsPhoto().split("@");
+		AwsUtil.deleteBucketObjects(images);
+		srepo.delete(sns);
+		
+		return "OK";
+	}
 }
