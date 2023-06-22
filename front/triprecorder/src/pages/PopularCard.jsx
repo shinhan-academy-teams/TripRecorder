@@ -4,8 +4,8 @@ import {
   benefitListAtom,
   cardListAtom,
   categoryAtom,
-} from "recoil/PopularCard";
-import { Button, Form, Input, Layout, Menu } from "antd";
+} from "recoil/PopularCardAtom";
+import { Button, Form, Input, Tabs } from "antd";
 import axios from "axios";
 import CardInfo from "components/PopularCard/CardInfo";
 import Benefit from "components/PopularCard/Benefit";
@@ -21,6 +21,7 @@ const PopularCard = () => {
 
   // 인기 카드 3개 가져오기: category가 변경될 때마다 실행
   useEffect(() => {
+    console.log(category);
     axios
       .post("/card/topcard", { category })
       .then((res) => {
@@ -32,7 +33,9 @@ const PopularCard = () => {
 
   // 카테고리 선택하면 setCategory, 혜택 초기화
   const selectCategory = (item) => {
-    setCategory(item.key);
+    console.log(item);
+    // setCategory(item.key);
+    setCategory(item);
     setBenefitList([]);
   };
 
@@ -50,7 +53,7 @@ const PopularCard = () => {
   };
 
   return (
-    <div className="bigDiv">
+    <div className="bigDiv" style={{ textAlign: "center" }}>
       {/* 금액 입력 form + button */}
       <div>
         <Form name="benefitForm" onFinish={benefits} autoComplete="off">
@@ -67,29 +70,24 @@ const PopularCard = () => {
           >
             <Input type="number" placeholder="금액을 입력해주세요" />
           </Form.Item>
-
           <Button htmlType="submit">혜택조회</Button>
         </Form>
       </div>
 
       {/* 카테고리 nav */}
+      {/* https://github.com/ant-design/ant-design/blob/master/components/tabs/demo/centered.tsx */}
       <div>
-        {/* https://github.com/ant-design/ant-design/blob/master/components/layout/demo/top.tsx */}
-        <Layout className="layout">
-          <Menu
-            style={{ backgroundColor: "#B1D7B4" }}
-            mode="horizontal"
-            defaultSelectedKeys={[category]}
-            onClick={selectCategory}
-            items={categoryList.map((cate) => {
-              const key = cate;
-              return {
-                key,
-                label: cate,
-              };
-            })}
-          />
-        </Layout>
+        <Tabs
+          defaultActiveKey={category}
+          centered
+          items={categoryList.map((data) => {
+            return {
+              label: data,
+              key: data,
+            };
+          })}
+          onChange={selectCategory}
+        />
       </div>
 
       {/* 카드 리스트 */}
