@@ -1,18 +1,28 @@
 package trippers.triprecorder.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import trippers.triprecorder.dto.ProfileDto;
 import trippers.triprecorder.dto.ProfileUpdateDto;
+import trippers.triprecorder.entity.ProfileVO;
 import trippers.triprecorder.entity.UserVO;
 import trippers.triprecorder.repository.FollowRepository;
+import trippers.triprecorder.repository.ProfileRepository;
 import trippers.triprecorder.repository.UserRepository;
 import trippers.triprecorder.util.AwsUtil;
 import trippers.triprecorder.util.EncodingUtil;
@@ -24,7 +34,9 @@ public class ProfileController {
 	UserRepository urepo;
 	@Autowired
 	FollowRepository frepo;
-	
+	@Autowired
+	ProfileRepository prepo;
+
 	// 사용자 프로필 조회
 	@GetMapping("/{userNo}")
 	public ProfileDto getUserProfile(HttpServletRequest request, @PathVariable Long userNo) {
@@ -34,60 +46,80 @@ public class ProfileController {
 		Integer follower = frepo.findByFollowing(user).size();
 		// 팔로잉하지 않은 상태
 		Integer isFollowing = -1;
-		
-		if(obj != null) {
+
+		if (obj != null) {
 			Long loginNo = EncodingUtil.getUserNo(request);
 			// 내 계정일 때
-			if(userNo == loginNo) isFollowing = 0;
+			if (userNo == loginNo)
+				isFollowing = 0;
 			// 팔로잉중
-			else if (frepo.findByFollowing(user).size() != 0) isFollowing = 1;
+			else if (frepo.findByFollowing(user).size() != 0)
+				isFollowing = 1;
 		}
-		
-		ProfileDto profile = ProfileDto.builder()
-				.userNo(user.getUserNo())
-				.userNick(user.getUserNick())
+
+		ProfileDto profile = ProfileDto.builder().userNo(user.getUserNo()).userNick(user.getUserNick())
 				.profilePhoto(AwsUtil.getImageURL(user.getProfile().getProfilePhoto()))
-				.profileMsg(user.getProfile().getProfileMsg())
-				.userLevel(user.getUserLevel())
-				.follower(follower)
-				.following(following)
-				.isFollowing(isFollowing)
-				.build();
-		
+				.profileMsg(user.getProfile().getProfileMsg()).userLevel(user.getUserLevel()).follower(follower)
+				.following(following).isFollowing(isFollowing).build();
+
 		return profile;
 	}
-	// 사용자 프로필 수정
-    @GetMapping("/{userNo}")
-    public ProfileDto updateUserProfile(@PathVariable Long userNo, @RequestBody ProfileUpdateDto updateDto) {
-        UserVO user = urepo.findById(userNo).orElse(null);
-        if (user == null) {
-            // 사용자를 찾지 못한 경우 예외 처리
-            // 예: throw new NotFoundException("User not found");
-        }
-        
-        // 수정할 프로필 정보 업데이트
-//        user.setUserName(updateDto.getUserName());
-//        user.setUserGender(updateDto.getUserGender());
-//        user.setUserNick(updateDto.getUserNick());
-//        user.setUserEmail(updateDto.getUserEmail());
-//        user.setUserPw(updateDto.getUserPw());
-//        user.getProfile().setProfilePhoto(updateDto.getProfilePhoto());
-//        user.getProfile().setProfileMsg(updateDto.getProfileMsg());
-        
-        UserVO updatedUser = urepo.save(user); // 수정된 사용자 정보 저장
-        
-        // 수정된 프로필 정보를 포함한 ProfileDto 반환
-        ProfileDto profile = ProfileDto.builder()
-                .userNo(updatedUser.getUserNo())
-                .userNick(updatedUser.getUserNick())
-                .profilePhoto(AwsUtil.getImageURL(updatedUser.getProfile().getProfilePhoto()))
-                .profileMsg(updatedUser.getProfile().getProfileMsg())
-                .userLevel(updatedUser.getUserLevel())
-                .follower(frepo.findByFollowing(updatedUser).size())
-                .following(frepo.findByFollower(updatedUser).size())
-                .build();
-        
-        return profile;
-    }
-	
+
+	// 페이지 진입시 회원정보 조회
+	@GetMapping("/update/{userNo}")
+	public ProfileUpdateDto getUserProfileForUpdate(HttpServletRequest request, @PathVariable Long userNo) {
+		UserVO user = urepo.findById(userNo).orElse(null);
+		ProfileVO profile = prepo.findById(userNo).orElse(null);
+
+		ProfileUpdateDto updateProfile = ProfileUpdateDto.builder().userName(user.getUserName())
+				.userGender(user.getUserGender()).userNick(user.getUserNick()).userEmail(user.getUserEmail())
+				.profilePhoto(AwsUtil.getImageURL(profile.getProfilePhoto())).profileMsg(profile.getProfileMsg())
+				.build();
+
+		return updateProfile;
+	}
+
+	// 저장 버튼 눌렀을 때 수정
+	@PutMapping("/click")
+	public String putUserProfileForUpdate(@RequestBody ObjectNode obj) throws JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		
+		UserVO user = mapper.treeToValue(obj.get("user"), UserVO.class);
+		ProfileVO tmpProfile = mapper.treeToValue(obj.get("profile"), ProfileVO.class);
+
+		UserVO tmpUser = urepo.findById(user.getUserNo()).orElse(null);
+		ProfileVO profile = prepo.findById(tmpUser.getUserNo()).orElse(null);
+		
+		tmpUser.setUserName(user.getUserName());
+		tmpUser.setUserGender(user.getUserGender());
+		tmpUser.setUserNick(user.getUserNick());
+		tmpUser.setUserEmail(user.getUserEmail());
+		
+//		profile.setUser(tmpUser);
+		
+//		profile.setProfileNo(tmpUser.getProfile().getProfileNo());
+		profile.setProfileMsg(tmpUser.getProfile().getProfileMsg());
+
+		tmpUser.setUserPw(EncodingUtil.encodingUserPw(user.getUserPw()));
+
+		String profilePhoto = tmpProfile.getProfilePhoto();
+
+		if (profilePhoto.trim().isEmpty()) {
+			profile.setProfilePhoto("profile/default_profile.png");
+			
+		} else if (!profilePhoto.equals("no")) {
+			
+			profile.setProfilePhoto(profilePhoto);
+		}
+
+		tmpUser.setProfile(profile);
+
+		UserVO savedUser = urepo.save(tmpUser);
+
+		if (savedUser != null) {
+			return "ok";
+		} else {
+			return "fail";
+		}
+	}
 }
