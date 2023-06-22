@@ -1,8 +1,5 @@
 package trippers.triprecorder.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,17 +87,24 @@ public class ProfileController {
 		UserVO tmpUser = urepo.findById(user.getUserNo()).orElse(null);
 		ProfileVO profile = prepo.findById(tmpUser.getUserNo()).orElse(null);
 		
-		tmpUser.setUserName(user.getUserName());
-		tmpUser.setUserGender(user.getUserGender());
-		tmpUser.setUserNick(user.getUserNick());
-		tmpUser.setUserEmail(user.getUserEmail());
-		
-//		profile.setUser(tmpUser);
-		
-//		profile.setProfileNo(tmpUser.getProfile().getProfileNo());
-		profile.setProfileMsg(tmpUser.getProfile().getProfileMsg());
-
-		tmpUser.setUserPw(EncodingUtil.encodingUserPw(user.getUserPw()));
+		if(!user.getUserName().equals("")) {
+			tmpUser.setUserName(user.getUserName());
+		}
+		if(!user.getUserGender().equals("")) {
+			tmpUser.setUserGender(user.getUserGender());
+		}
+		if(!user.getUserNick().equals("")) {
+			tmpUser.setUserNick(user.getUserNick());
+		}
+		if(!user.getUserEmail().equals("")) {
+			tmpUser.setUserEmail(user.getUserEmail());
+		}
+		if(!tmpProfile.getProfileMsg().equals("")) {
+			profile.setProfileMsg(tmpProfile.getProfileMsg());
+		}
+		if(!user.getUserPw().equals("")) {
+			tmpUser.setUserPw(EncodingUtil.encodingUserPw(user.getUserPw()));
+		}
 
 		String profilePhoto = tmpProfile.getProfilePhoto();
 

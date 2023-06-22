@@ -1,189 +1,98 @@
 import React, { useState } from "react";
-import styled from "styled-components";
+import { Input, Button, Upload, Form, Typography, Space, Image } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 
-const DivBox = styled.div`
-  position: absolute;
-  width: 60%;
-  border: 3px solid #7fb77e;
-  border-radius: 30px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  padding: 40px; /* 수정: 내용의 크기를 더 크게 조정 */
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 30px; /* 수정: 요소들 사이의 간격을 더 크게 조정 */
-`;
-
-const Btn = styled.button`
-  background: #7fb77e;
-  margin: 25px auto;
-  display: inline-block;
-  padding: 15px 30px;
-  border-radius: 20px;
-  border: none;
-  color: #f7f6dc;
-  font: bold;
-`;
-
-const ProfilePictureContainer = styled.div`
-  position: relative;
-  display: inline-block;
-`;
-
-const ProfilePicture = styled.img`
-  max-width: 100%;
-  max-height: 200px;
-  margin-bottom: 10px;
-`;
-
-const FileInput = styled.input`
-  position: absolute;
-  top: 0;
-  left: 0;
-  opacity: 0;
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-`;
-
-const UploadButton = styled.button`
-  display: inline-block;
-  padding: 5px 10px;
-  background-color: #007bff;
-  border: none;
-  border-radius: 4px;
-  color: #fff;
-  cursor: pointer;
-`;
-
-const InputLabel = styled.label`
-  display: flex;
-  align-items: center;
-  font-weight: bold;
-  margin-bottom: 10px; /* 수정: 레이블 간격을 더 크게 조정 */
-`;
-
-const LabelText = styled.span`
-  margin-right: 10px;
-  width: 120px;
-`;
-
-const InputField = styled.input`
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  width: 100%;
-`;
+const { Title } = Typography;
 
 const UpdateProfile = () => {
-  const [name, setName] = useState("");
-  const [gender, setGender] = useState("");
-  const [nickname, setNickname] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [form] = Form.useForm();
   const [profilePicture, setProfilePicture] = useState("");
-  const [profileMessage, setProfileMessage] = useState("");
-
-  const handleNameChange = (event) => {
-    setName(event.target.value);
-  };
-
-  const handleGenderChange = (event) => {
-    setGender(event.target.value);
-  };
-
-  const handleNicknameChange = (event) => {
-    setNickname(event.target.value);
-  };
-
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
-  };
-
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
-  };
-
-  const handleProfilePictureChange = (event) => {
-    setProfilePicture(event.target.value);
-  };
-
-  const handleProfileMessageChange = (event) => {
-    setProfileMessage(event.target.value);
-  };
+  const [defaultProfilePicture, setDefaultProfilePicture] = useState(false);
 
   const handleProfilePictureUpload = (event) => {
     // 프로필 사진 업로드 로직
     // 선택된 파일을 처리하고 프로필 사진 상태 업데이트
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleDefaultProfilePicture = () => {
+    setDefaultProfilePicture(true);
+    setProfilePicture(""); // 프로필 사진 값을 초기화
+  };
+
+  const handleSubmit = (values) => {
     // 프로필 수정 제출 로직
+    console.log(values);
   };
 
   return (
-    <DivBox>
-      <h1>회원 정보 수정</h1>
-      <form onSubmit={handleSubmit}>
-        <InputLabel>
-          <LabelText>이름:</LabelText>
-          <InputField type="text" value={name} onChange={handleNameChange} />
-        </InputLabel>
-        <InputLabel>
-          <LabelText>성별:</LabelText>
-          <InputField
-            type="text"
-            value={gender}
-            onChange={handleGenderChange}
-          />
-        </InputLabel>
-        <InputLabel>
-          <LabelText>닉네임:</LabelText>
-          <InputField
-            type="text"
-            value={nickname}
-            onChange={handleNicknameChange}
-          />
-        </InputLabel>
-        <InputLabel>
-          <LabelText>이메일:</LabelText>
-          <InputField type="email" value={email} onChange={handleEmailChange} />
-        </InputLabel>
-        <InputLabel>
-          <LabelText>비밀번호:</LabelText>
-          <InputField
-            type="password"
-            value={password}
-            onChange={handlePasswordChange}
-          />
-        </InputLabel>
-        <InputLabel>
-          <LabelText>프로필메시지:</LabelText>
-          <textarea
-            value={profileMessage}
-            onChange={handleProfileMessageChange}
-          ></textarea>
-        </InputLabel>
-        <InputLabel>
-          <LabelText>프로필사진:</LabelText>
-          <ProfilePictureContainer>
-            <ProfilePicture src={profilePicture} alt="프로필 사진" />
-            <FileInput
-              type="file"
-              onChange={handleProfilePictureUpload}
-              accept="image/*"
+    <div className="divbox" style={{ height: "850px" }}>
+      <Title level={2}>회원 정보 수정</Title>
+      <Form form={form} onFinish={handleSubmit}>
+        <Form style={{ width: "320px", display: "block", margin: "0 auto" }}>
+          <Form.Item name="name" label="이름">
+            <Input style={{ width: "220px" }} />
+          </Form.Item>
+        </Form>
+        <Form style={{ width: "320px", display: "block", margin: "0 auto" }}>
+          <Form.Item name="gender" label="성별">
+            <Input style={{ width: "220px" }} />
+          </Form.Item>
+        </Form>
+        <Form style={{ width: "320px", display: "block", margin: "0 auto" }}>
+          <Form.Item name="nickname" label="닉네임">
+            <Input style={{ width: "220px" }} />
+          </Form.Item>
+        </Form>
+        <Form style={{ width: "320px", display: "block", margin: "0 auto" }}>
+          <Form.Item name="email" label="이메일">
+            <Input type="email" style={{ width: "220px" }} />
+          </Form.Item>
+        </Form>
+        <Form style={{ width: "320px", display: "block", margin: "0 auto" }}>
+          <Form.Item name="password" label="비밀번호">
+            <Input.Password style={{ width: "220px" }} />
+          </Form.Item>
+        </Form>
+        <Form style={{ width: "320px", display: "block", margin: "0 auto" }}>
+          <Form.Item name="profileMessage" label="프로필메시지">
+            <Input.TextArea
+              autoSize={{ minRows: 4, maxRows: 4 }}
+              style={{ width: "190px" }}
             />
-            <UploadButton>사진 업로드</UploadButton>
-          </ProfilePictureContainer>
-        </InputLabel>
-        <Btn type="submit">변경 사항 저장</Btn>
-      </form>
-    </DivBox>
+          </Form.Item>
+        </Form>
+        <Form style={{ width: "320px", display: "block", margin: "0 auto" }}>
+          <Form.Item label="프로필사진">
+            <Image
+              width={180}
+              src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+            />
+            <Form.Item name="profilePicture" noStyle>
+              <Upload
+                name="profilePicture"
+                beforeUpload={() => false}
+                onChange={handleProfilePictureUpload}
+                accept="image/*"
+                showUploadList={false}
+              >
+                <Space direction="horizontal" style={{ margin: 3 }}>
+                  <Button icon={<UploadOutlined />}>사진 업로드</Button>
+                </Space>
+              </Upload>
+            </Form.Item>
+            <Button onClick={handleDefaultProfilePicture}>기본이미지</Button>
+            {defaultProfilePicture && (
+              <div style={{ color: "red" }}>기본 이미지로 설정되었습니다.</div>
+            )}
+          </Form.Item>
+        </Form>
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            수정 완료
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
   );
 };
 
