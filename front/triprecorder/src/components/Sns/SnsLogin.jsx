@@ -1,10 +1,13 @@
-import { UserOutlined } from "@ant-design/icons";
-import { Carousel, Input } from "antd";
+import { Button, Carousel, Input, Space, message } from "antd";
+import authService from "api/auth.service";
 import api from "api/axios";
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
-import { allDataAtom, photoAtom } from "recoil/snsAtom";
+import { allDataAtom, photoAtom, repDataAtom } from "recoil/snsAtom";
 import "style/sns.scss";
+
+const { TextArea } = Input;
+// const { Search } = Input;
 
 const SnsLogin = () => {
   const onChange = (currentSlide) => {
@@ -13,6 +16,7 @@ const SnsLogin = () => {
 
   const [allData, setAllData] = useRecoilState(allDataAtom);
   const [photoData, setPhotoData] = useRecoilState(photoAtom);
+  const [repData, setRepData] = useRecoilState(repDataAtom);
 
   useEffect(() => {
     api.get("/sns/list").then((res) => {
@@ -31,6 +35,24 @@ const SnsLogin = () => {
     console.log("모든 데이터 : ", allData);
   }, [allData]);
 
+  const handleRep = (e) => {
+    setRepData(e.target.value);
+  };
+
+  const onRep = (snsNo) => {
+    authService
+      .RegisterRep(repData, snsNo)
+      .then((res) => {
+        message.success("댓글을 등록했습니다. 😊");
+        
+      })
+      .catch((err) => message.error("댓글 작성에 실패했습니다. 😥"));
+  };
+
+  const onHeart = () =>{
+    
+  };
+
   return (
     <div className="bigDiv">
       {allData.map((d, i) => {
@@ -38,13 +60,13 @@ const SnsLogin = () => {
           <div className="all" key={i}>
             <div className="leftDiv">
               {/* 사진들 */}
-              <Carousel afterChange={onChange} style={{ width: "600px" }}>
+              <Carousel afterChange={onChange} style={{ width: "800px" }}>
                 {d.snsPhoto.map((a, k) => {
                   return (
                     <div key={k}>
                       <img
                         src={a}
-                        style={{ width: "600px", height: "600px" }}
+                        style={{ width: "800px", height: "800px" }}
                         alt="게시물"
                       />
                     </div>
@@ -83,12 +105,33 @@ const SnsLogin = () => {
                   );
                 })}
               </div>
-              <Input
-                className="repleinput"
-                size="large"
-                placeholder="댓글을 작성하세요"
-                prefix={<UserOutlined />}
-              />
+
+              <div>
+                <Button onClick={onHeart}>👍 {d.heartCnt}</Button>
+              </div>
+
+              <Space direction="vertical" size="middle">
+                <Space.Compact
+                  className="repInput"
+                  style={{
+                    width: "100%",
+                  }}
+                >
+                  <TextArea
+                    placeholder="댓글 작성..."
+                    rows={4}
+                    name="rep"
+                    onChange={handleRep}
+                  />
+                  <Button
+                    type="primary"
+                    onClick={() => onRep(d.snsNo)}
+                    style={{ height: "99px" }}
+                  >
+                    게시
+                  </Button>
+                </Space.Compact>
+              </Space>
             </div>
           </div>
         );
