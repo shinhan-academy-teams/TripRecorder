@@ -9,6 +9,7 @@ import CategoryItem from "components/Profile/CategoryItem";
 import Expense from "components/Profile/Expense";
 import { useRecoilState } from "recoil";
 import { imagesState } from "../recoil/Profile";
+import { userNo, userNick, userProfile } from "../recoil/UserInfo";
 import {
   AppstoreAddOutlined,
   RollbackOutlined,
@@ -25,6 +26,7 @@ const Profile = () => {
   //     .getSnsPostList(localStorage.getItem("userNo"))
   //     .then((res) => console.log(res));
   // };
+  const [userNum, setUserNum] = useRecoilState(userNo);
   let { userNick } = useParams();
   useEffect(() => {
     // profileService.getSnsPostList(4).then((res) => {
@@ -32,15 +34,17 @@ const Profile = () => {
     //   console.log("hi");
     //   console.log(images);
     // });
+
     console.log(userNick, "##");
-    profileService
-      .getCategoryList(localStorage.getItem("userNo"))
-      .then((res) => {
-        console.log(res);
-        // setImages(res);
-        setImageState(res);
-        setLoading(false);
-      });
+
+    // profileService.getProfileInfo()
+
+    profileService.getCategoryList(userNum).then((res) => {
+      console.log(res);
+      // setImages(res);
+      setImageState(res);
+      setLoading(false);
+    });
   }, []);
 
   return (
@@ -103,7 +107,7 @@ const Profile = () => {
                             setImageState([]);
                             setLoading(true);
                             profileService
-                              .getCategoryList(localStorage.getItem("userNo"))
+                              .getCategoryList(userNum)
                               .then((res) => {
                                 console.log(res);
                                 // setImages(res);
@@ -183,7 +187,7 @@ const Profile = () => {
                             setImageState([]);
                             setLoading(true);
                             profileService
-                              .getCategoryList(localStorage.getItem("userNo"))
+                              .getCategoryList(userNum)
                               .then((res) => {
                                 console.log(res);
                                 // setImages(res);
@@ -206,9 +210,10 @@ const Profile = () => {
                               tripNo={imageItem.tripNo}
                             />
                           ) : (
-                            <Expense />
+                            ""
                           )
                         )}
+                        {image[0]?.tripName ? "" : <Expense />}
                       </div>
                     </>
                   ),
