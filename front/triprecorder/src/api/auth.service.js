@@ -53,8 +53,14 @@ const login = (userId, userPw) => {
     })
     .then((res) => {
       const token = res.headers.authorization;
-      Cookies.set("jwtToken", token, { expires: 1, secure: true });
+      if (token) {
+        Cookies.set("jwtToken", token, { expires: 1, secure: true });
+        localStorage.clear();
 
+        localStorage.setItem("userNo", res.data.userNo);
+        localStorage.setItem("userNick", res.data.userNick);
+        localStorage.setItem("userProfile", res.data.userProfile);
+      }
       return res;
     })
     .catch((err) => console.log(err));

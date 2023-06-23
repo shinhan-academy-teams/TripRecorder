@@ -54,7 +54,6 @@ const Expense = () => {
           <InfoDiv>총 예산: {data[0]?.tripExp}</InfoDiv>
           <InfoDiv>쓴 돈: {data[0]?.useExp}</InfoDiv>
           <InfoDiv>남은 돈: {data[0]?.remainExp}</InfoDiv>
-          <Button> Test</Button>
         </div>
         {/* <div style={{ display: "flex", flexDirection: "column" }}> */}
         <div
