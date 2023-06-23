@@ -3,11 +3,20 @@ import logo from "assets/tripRecorder.png";
 import styled from "@emotion/styled";
 import { DatePicker, Form, Input, InputNumber, message } from "antd";
 import authService from "api/auth.service";
-import axios from "api/axios";
+import api from "api/axios";
+import { tripNoState } from "../recoil/Profile";
+// import { useRecoilState } from "recoil";
+// import { useLocation } from "react-router-dom";
 // import dayjs from "dayjs";
 
 const { RangePicker } = DatePicker;
 const TripRegistration = (props) => {
+  // const location = useLocation();
+  // const id = location.state.id;
+  // const job = location.state.job;
+
+  // const [tno, setTno] = useRecoilState(tripNoState);
+
   const DivBox = styled.div`
     position: absolute;
     width: 40%;
@@ -87,7 +96,7 @@ const TripRegistration = (props) => {
       .catch((err) => console.log(err));
 
     //등록후 alert
-    await axios
+    await api
       .get("/trip/regoster")
       .then((res) => {
         message.success("여행 등록이 완료되었습니다. 😊");
@@ -101,6 +110,8 @@ const TripRegistration = (props) => {
 
   return (
     <DivBox>
+      {/* <button onClick={() => console.log(id, job)}></button> */}
+      {/* <button onClick={() => console.log(tno)}></button> */}
       <LogoImg alt="tripRecorder" src={logo} />
       <small style={{ color: "#9CA3AF", paddingBottom: 10 }}>
         여행 카테고리를 등록하세요.

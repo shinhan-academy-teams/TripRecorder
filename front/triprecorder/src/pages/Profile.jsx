@@ -1,351 +1,258 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../style/profile.scss";
-
+import styles from "../style/profile2.module.scss";
+import Header from "components/Profile/Header";
+import GalleryItem from "components/Profile/GalleryItem";
+import profileService from "api/profile.service";
+import { Button, Tabs } from "antd";
+import CategoryItem from "components/Profile/CategoryItem";
+import Expense from "components/Profile/Expense";
+import { useRecoilState } from "recoil";
+import { imagesState } from "../recoil/Profile";
+import { userNo, userNick, userProfile } from "../recoil/UserInfo";
+import {
+  AppstoreAddOutlined,
+  RollbackOutlined,
+  SettingOutlined,
+} from "@ant-design/icons";
+import CategoryExpenseItem from "components/Profile/CategoryExpenseItem";
+import { Link, useParams } from "react-router-dom";
 const Profile = () => {
+  const [image, setImageState] = useRecoilState(imagesState);
+  const [loading, setLoading] = useState(true);
+
+  // const getProfile = () => {
+  //   profileService
+  //     .getSnsPostList(localStorage.getItem("userNo"))
+  //     .then((res) => console.log(res));
+  // };
+  const [userNum, setUserNum] = useRecoilState(userNo);
+  let { userNick } = useParams();
+  useEffect(() => {
+    // profileService.getSnsPostList(4).then((res) => {
+    //   setImages(res);
+    //   console.log("hi");
+    //   console.log(images);
+    // });
+
+    console.log(userNick, "##");
+
+    // profileService.getProfileInfo()
+
+    profileService.getCategoryList(userNum).then((res) => {
+      console.log(res);
+      // setImages(res);
+      setImageState(res);
+      setLoading(false);
+    });
+  }, []);
+
   return (
-    <>
-      <div id="header">
-        <div class="container">
-          <div class="profile">
-            <div class="profile-image">
-              <img
-                src="https://images.unsplash.com/photo-1513721032312-6a18a42c8763?w=152&h=152&fit=crop&crop=faces"
-                alt=""
-              />
-            </div>
-
-            <div class="profile-user-settings">
-              <h1 class="profile-user-name">janedoe_</h1>
-
-              <button class="btn profile-edit-btn">Edit Profile</button>
-
-              <button
-                class="btn profile-settings-btn"
-                aria-label="profile settings"
-              >
-                <i class="fas fa-cog" aria-hidden="true"></i>
-              </button>
-            </div>
-
-            <div class="profile-stats">
-              <ul>
-                <li>
-                  <span class="profile-stat-count">164</span> posts
-                </li>
-                <li>
-                  <span class="profile-stat-count">188</span> followers
-                </li>
-                <li>
-                  <span class="profile-stat-count">206</span> following
-                </li>
-              </ul>
-            </div>
-
-            <div class="profile-bio">
-              <p>
-                <span class="profile-real-name">Jane Doe</span> Lorem ipsum
-                dolor sit, amet consectetur adipisicing elit 📷✈️🏕️
-              </p>
-            </div>
-          </div>
-          {/* <!-- End of profile section --> */}
-        </div>
-        {/* <!-- End of container --> */}
-      </div>
-
+    <div className={styles.divbox}>
+      <Header />
       <div id="main">
         <div class="container">
-          <div class="gallery">
-            <div class="gallery-item" tabindex="0">
-              <img
-                src="https://images.unsplash.com/photo-1511765224389-37f0e77cf0eb?w=500&h=500&fit=crop"
-                class="gallery-image"
-                alt=""
-              />
+          <Tabs
+            defaultActiveKey="1"
+            centered
+            items={new Array(2).fill(null).map((_, i) => {
+              const id = String(i + 1);
+              const label = ["게시물", "경비"];
+              return {
+                label: `${label[i]}`,
+                key: id,
+                children:
+                  label[i] === "게시물" ? (
+                    <>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "flex-end",
+                          flexDirection: "row",
+                          padding: "20px",
+                        }}
+                      >
+                        {image[0]?.tripName ? (
+                          <Link to={"/tripregistration"}>
+                            <button
+                              class="btn profile-settings-btn"
+                              onClick={() => {
+                                // navigate("/tripregistration", {
+                                //   state: {
+                                //     id: 1,
+                                //     job: "개발자",
+                                //   },
+                                // });
+                                console.log(image, "category");
+                              }}
+                            >
+                              <AppstoreAddOutlined />
+                            </button>
+                          </Link>
+                        ) : (
+                          <Link to={"/registersns"}>
+                            <button
+                              class="btn profile-settings-btn"
+                              onClick={() => {
+                                console.log(image, "profile");
+                              }}
+                            >
+                              <AppstoreAddOutlined />
+                            </button>
+                          </Link>
+                        )}
+                        <button
+                          class="btn profile-settings-btn"
+                          onClick={() => {
+                            setImageState([]);
+                            setLoading(true);
+                            profileService
+                              .getCategoryList(userNum)
+                              .then((res) => {
+                                console.log(res);
+                                // setImages(res);
+                                setImageState(res);
+                                setLoading(false);
+                              });
+                          }}
+                        >
+                          <RollbackOutlined />
+                        </button>
+                      </div>
+                      {loading ? <div class="loader" /> : ""}
 
-              <div class="gallery-item-info">
-                <ul>
-                  <li class="gallery-item-likes">
-                    <span class="visually-hidden">Likes:</span>
-                    <i class="fas fa-heart" aria-hidden="true"></i> 56
-                  </li>
-                  <li class="gallery-item-comments">
-                    <span class="visually-hidden">Comments:</span>
-                    <i class="fas fa-comment" aria-hidden="true"></i> 2
-                  </li>
-                </ul>
-              </div>
-            </div>
+                      <div class="gallery">
+                        {image?.map((imageItem, index) =>
+                          imageItem.tripName ? (
+                            <CategoryItem
+                              key={index}
+                              src={imageItem.thumbnail}
+                              tripName={imageItem.tripName}
+                              tripNo={imageItem.tripNo}
+                            />
+                          ) : (
+                            <GalleryItem
+                              key={index}
+                              src={imageItem.thumbnail}
+                              likes={imageItem.heartCnt}
+                              comments={imageItem.replyCnt}
+                            />
+                          )
+                        )}
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      {/* 비용쪽 카테*/}
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "flex-end",
+                          flexDirection: "row",
+                          padding: "20px",
+                        }}
+                      >
+                        {image[0]?.tripName ? (
+                          <Link to={"/tripregistration"}>
+                            <button
+                              class="btn profile-settings-btn"
+                              onClick={() => {
+                                // navigate("/tripregistration", {
+                                //   state: {
+                                //     id: 1,
+                                //     job: "개발자",
+                                //   },
+                                // });
+                                console.log(image, "category");
+                              }}
+                            >
+                              <AppstoreAddOutlined />
+                            </button>
+                          </Link>
+                        ) : (
+                          <Link to={"/registerexp"}>
+                            <button
+                              class="btn profile-settings-btn"
+                              onClick={() => {
+                                console.log(image, "profile");
+                              }}
+                            >
+                              <AppstoreAddOutlined />
+                            </button>
+                          </Link>
+                        )}
+                        <button
+                          class="btn profile-settings-btn"
+                          onClick={() => {
+                            setImageState([]);
+                            setLoading(true);
+                            profileService
+                              .getCategoryList(userNum)
+                              .then((res) => {
+                                console.log(res);
+                                // setImages(res);
+                                setImageState(res);
+                                setLoading(false);
+                              });
+                          }}
+                        >
+                          <RollbackOutlined />
+                        </button>
+                      </div>
+                      {loading ? <div class="loader" /> : ""}
+                      <div class="gallery">
+                        {image?.map((imageItem, index) =>
+                          imageItem.tripName ? (
+                            <CategoryExpenseItem
+                              key={index}
+                              src={imageItem.thumbnail}
+                              tripName={imageItem.tripName}
+                              tripNo={imageItem.tripNo}
+                            />
+                          ) : (
+                            ""
+                          )
+                        )}
+                        {image[0]?.tripName ? "" : <Expense />}
+                      </div>
+                    </>
+                  ),
+              };
+            })}
+          />
 
-            <div class="gallery-item" tabindex="0">
-              <img
-                src="https://images.unsplash.com/photo-1497445462247-4330a224fdb1?w=500&h=500&fit=crop"
-                class="gallery-image"
-                alt=""
-              />
-
-              <div class="gallery-item-info">
-                <ul>
-                  <li class="gallery-item-likes">
-                    <span class="visually-hidden">Likes:</span>
-                    <i class="fas fa-heart" aria-hidden="true"></i> 89
-                  </li>
-                  <li class="gallery-item-comments">
-                    <span class="visually-hidden">Comments:</span>
-                    <i class="fas fa-comment" aria-hidden="true"></i> 5
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="gallery-item" tabindex="0">
-              <img
-                src="https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=500&h=500&fit=crop"
-                class="gallery-image"
-                alt=""
-              />
-
-              <div class="gallery-item-type">
-                <span class="visually-hidden">Gallery</span>
-                <i class="fas fa-clone" aria-hidden="true"></i>
-              </div>
-
-              <div class="gallery-item-info">
-                <ul>
-                  <li class="gallery-item-likes">
-                    <span class="visually-hidden">Likes:</span>
-                    <i class="fas fa-heart" aria-hidden="true"></i> 42
-                  </li>
-                  <li class="gallery-item-comments">
-                    <span class="visually-hidden">Comments:</span>
-                    <i class="fas fa-comment" aria-hidden="true"></i> 1
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="gallery-item" tabindex="0">
-              <img
-                src="https://images.unsplash.com/photo-1502630859934-b3b41d18206c?w=500&h=500&fit=crop"
-                class="gallery-image"
-                alt=""
-              />
-
-              <div class="gallery-item-type">
-                <span class="visually-hidden">Video</span>
-                <i class="fas fa-video" aria-hidden="true"></i>
-              </div>
-
-              <div class="gallery-item-info">
-                <ul>
-                  <li class="gallery-item-likes">
-                    <span class="visually-hidden">Likes:</span>
-                    <i class="fas fa-heart" aria-hidden="true"></i> 38
-                  </li>
-                  <li class="gallery-item-comments">
-                    <span class="visually-hidden">Comments:</span>
-                    <i class="fas fa-comment" aria-hidden="true"></i> 0
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="gallery-item" tabindex="0">
-              <img
-                src="https://images.unsplash.com/photo-1498471731312-b6d2b8280c61?w=500&h=500&fit=crop"
-                class="gallery-image"
-                alt=""
-              />
-
-              <div class="gallery-item-type">
-                <span class="visually-hidden">Gallery</span>
-                <i class="fas fa-clone" aria-hidden="true"></i>
-              </div>
-
-              <div class="gallery-item-info">
-                <ul>
-                  <li class="gallery-item-likes">
-                    <span class="visually-hidden">Likes:</span>
-                    <i class="fas fa-heart" aria-hidden="true"></i> 47
-                  </li>
-                  <li class="gallery-item-comments">
-                    <span class="visually-hidden">Comments:</span>
-                    <i class="fas fa-comment" aria-hidden="true"></i> 1
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="gallery-item" tabindex="0">
-              <img
-                src="https://images.unsplash.com/photo-1515023115689-589c33041d3c?w=500&h=500&fit=crop"
-                class="gallery-image"
-                alt=""
-              />
-
-              <div class="gallery-item-info">
-                <ul>
-                  <li class="gallery-item-likes">
-                    <span class="visually-hidden">Likes:</span>
-                    <i class="fas fa-heart" aria-hidden="true"></i> 94
-                  </li>
-                  <li class="gallery-item-comments">
-                    <span class="visually-hidden">Comments:</span>
-                    <i class="fas fa-comment" aria-hidden="true"></i> 3
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="gallery-item" tabindex="0">
-              <img
-                src="https://images.unsplash.com/photo-1504214208698-ea1916a2195a?w=500&h=500&fit=crop"
-                class="gallery-image"
-                alt=""
-              />
-
-              <div class="gallery-item-type">
-                <span class="visually-hidden">Gallery</span>
-                <i class="fas fa-clone" aria-hidden="true"></i>
-              </div>
-
-              <div class="gallery-item-info">
-                <ul>
-                  <li class="gallery-item-likes">
-                    <span class="visually-hidden">Likes:</span>
-                    <i class="fas fa-heart" aria-hidden="true"></i> 52
-                  </li>
-                  <li class="gallery-item-comments">
-                    <span class="visually-hidden">Comments:</span>
-                    <i class="fas fa-comment" aria-hidden="true"></i> 4
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="gallery-item" tabindex="0">
-              <img
-                src="https://images.unsplash.com/photo-1515814472071-4d632dbc5d4a?w=500&h=500&fit=crop"
-                class="gallery-image"
-                alt=""
-              />
-
-              <div class="gallery-item-info">
-                <ul>
-                  <li class="gallery-item-likes">
-                    <span class="visually-hidden">Likes:</span>
-                    <i class="fas fa-heart" aria-hidden="true"></i> 66
-                  </li>
-                  <li class="gallery-item-comments">
-                    <span class="visually-hidden">Comments:</span>
-                    <i class="fas fa-comment" aria-hidden="true"></i> 2
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="gallery-item" tabindex="0">
-              <img
-                src="https://images.unsplash.com/photo-1511407397940-d57f68e81203?w=500&h=500&fit=crop"
-                class="gallery-image"
-                alt=""
-              />
-
-              <div class="gallery-item-type">
-                <span class="visually-hidden">Gallery</span>
-                <i class="fas fa-clone" aria-hidden="true"></i>
-              </div>
-
-              <div class="gallery-item-info">
-                <ul>
-                  <li class="gallery-item-likes">
-                    <span class="visually-hidden">Likes:</span>
-                    <i class="fas fa-heart" aria-hidden="true"></i> 45
-                  </li>
-                  <li class="gallery-item-comments">
-                    <span class="visually-hidden">Comments:</span>
-                    <i class="fas fa-comment" aria-hidden="true"></i> 0
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="gallery-item" tabindex="0">
-              <img
-                src="https://images.unsplash.com/photo-1518481612222-68bbe828ecd1?w=500&h=500&fit=crop"
-                class="gallery-image"
-                alt=""
-              />
-
-              <div class="gallery-item-info">
-                <ul>
-                  <li class="gallery-item-likes">
-                    <span class="visually-hidden">Likes:</span>
-                    <i class="fas fa-heart" aria-hidden="true"></i> 34
-                  </li>
-                  <li class="gallery-item-comments">
-                    <span class="visually-hidden">Comments:</span>
-                    <i class="fas fa-comment" aria-hidden="true"></i> 1
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="gallery-item" tabindex="0">
-              <img
-                src="https://images.unsplash.com/photo-1505058707965-09a4469a87e4?w=500&h=500&fit=crop"
-                class="gallery-image"
-                alt=""
-              />
-
-              <div class="gallery-item-info">
-                <ul>
-                  <li class="gallery-item-likes">
-                    <span class="visually-hidden">Likes:</span>
-                    <i class="fas fa-heart" aria-hidden="true"></i> 41
-                  </li>
-                  <li class="gallery-item-comments">
-                    <span class="visually-hidden">Comments:</span>
-                    <i class="fas fa-comment" aria-hidden="true"></i> 0
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="gallery-item" tabindex="0">
-              <img
-                src="https://images.unsplash.com/photo-1423012373122-fff0a5d28cc9?w=500&h=500&fit=crop"
-                class="gallery-image"
-                alt=""
-              />
-
-              <div class="gallery-item-type">
-                <span class="visually-hidden">Video</span>
-                <i class="fas fa-video" aria-hidden="true"></i>
-              </div>
-
-              <div class="gallery-item-info">
-                <ul>
-                  <li class="gallery-item-likes">
-                    <span class="visually-hidden">Likes:</span>
-                    <i class="fas fa-heart" aria-hidden="true"></i> 30
-                  </li>
-                  <li class="gallery-item-comments">
-                    <span class="visually-hidden">Comments:</span>
-                    <i class="fas fa-comment" aria-hidden="true"></i> 2
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
           {/* <!-- End of gallery --> */}
 
           {/* <div class="loader"></div> */}
         </div>
         {/* <!-- End of container --> */}
       </div>
-    </>
+    </div>
   );
 };
 
 export default Profile;
+
+// items={new Array(2).fill(null).map((_, i) => {
+//   const id = String(i + 1);
+//   const label = ["게시물", "경비"];
+//   return {
+//     label: `${label[i]}`,
+//     key: id,
+//     children:
+//       label[i] === "게시물" ? (
+//         <div class="gallery">
+//           {images?.map((image, index) => (
+//             <GalleryItem
+// key={index}
+// src={image.thumbnail}
+// likes={image.heartCnt}
+// comments={image.replyCnt}
+//             />
+//           ))}
+//         </div>
+//       ) : (
+//         "hi"
+//       ),
+//   };
+// })}

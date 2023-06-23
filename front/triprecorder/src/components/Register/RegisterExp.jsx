@@ -10,7 +10,6 @@ import {
   Select,
   Radio,
   Space,
-  message,
 } from "antd";
 
 import dayjs from "dayjs";
@@ -20,37 +19,49 @@ import {
   cardsAtom,
   payMethodAtom,
   showAtom,
-  showBtnAtom,
+  // showBtnAtom,
   tripSnsAtom,
+  ReceiptAtom,
+  // ReceiptDataAtom,
+  expPlaceAtom,
+  expAddressAtom,
+  expMoneyAtom,
+  dateTimeAtom,
 } from "recoil/RegisterExpAtom";
-import Receipt from "./Exp/Receipt";
-import axios from "axios";
-import { InboxOutlined } from "@ant-design/icons";
-import Dragger from "antd/es/upload/Dragger";
+import api from "api/axios";
+import AWS from "aws-sdk";
+import { tripNoState } from "../../recoil/Profile";
 
 const { Option } = Select;
+
 const RegisterExp = () => {
   const [value, setValue] = useRecoilState(payMethodAtom);
   const [show, setShow] = useRecoilState(showAtom); //카드선택시 select 출력
-  const [showBtn, setShowBtn] = useRecoilState(showBtnAtom); //데이터 추출 버튼 보이기
+  // const [showBtn, setShowBtn] = useRecoilState(showBtnAtom); //데이터 추출 버튼 보이기
   const [cards, setCards] = useRecoilState(cardsAtom); //카드 이름
   const [tripSns, setTripSns] = useRecoilState(tripSnsAtom); //게시글
+  const [tno, setTno] = useRecoilState(tripNoState);
 
+  // 카드 리스트 가져오기
   useEffect(() => {
-    axios
+    api
       .post("/card/list")
       .then((res) => {
         const cardData = res.data;
         setCards(cardData.map((card) => card));
+        console.log(cardData);
       })
       .catch((err) => console.log("error", err));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-    axios
-      .post("/sns/list/4")
+  // sns 리스트 가져오기
+  useEffect(() => {
+    api
+      .post("/sns/list/4") //하드 코딩한 tripNo 수정 필요
       .then((res) => {
         const snsData = res.data;
         setTripSns(snsData.map((sns) => sns));
+        console.log(snsData);
       })
       .catch((err) => console.log("error : ", err));
   }, []);
@@ -102,7 +113,7 @@ const RegisterExp = () => {
       cardCash = values["card"];
       authService
         .ResigerExpCard(
-          4,
+          4, //tripNo
           values["sns"],
           cardCash,
           values["expTitle"],
@@ -136,6 +147,7 @@ const RegisterExp = () => {
         .catch((err) => console.log(err));
     }
   };
+
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
@@ -145,21 +157,134 @@ const RegisterExp = () => {
     console.log(value);
   };
 
-  const handleFileUpload = (info) => {
-    const { status, name } = info.file;
-    if (status === 'done') {
-      message.success(`${name} file uploaded successfully.`);
-    } else if (status === 'error') {
-      message.error(`${name} file upload failed.`);
+  //s3에 저장
+  const [selectedReceipt, setSelectedReceipt] = useRecoilState(ReceiptAtom);
+  const ACCESS_KEY = "AKIA2FRRYIXGMZUAI6VM"; //iam에 있음
+  const SECRET_ACCESS_KEY = process.env.REACT_APP_SECRET_ACCESS_KEY;
+  const REGION = "ap-northeast-2";
+  const S3_BUCKET = "trip-recorder"; //s3버킷 네임
+
+  AWS.config.update({
+    accessKeyId: ACCESS_KEY,
+    secretAccessKey: SECRET_ACCESS_KEY,
+  });
+
+  const myBucket = new AWS.S3({
+    params: { Bucket: S3_BUCKET },
+    region: REGION,
+  });
+
+  const handleFileInput = (e) => {
+    // console.log(e.target.files); //선택한 파일들
+    for (let i = 0; i < e.target.files.length; i++) {
+      //파일 갯수만큼 for
+      //console.log(e.target.files[i].name); //파일명...
+      const file = e.target.files[i];
+      const fileExt = file.name.split(".").pop();
+      if (
+        (file.type !== "image/jpeg" || fileExt !== "jpg") &
+        (file.type !== "image/png" || fileExt !== "png") &
+        (fileExt !== "jpeg")
+      ) {
+        alert("jpg와 png파일만 Upload 가능합니다.");
+        return;
+      }
+      // setProgress(0);
+      setSelectedReceipt(e.target.files);
+      //   console.log(file);
+      //   console.log(selectedFile);
     }
   };
 
+  const uploadFile = (files) => {
+    // console.log(files);
+    for (let i = 0; i < files.length; i++) {
+      const params = {
+        ACL: "public-read",
+        Body: files[i],
+        Bucket: S3_BUCKET,
+        Key: "receipt/" + files[i].name,
+      };
+      myBucket
+        .putObject(params)
+        .on("httpUploadProgress", () => {
+          setTimeout(() => {
+            // setShowAlert(false);
+            setSelectedReceipt([]);
+          }, 3000);
+        })
+        .send((err) => {
+          if (err) console.log(err);
+        });
+    }
+  };
+
+  //initialValues에 담을 useState
+  const [expPlace, setexpPlace] = useRecoilState(expPlaceAtom);
+  const [expAddress, setexpAddress] = useRecoilState(expAddressAtom);
+  const [expMoney, setexpMoney] = useRecoilState(expMoneyAtom);
+  const [dateTime, setdateTime] = useRecoilState(dateTimeAtom);
+
+  //데이터 추출
+  //백엔드로 파일 주소 전송 및 데이터 받아오기
+  useEffect(() => {
+    console.log(expPlace);
+    console.log("expPlace : ", typeof expPlace);
+  }, [expPlace]);
+  useEffect(() => {
+    console.log(expAddress);
+  }, [expAddress]);
+  useEffect(() => {
+    console.log(expMoney);
+  }, [expMoney]);
+  useEffect(() => {
+    console.log(dateTime);
+  }, [dateTime]);
+
+  const ReceiptDataEx = (file) => {
+    console.log("파일명", file[0].name); //영수증 파일명
+
+    var imageKey = "receipt/" + file[0].name;
+    api
+      .post("/img/imgrequest", {
+        imageKey,
+      })
+      .then((res) => {
+        var receiptD = res.data;
+        setexpPlace(receiptD.storeInfo);
+        setexpAddress(() => {
+          return receiptD.addresses;
+        });
+        setexpMoney(() => {
+          return receiptD.totalPrice;
+        });
+        setdateTime(() => {
+          return receiptD.timestamp;
+        });
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const fields = [
+    { name: ["expPlace"], value: expPlace },
+    { name: ["expAddress"], value: expAddress },
+    { name: ["expMoney"], value: expMoney },
+    { name: ["dateTime"], value: dayjs(dateTime, "YYYY-MM-DD HH:mm") },
+  ];
   return (
     <div className="divbox">
       <img alt="tripRecorder" src={logo} className="logoimg" />
       <small style={{ color: "#9CA3AF", paddingBottom: 10 }}>
-        여행 경비 및 게시글을 등록하세요.
+        여행 경비 내용을 등록하세요.
       </small>
+      <Button
+        size="small"
+        onClick={() => {
+          console.log(tno);
+        }}
+      >
+        tripNo 확인
+      </Button>
       <div className="divform">
         <Form
           name="basic"
@@ -168,6 +293,7 @@ const RegisterExp = () => {
             margin: "0 auto",
           }}
           initialValues={{}}
+          fields={fields}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           autoComplete="off"
@@ -221,30 +347,25 @@ const RegisterExp = () => {
                 },
               ]}
               style={{ justifyContent: "center" }}
-              onChange={() => setShowBtn(true)}
+              // onChange={() => setShowBtn(true)}
             >
               <div>
-                <Dragger
-                  name="file"
-                  action="/upload"
-                  onChange={handleFileUpload}
-                  fileList={[]}
-                >
-                  <p className="ant-upload-drag-icon">
-                    <InboxOutlined />
-                  </p>
-                  <p className="ant-upload-text">
-                    Click or drag file to this area to upload
-                  </p>
-                  <p className="ant-upload-hint">
-                    Support for a single or bulk upload.
-                  </p>
-                </Dragger>
+                <Input
+                  color="primary"
+                  type="file"
+                  onChange={handleFileInput}
+                  onBlur={() => uploadFile(selectedReceipt)} //s3에 저장
+                />
               </div>
             </Form.Item>
-            {showBtn && (
-              <Form.Item style={{ justifyContent: "center" }}>
-                <Button onClick={Receipt}>데이터 추출</Button>
+            {selectedReceipt && ( //style={{ justifyContent: "center" }}
+              <Form.Item>
+                <Button
+                  color="primary"
+                  onClick={() => ReceiptDataEx(selectedReceipt)}
+                >
+                  데이터 추출
+                </Button>
               </Form.Item>
             )}
           </div>

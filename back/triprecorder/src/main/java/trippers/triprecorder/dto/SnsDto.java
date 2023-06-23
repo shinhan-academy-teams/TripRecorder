@@ -15,12 +15,13 @@ public class SnsDto {
 	private Long snsNo;
 	private String snsTitle;
 	private String snsContent;
-	private String snsPhoto;
+	private List<String> snsPhoto;
 	private Timestamp snsRegdate;
 	private Integer snsScope;
 	private UserSimpleDto snsUser;
 	
 	private List<ReplyDto> reply;
-	private boolean heart;
-	private List<HashtagDto> hashtag;
+	private boolean isHeart;
+	private Integer heartCnt;
+	private List<String> hashtag;
 }
