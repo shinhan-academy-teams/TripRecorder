@@ -5,8 +5,14 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Form, Input, Button } from "antd";
 import Cookies from "js-cookie";
 import authService from "api/auth.service";
+import { useRecoilState } from "recoil";
+import { userNo, userNick, userProfile, isLoggedIn } from "../recoil/UserInfo";
 
 const SignIn = (props) => {
+  const [userNum, setUserNum] = useRecoilState(userNo);
+  const [userNickName, setUserNickName] = useRecoilState(userNick);
+  const [userProf, setUserProf] = useRecoilState(userProfile);
+  const [isLog, setIsLog] = useRecoilState(isLoggedIn);
   const DivInner = styled.div`
     margin-bottom: 0.75rem;
   `;
@@ -49,18 +55,28 @@ const SignIn = (props) => {
   useEffect(() => {
     forceUpdate({});
   }, []);
+
+  useEffect(() => {
+    let user = localStorage.getItem("userNo");
+    if (user !== null) {
+      setIsLog(true);
+    }
+  }, [window.localStorage.length]);
+
   const onFinish = async (values) => {
     console.log("Success:", values);
     await authService
       .login(values["ID"], values["PW"])
       .then((res) => {
-        if (res.status === 200) {
+        if (res?.status === 200) {
           console.log(res.data);
           console.log(Cookies.get("jwtToken"));
-          localStorage.clear();
-          localStorage.setItem("userNo", res.data.userNo);
-          localStorage.setItem("userNick", res.data.userNick);
-          localStorage.setItem("userProfile", res.data.userProfile);
+
+          // localStorage.clear();
+          // localStorage.setItem("userNo", res.data.userNo);
+          // localStorage.setItem("userNick", res.data.userNick);
+          // localStorage.setItem("userProfile", res.data.userProfile);
+
           window.location.href = "/";
         }
       })

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Logo from "assets/recorder_green.png";
 import Profile from "assets/profile.png";
 import {
@@ -8,10 +8,22 @@ import {
   CreditCardOutlined,
 } from "@ant-design/icons";
 import "style/navbar.scss";
-
+import { useRecoilState } from "recoil";
+import {
+  userNo,
+  userNick,
+  userProfile,
+  isLoggedIn,
+} from "../../recoil/UserInfo";
 import { useLocation, Link, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const Navbar = () => {
+  const [userNum, setUserNum] = useRecoilState(userNo);
+  const [userNickName, setUserNickName] = useRecoilState(userNick);
+  const [userProf, setUserProf] = useRecoilState(userProfile);
+  const [isLog, setIsLog] = useRecoilState(isLoggedIn);
+
   const location = useLocation();
 
   const navigate = useNavigate();
@@ -21,7 +33,17 @@ const Navbar = () => {
   const handleCloseMenu = () => {
     setCloseMenu(!closeMenu);
   };
+  useEffect(() => {
+    // setCloseMenu(closeMenu);
+    let user = localStorage.getItem("userNo");
+    if (user !== null) {
+      setIsLog(true);
+    }
 
+    setUserNum(localStorage.getItem("userNo"));
+    setUserNickName(localStorage.getItem("userNick"));
+    setUserProf(localStorage.getItem("userProfile"));
+  }, [window.localStorage.length]);
   return (
     <div className={closeMenu === false ? "sidebar" : "sidebar active"}>
       <div
@@ -49,22 +71,46 @@ const Navbar = () => {
         ></div>
         <div className="burgerMenu"></div>
       </div>
-      <div
-        className={
-          closeMenu === false ? "profileContainer" : "profileContainer active"
-        }
-      >
-        <img src={Profile} alt="profile" className="profile" />
-        <div className="profileContents" style={{ cursor: "pointer" }}
-                onClick={() => {
-                  console.log("h2");
-                  navigate(`/${localStorage.getItem('userNick')}`);
-                }}
+      {isLog ? (
+        <div
+          className={
+            closeMenu === false ? "profileContainer" : "profileContainer active"
+          }
         >
-          <p className="name">Hello, zzahee✈️</p>
-          <p>zzahee366@gmail.com</p>
+          <img src={userProf} alt="profile" className="profile" />
+          <div
+            className="profileContents"
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              console.log(userProf);
+              navigate(`/${userNickName}`);
+            }}
+          >
+            <p className="name">{userNickName}</p>
+            {/* <p>zzahee366@gmail.com</p> */}
+          </div>
         </div>
-      </div>
+      ) : (
+        <div
+          className={
+            closeMenu === false ? "profileContainer" : "profileContainer active"
+          }
+        >
+          <img src={Logo} alt="profile" className="profile" />
+          <div
+            className="profileContents"
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              console.log(userProf);
+              navigate(`/login`);
+            }}
+          >
+            <p className="name">로그인해주세요</p>
+            {/* <p>zzahee366@gmail.com</p> */}
+          </div>
+        </div>
+      )}
+
       <div
         className={
           closeMenu === false ? "contentsContainer" : "contentsContainer active"
@@ -77,7 +123,20 @@ const Navbar = () => {
                 style={{ padding: "0 1rem 0 0.5rem", fontSize: "20px" }}
               />
             </Link>
-            <Link to={"/"} className="link_name">
+            <Link
+              to={"/"}
+              className="link_name"
+              onClick={() => {
+                // console.log("1");
+                Cookies.remove("jwtToken");
+                setIsLog(false);
+
+                setUserNum("");
+                setUserNickName("");
+                setUserProf("");
+                localStorage.clear();
+              }}
+            >
               로그아웃
             </Link>
           </li>

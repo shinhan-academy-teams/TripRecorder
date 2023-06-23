@@ -6,10 +6,15 @@ import { imagesState } from "../../recoil/Profile";
 import User from "components/Search/User";
 import profileService from "api/profile.service";
 import { Link, useNavigate } from "react-router-dom";
+import { userProfile, userNo, userNick } from "../../recoil/UserInfo";
 const Header = () => {
   const [image, setImageState] = useRecoilState(imagesState);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isfollowingOpen, setIsFollowingOpen] = useState(false);
+
+  const [userProf, setUserProf] = useRecoilState(userProfile);
+  const [userNum, setUserNum] = useRecoilState(userNo);
+  const [userNickName, setUserNickName] = useRecoilState(userNick);
 
   const [follower, setFollower] = useState();
   const [following, setFollowing] = useState();
@@ -52,15 +57,13 @@ const Header = () => {
       <div class="container">
         <div class="profile">
           <div class="profile-image">
-            <img src={`${localStorage.getItem("userProfile")}`} alt="" />
+            <img src={userProf} alt="" />
           </div>
 
           <div class="profile-user-settings">
-            <h1 class="profile-user-name">
-              {localStorage.getItem("userNick")}
-            </h1>
+            <h1 class="profile-user-name">{userNickName}</h1>
 
-            {localStorage.getItem("userNo") ? (
+            {userNum ? (
               <button
                 class="btn profile-edit-btn"
                 // onClick={() => }
