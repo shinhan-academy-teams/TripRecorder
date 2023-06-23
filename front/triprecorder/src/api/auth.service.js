@@ -172,6 +172,19 @@ const RegisterSns = (
   });
 };
 
+//댓글 등록
+const RegisterRep = (replyContent, snsNo) => {
+  console.log("타입 : ", typeof snsNo);
+  return api.post("/reply/register/" + snsNo, {
+    replyContent,
+  });
+};
+
+//좋아요
+// const Heart = (snsNo) =>{
+//   return api.post("/heart/register/"+snsNo, )
+// };
+
 const authService = {
   checkDuplicateId,
   checkDuplicateNick,
@@ -183,6 +196,7 @@ const authService = {
   RegisterExpCash,
   ReceiptAddress,
   RegisterSns,
+  RegisterRep,
 };
 
 export default authService;
