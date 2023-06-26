@@ -1,10 +1,4 @@
-import React, { useEffect } from "react";
-import { useRecoilState } from "recoil";
-import {
-  benefitListAtom,
-  cardListAtom,
-  categoryAtom,
-} from "recoil/PopularCardAtom";
+import React, { useEffect, useState } from "react";
 import { Button, Form, Input, Tabs } from "antd";
 import axios from "axios";
 import CardInfo from "components/PopularCard/CardInfo";
@@ -12,10 +6,10 @@ import Benefit from "components/PopularCard/Benefit";
 
 const PopularCard = () => {
   // 카테고리, 카테고리에 따른 카드 리스트
-  const [cardList, setCardList] = useRecoilState(cardListAtom);
-  const [category, setCategory] = useRecoilState(categoryAtom);
+  const [cardList, setCardList] = useState([]);
+  const [category, setCategory] = useState("쇼핑");
   // 혜택 리스트
-  const [benefitList, setBenefitList] = useRecoilState(benefitListAtom);
+  const [benefitList, setBenefitList] = useState([]);
 
   const categoryList = ["쇼핑", "외식", "교통", "관광", "숙박", "항공"];
 
