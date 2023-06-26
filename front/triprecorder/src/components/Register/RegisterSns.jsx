@@ -83,7 +83,7 @@ const RegisterSns = () => {
 
   useEffect(() => {
     api
-      .post("/exp/list/4") //하드 코딩한 tripNo 수정 필요
+      .post("/exp/list/" + tno) //하드 코딩한 tripNo 수정 필요
       .then((res) => {
         const receiptData = res.data;
         setTripReceipt(receiptData.map((receipt) => receipt));
@@ -179,7 +179,7 @@ const RegisterSns = () => {
   for (var i = 0; i < selectedFile.length; i++) {
     console.log("사진 이름", selectedFile[i].name);
 
-    fileString += "sns/4/" + selectedFile[i].name + "@";
+    fileString += "sns/" + tno + "/" + selectedFile[i].name + "@";
   }
   console.log("String : ", fileString);
 
@@ -191,7 +191,7 @@ const RegisterSns = () => {
         ACL: "public-read",
         Body: files[i],
         Bucket: S3_BUCKET,
-        Key: "sns/4/" + files[i].name, //"sns/유저id/tripid/snsid" 수정
+        Key: "sns/" + tno + "/" + files[i].name, //"sns/유저id/tripid/snsid" 수정
         ContentType: files[i].type,
       };
       myBucket
@@ -216,7 +216,7 @@ const RegisterSns = () => {
     // console.log();
     authService
       .RegisterSns(
-        4, //tripNo
+        tno,
         values["receipt"],
         tags,
         values["snsTitle"],
@@ -237,14 +237,14 @@ const RegisterSns = () => {
       <small style={{ color: "#9CA3AF", paddingBottom: 10 }}>
         여행 게시글 내용을 등록하세요.
       </small>
-      <Button
+      {/* <Button
         size="small"
         onClick={() => {
           console.log(tno);
         }}
       >
         tripNo 확인
-      </Button>
+      </Button> */}
       <div className="divform">
         <Form
           name="basic"
