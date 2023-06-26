@@ -48,10 +48,11 @@ const Profile = () => {
   }, []);
 
   return (
-    <div className={styles.divbox}>
+    // <div className={styles.divbox}>
+    <div className={styles.divbox} style={{ fontSize: "10px" }}>
       <Header />
       <div id="main">
-        <div class="container">
+        <div className="container">
           <Tabs
             defaultActiveKey="1"
             centered
@@ -75,7 +76,7 @@ const Profile = () => {
                         {image[0]?.tripName ? (
                           <Link to={"/tripregistration"}>
                             <button
-                              class="btn profile-settings-btn"
+                              className="btn profile-settings-btn"
                               onClick={() => {
                                 // navigate("/tripregistration", {
                                 //   state: {
@@ -92,7 +93,7 @@ const Profile = () => {
                         ) : (
                           <Link to={"/registersns"}>
                             <button
-                              class="btn profile-settings-btn"
+                              className="btn profile-settings-btn"
                               onClick={() => {
                                 console.log(image, "profile");
                               }}
@@ -102,7 +103,7 @@ const Profile = () => {
                           </Link>
                         )}
                         <button
-                          class="btn profile-settings-btn"
+                          className="btn profile-settings-btn"
                           onClick={() => {
                             setImageState([]);
                             setLoading(true);
@@ -119,9 +120,9 @@ const Profile = () => {
                           <RollbackOutlined />
                         </button>
                       </div>
-                      {loading ? <div class="loader" /> : ""}
+                      {/* {loading ? <div className="loader" /> : ""} */}
 
-                      <div class="gallery">
+                      <div className="gallery">
                         {image?.map((imageItem, index) =>
                           imageItem.tripName ? (
                             <CategoryItem
@@ -155,7 +156,7 @@ const Profile = () => {
                         {image[0]?.tripName ? (
                           <Link to={"/tripregistration"}>
                             <button
-                              class="btn profile-settings-btn"
+                              className="btn profile-settings-btn"
                               onClick={() => {
                                 // navigate("/tripregistration", {
                                 //   state: {
@@ -172,7 +173,7 @@ const Profile = () => {
                         ) : (
                           <Link to={"/registerexp"}>
                             <button
-                              class="btn profile-settings-btn"
+                              className="btn profile-settings-btn"
                               onClick={() => {
                                 console.log(image, "profile");
                               }}
@@ -182,7 +183,7 @@ const Profile = () => {
                           </Link>
                         )}
                         <button
-                          class="btn profile-settings-btn"
+                          className="btn profile-settings-btn"
                           onClick={() => {
                             setImageState([]);
                             setLoading(true);
@@ -199,8 +200,8 @@ const Profile = () => {
                           <RollbackOutlined />
                         </button>
                       </div>
-                      {loading ? <div class="loader" /> : ""}
-                      <div class="gallery">
+                      {loading ? <div className="loader" /> : ""}
+                      <div className="gallery">
                         {image?.map((imageItem, index) =>
                           imageItem.tripName ? (
                             <CategoryExpenseItem

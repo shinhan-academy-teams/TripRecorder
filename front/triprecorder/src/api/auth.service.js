@@ -41,8 +41,14 @@ const signup = (userId, userPw, userName, userNick, userEmail, userGender) => {
       userEmail,
       userGender,
     })
-    .then((res) => console.log(res))
-    .catch((err) => console.log(err));
+    .then((res) => {
+      console.log(res);
+      return res.data;
+    })
+    .catch((err) => {
+      console.log(err);
+      return err;
+    });
 };
 
 const login = (userId, userPw) => {

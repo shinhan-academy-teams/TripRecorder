@@ -56,6 +56,32 @@ const getProfileInfo = (userNo) => {
     .catch((err) => console.log(err));
 };
 
+const getExpDetail = (expNo) => {
+  return api
+    .get(`/exp/detail/${expNo}`)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => console.log(err));
+};
+const delExp = (expNo) => {
+  return api
+    .delete(`/exp/delete/${expNo}`)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => console.log(err));
+};
+
+const getConnected = (tripNum) => {
+  return api
+    .post(`/exp/list/${tripNum}`)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => console.log(err));
+};
+
 const profileService = {
   getSnsPostList,
   getCategoryList,
@@ -63,6 +89,9 @@ const profileService = {
   getFollowingList,
   getExpList,
   getProfileInfo,
+  getExpDetail,
+  delExp,
+  getConnected,
 };
 
 export default profileService;

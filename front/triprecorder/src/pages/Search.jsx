@@ -1,32 +1,52 @@
-import React from "react";
-import styled from "@emotion/styled";
-import User from "components/Search/User";
+import React, { useEffect } from "react";
 import { Button, Form, Input, Select } from "antd";
-import { useRecoilState } from "recoil";
-import { HashtagSnsAtom, NicknameUserAtom } from "recoil/SearchAtom";
 import axios from "axios";
-// import {userState}
+import { useState } from "react";
+import Cookies from "js-cookie";
+import api from "api/axios";
+import { useRecoilState } from "recoil";
+import { HashtagSnsAtom } from "recoil/SearchAtom";
+import UserTripNum from "components/Search/UserTripNum";
+import SnsDetail from "components/Search/SnsDetail";
+
 const Search = () => {
   // 게시글 리스트, 사용자 리스트
-  const [userList, setuserList] = useRecoilState(NicknameUserAtom);
+  const [userList, setuserList] = useState([]);
   const [snsList, setsnsList] = useRecoilState(HashtagSnsAtom);
 
+  // 토큰
+  const token = Cookies.get("jwtToken");
+
+  // 로드 시 리셋
+  useEffect(() => {
+    setsnsList([]);
+  }, []);
   // 검색 버튼 눌렀을 때
   const search = (value) => {
-    console.log(value);
     const searchType = value.searchType;
     const search = value.searchValue;
-
     if (searchType === "nickname") {
       axios
         .post("/search/nickname", { search })
         .then((res) => {
-          console.log(res);
           setuserList(res.data.map((data) => data));
           setsnsList([]);
         })
         .catch((err) => console.log("error", err));
+    } else {
+      setsnsList([]);
+      api
+        .post("/search/hashtag", { search })
+        .then((res) => {
+          setsnsList(res.data.map((data) => data));
+          setuserList([]);
+        })
+        .catch((err) => console.log("error", err));
     }
+  };
+  // 게시글 컴포넌트가 변경되었을 때 (삭제)
+  const updateSnsList = (newList) => {
+    setsnsList(newList);
   };
 
   return (
@@ -64,15 +84,33 @@ const Search = () => {
       {/* 닉네임 검색 */}
       <div>
         {userList.map((user, i) => {
-          console.log(user);
           return (
-            <User userNick={user.userNick} src={user.userProfile} key={i} />
+            <div>
+              <UserTripNum
+                userNo={user.userNo}
+                key={i}
+                userNick={user.userNick}
+                userProfile={user.userProfile}
+              />
+            </div>
           );
         })}
       </div>
 
       {/* 해시태그 검색 */}
-      <div></div>
+      <div>
+        {snsList.map((sns, i) => {
+          return (
+            <SnsDetail
+              token={token ? token : null}
+              snsData={sns}
+              key={i}
+              snsList={snsList}
+              updateSnsList={updateSnsList}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 };
