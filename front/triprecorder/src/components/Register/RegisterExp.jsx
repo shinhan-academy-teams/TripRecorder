@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "style/register.scss";
 import logo from "assets/tripRecorder.png";
 import {
@@ -10,6 +10,7 @@ import {
   Select,
   Radio,
   Space,
+  message,
 } from "antd";
 
 import dayjs from "dayjs";
@@ -31,6 +32,8 @@ import {
 import api from "api/axios";
 import AWS from "aws-sdk";
 import { tripNoState } from "../../recoil/Profile";
+import { useNavigate } from "react-router-dom";
+import { userNick } from "recoil/UserInfo";
 
 const { Option } = Select;
 
@@ -57,7 +60,7 @@ const RegisterExp = () => {
   // sns 리스트 가져오기
   useEffect(() => {
     api
-      .post("/sns/list/4") //하드 코딩한 tripNo 수정 필요
+      .post("/sns/list/" + tno) //하드 코딩한 tripNo 수정 필요
       .then((res) => {
         const snsData = res.data;
         setTripSns(snsData.map((sns) => sns));
@@ -66,6 +69,7 @@ const RegisterExp = () => {
       .catch((err) => console.log("error : ", err));
   }, []);
 
+  const navigate = useNavigate();
   const onFinish = (values) => {
     //values : DB에 저장할 입력값
     console.log("Success:", values);
@@ -107,13 +111,14 @@ const RegisterExp = () => {
     };
 
     var cardCash = "";
+
     if (values["expWay"] === "card") {
       //카드선택시 axios
       const dateTime = datePasing(values["dateTime"]);
       cardCash = values["card"];
       authService
         .ResigerExpCard(
-          4, //tripNo
+          tno,
           values["sns"],
           cardCash,
           values["expTitle"],
@@ -124,15 +129,17 @@ const RegisterExp = () => {
           values["expWay"],
           values["expCate"]
         )
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err));
+        .then((res) => message.success("경비 등록이 완료되었습니다. 😊"))
+        .catch((err) =>
+          message.error("경비 등록에 실패했습니다. 다시 시도하세요. 😥")
+        );
     } else {
       //현금선택시 axios
       const dateTime = datePasing(values["dateTime"]);
       cardCash = "";
       authService
         .RegisterExpCash(
-          4,
+          tno,
           values["sns"],
           cardCash,
           values["expTitle"],
@@ -143,8 +150,13 @@ const RegisterExp = () => {
           values["expWay"],
           values["expCate"]
         )
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err));
+        .then((res) => {
+          message.success("경비 등록이 완료되었습니다. 😊");
+          navigate("/" + userNick);
+        })
+        .catch((err) =>
+          message.error("경비 등록에 실패했습니다. 다시 시도하세요. 😥")
+        );
     }
   };
 
@@ -220,10 +232,14 @@ const RegisterExp = () => {
   };
 
   //initialValues에 담을 useState
-  const [expPlace, setexpPlace] = useRecoilState(expPlaceAtom);
-  const [expAddress, setexpAddress] = useRecoilState(expAddressAtom);
-  const [expMoney, setexpMoney] = useRecoilState(expMoneyAtom);
-  const [dateTime, setdateTime] = useRecoilState(dateTimeAtom);
+  // const [expPlace, setexpPlace] = useRecoilState(expPlaceAtom);
+  // const [expAddress, setexpAddress] = useRecoilState(expAddressAtom);
+  // const [expMoney, setexpMoney] = useRecoilState(expMoneyAtom);
+  // const [dateTime, setdateTime] = useRecoilState(dateTimeAtom);
+  const [expPlace, setexpPlace] = useState("");
+  const [expAddress, setexpAddress] = useState("");
+  const [expMoney, setexpMoney] = useState("");
+  const [dateTime, setdateTime] = useState("0000-00-00 00:00");
 
   //데이터 추출
   //백엔드로 파일 주소 전송 및 데이터 받아오기
@@ -277,14 +293,14 @@ const RegisterExp = () => {
       <small style={{ color: "#9CA3AF", paddingBottom: 10 }}>
         여행 경비 내용을 등록하세요.
       </small>
-      <Button
+      {/* <Button
         size="small"
         onClick={() => {
           console.log(tno);
         }}
       >
         tripNo 확인
-      </Button>
+      </Button> */}
       <div className="divform">
         <Form
           name="basic"
@@ -292,7 +308,7 @@ const RegisterExp = () => {
             maxWidth: 450,
             margin: "0 auto",
           }}
-          initialValues={{}}
+          initialValues={{ expWay: "현금" }}
           fields={fields}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
@@ -461,7 +477,7 @@ const RegisterExp = () => {
           >
             <InputNumber
               formatter={(value) =>
-                `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                `₩ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
               }
               parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
             />

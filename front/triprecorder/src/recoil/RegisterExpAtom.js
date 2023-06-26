@@ -57,8 +57,9 @@ export const expMoneyAtom = atom({
   default: "",
 });
 
+
 //날짜+시간 상태
 export const dateTimeAtom = atom({
   key: "dateTimeAtom",
-  default: "",
+  default: "0000-00-00 00:00",
 });
