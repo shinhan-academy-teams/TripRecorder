@@ -3,8 +3,12 @@ import styled from "@emotion/styled";
 import SignUp from "components/SignUp";
 import trip2 from "assets/trip2.jpg";
 import SignIn from "components/SignIn";
+import { isLoggedIn } from "../recoil/UserInfo";
+import { useRecoilState } from "recoil";
+import LevelCheck from "../components/LevelCheck";
 
 const Login = ({ setIsShow }) => {
+  const [isLog, setIsLog] = useRecoilState(isLoggedIn);
   setIsShow(false);
   const DivContainer = styled.div`
     display: flex;
@@ -56,34 +60,40 @@ const Login = ({ setIsShow }) => {
   };
 
   return (
-    <DivContainer>
-      <LoginContainer>
-        {loginstate === false ? (
-          <SignIn handleLoginState={handleLoginState} />
-        ) : (
-          <SignUp handleLoginState={handleLoginState} />
-        )}
+    <>
+      {isLog ? (
+        <LevelCheck />
+      ) : (
+        <DivContainer>
+          <LoginContainer>
+            {loginstate === false ? (
+              <SignIn handleLoginState={handleLoginState} />
+            ) : (
+              <SignUp handleLoginState={handleLoginState} />
+            )}
 
-        <LoginBanner>
-          <ImgComponent src={trip2} />
-        </LoginBanner>
-      </LoginContainer>
-      <Credit>
-        <p style={{ textAlign: "center" }}>
-          문의 내용{" "}
-          <Link target="_blank" href="www.naver.com">
-            dltlaos14@naver.com
-          </Link>
-          &nbsp;&nbsp;Made by{" "}
-          <Link
-            target="_blank"
-            href="https://github.com/shinhan-academy-teams/TripRecorder"
-          >
-            github
-          </Link>
-        </p>
-      </Credit>
-    </DivContainer>
+            <LoginBanner>
+              <ImgComponent src={trip2} />
+            </LoginBanner>
+          </LoginContainer>
+          <Credit>
+            <p style={{ textAlign: "center" }}>
+              문의 내용{" "}
+              <Link target="_blank" href="www.naver.com">
+                dltlaos14@naver.com
+              </Link>
+              &nbsp;&nbsp;Made by{" "}
+              <Link
+                target="_blank"
+                href="https://github.com/shinhan-academy-teams/TripRecorder"
+              >
+                github
+              </Link>
+            </p>
+          </Credit>
+        </DivContainer>
+      )}
+    </>
   );
 };
 export default Login;
