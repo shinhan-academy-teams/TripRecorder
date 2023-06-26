@@ -79,7 +79,7 @@ public class SnsController {
 		}
 
 		trepo.findById(tripNo).ifPresent(trip -> sns.setSns(trip));
-		if (sns.getSnsContent().equals("")) {
+		if (sns.getSnsContent().trim().equals("")) {
 			sns.setSnsContent(null);
 		}
 
@@ -91,77 +91,77 @@ public class SnsController {
 
 		return "OK";
 	}
-	
+
 	// 게시글 조회 (메인페이지)
 	@GetMapping("/list")
 	public List<SnsDto> getSnsList(HttpServletRequest request) {
 		String obj = request.getHeader("Authorization");
 		List<SnsVO> tmpSnsList = new ArrayList<>();
 		Long userNo = null;
-		
-		if(obj != null) {
+
+		if (obj != null) {
 			userNo = EncodingUtil.getUserNo(request);
 			UserVO user = urepo.findById(userNo).orElse(null);
 			List<FollowVO> following = frepo.findByFollower(user);
-			
+
 			List<TripVO> myTrip = trepo.findByUser(user);
 			List<TripVO> followingTrip = new ArrayList<>();
 			following.forEach(f -> {
 				trepo.findByUser(f.getFollowing()).forEach(t -> followingTrip.add(t));
 			});
-			
-			tmpSnsList = srepo.findBySnsInAndSnsScopeInOrSnsInOrderBySnsNoDesc(followingTrip, new Integer[] {0, 1}, myTrip);
+
+			tmpSnsList = srepo.findBySnsInAndSnsScopeInOrSnsInOrderBySnsNoDesc(followingTrip, new Integer[] { 0, 1 },
+					myTrip);
 		} else {
 			tmpSnsList = srepo.findBySnsScopeOrderBySnsNoDesc(1);
 		}
-		
+
 		List<SnsDto> snsList = new ArrayList<>();
-		
-		for(int i = 0; i < tmpSnsList.size(); i++) {
+
+		for (int i = 0; i < tmpSnsList.size(); i++) {
 			SnsVO tmpSns = tmpSnsList.get(i);
 			SnsDto sns = MakeSnsUtil.makeSnsDto(tmpSns, userNo, urepo, rrepo, hrepo, tagrepo);
-			
 
-			if(tmpSns.getExp() != null) {
+			if (tmpSns.getExp() != null) {
 				sns.setExpNo(tmpSns.getExp().getExpNo());
 			}
-			
+
 			snsList.add(sns);
 		}
-		
+
 		return snsList;
 	}
-	
+
 	// 게시글 조회(사용자 프로필)
 	@GetMapping("/{tripNo}/list")
 	public List<JSONObject> getTripSnsList(@PathVariable Long tripNo) {
 		List<JSONObject> snsList = new ArrayList<>();
 		TripVO trip = trepo.findById(tripNo).orElse(null);
-		
+
 		srepo.findBySnsOrderBySnsNoDesc(trip).forEach(sns -> {
 			Integer heartCnt = hrepo.findBySns(sns).size();
 			Integer replyCnt = rrepo.findBySns(sns).size();
-			
+
 			JSONObject obj = new JSONObject();
-			obj.put("snsNo", sns.getSnsNo());	
+			obj.put("snsNo", sns.getSnsNo());
 			obj.put("heartCnt", heartCnt);
 			obj.put("replyCnt", replyCnt);
-			
+
 			String imgKey = sns.getSnsPhoto().split("@")[0];
 			obj.put("thumbnail", AwsUtil.getImageURL(imgKey));
-			
+
 			snsList.add(obj);
 		});
-		
+
 		return snsList;
 	}
-	
+
 	// 연결된 경비가 없는 게시글 조회
 	@PostMapping("/list/{tripNo}")
 	public List<JSONObject> postSnsList(@PathVariable Long tripNo) {
 		TripVO trip = trepo.findById(tripNo).orElse(null);
 		List<SnsVO> tmpSnsList = srepo.findBySnsAndExpNullOrderBySnsNoDesc(trip);
-		
+
 		List<JSONObject> snsList = new ArrayList<>();
 		tmpSnsList.forEach(sns -> {
 			JSONObject obj = new JSONObject();
@@ -169,39 +169,39 @@ public class SnsController {
 			obj.put("snsTitle", sns.getSnsTitle());
 			snsList.add(obj);
 		});
-		
+
 		return snsList;
 	}
-	
+
 	// 게시글 상세보기
 	@GetMapping("/detail/{snsNo}")
 	public SnsDto getSnsDetail(HttpServletRequest request, @PathVariable Long snsNo) {
 		String obj = request.getHeader("Authorization");
 		Long userNo = null;
-		
-		if(obj != null) {
+
+		if (obj != null) {
 			userNo = EncodingUtil.getUserNo(request);
 		}
 		SnsVO tmpSns = srepo.findById(snsNo).orElse(null);
 		SnsDto sns = MakeSnsUtil.makeSnsDto(tmpSns, userNo, urepo, rrepo, hrepo, tagrepo);
-		
+
 		return sns;
 	}
-	
+
 	// 게시글 삭제
 	@DeleteMapping("/delete/{snsNo}")
 	public String deleteSns(@PathVariable Long snsNo) {
 		SnsVO sns = srepo.findById(snsNo).orElse(null);
-		
+
 		ExpVO exp = sns.getExp();
-		if(exp != null) {
+		if (exp != null) {
 			exp.setSns(null);
 		}
-		
+
 		String[] images = sns.getSnsPhoto().split("@");
 		AwsUtil.deleteBucketObjects(images);
 		srepo.delete(sns);
-		
+
 		return "OK";
 	}
 }

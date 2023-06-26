@@ -2,6 +2,7 @@ package trippers.triprecorder.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,7 +27,7 @@ public class AuthController {
 	public boolean postUseridCheck(@RequestBody UserVO user) {
 		boolean result = true;
 		String userId = user.getUserId();
-		if(!userId.equals("")) {
+		if (!userId.equals("")) {
 			UserVO findUser = urepo.findByUserId(userId);
 			result = findUser != null;
 		}
@@ -41,18 +42,18 @@ public class AuthController {
 		UserVO findUser = null;
 		boolean result = true;
 		String userNick = user.getUserNick();
-		
-		if(!userNick.equals("")) {
-			if(obj != null) {
+
+		if (!userNick.equals("")) {
+			if (obj != null) {
 				Long userNo = EncodingUtil.getUserNo(request);
 				findUser = urepo.findByUserNickAndUserNoNot(userNick, userNo);
 			} else {
-				findUser = urepo.findByUserNick(userNick);	
+				findUser = urepo.findByUserNick(userNick);
 			}
-			
+
 			result = findUser != null;
-		}		
-		
+		}
+
 		return result;
 	}
 
@@ -64,17 +65,17 @@ public class AuthController {
 		UserVO findUser = null;
 		boolean result = true;
 		String userEmail = user.getUserEmail();
-		
-		if(!userEmail.equals("")) {
-			if(obj != null) {
+
+		if (!userEmail.equals("")) {
+			if (obj != null) {
 				Long userNo = EncodingUtil.getUserNo(request);
 				findUser = urepo.findByUserEmailAndUserNoNot(userEmail, userNo);
 			} else {
-				findUser = urepo.findByUserEmail(userEmail);	
+				findUser = urepo.findByUserEmail(userEmail);
 			}
 			result = findUser != null;
 		}
-		
+
 		return result;
 	}
 
@@ -89,5 +90,12 @@ public class AuthController {
 
 		urepo.save(user);
 		return "OK";
+	}
+
+	// 닉네임으로 유저 찾기
+	@PostMapping("/findByNick")
+	public Long getUserNoByNick(@RequestBody JSONObject obj) {
+		UserVO user = urepo.findByUserNick(obj.get("nickname").toString());
+		return user.getUserNo();
 	}
 }
