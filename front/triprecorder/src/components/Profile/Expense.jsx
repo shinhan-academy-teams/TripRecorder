@@ -5,10 +5,14 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import styled from "@emotion/styled";
 import { useRecoilState } from "recoil";
 import { tripNoState } from "../../recoil/Profile";
+import { userNick } from "../../recoil/UserInfo";
+import { useNavigate } from "react-router-dom";
 const Expense = () => {
   const [loading, setLoading] = useState(false);
+  const [userNickName, setUserNickName] = useRecoilState(userNick);
   const [data, setData] = useState([]);
   const [tno, setTno] = useRecoilState(tripNoState);
+  const navigate = useNavigate();
   const InfoDiv = styled.div`
     width: 100px;
     height: 50px;
@@ -51,6 +55,14 @@ const Expense = () => {
             // width: "2.5rem",
           }}
         >
+          <Button
+            onClick={() => {
+              // navigate(`/${userNickName}/${item.expNo}`); 유저 경비
+              navigate("/expNo");
+            }}
+          >
+            상세
+          </Button>
           <InfoDiv>총 예산: {data[0]?.tripExp}</InfoDiv>
           <InfoDiv>쓴 돈: {data[0]?.useExp}</InfoDiv>
           <InfoDiv>남은 돈: {data[0]?.remainExp}</InfoDiv>
@@ -88,7 +100,16 @@ const Expense = () => {
                 <List.Item key={idx}>
                   <List.Item.Meta
                     // avatar={<Avatar src={item.picture.large} />}
-                    title={<a href="#">{item?.expTitle}</a>}
+                    title={
+                      <div
+                        style={{ cursor: "pointer" }}
+                        onClick={() => {
+                          navigate(`/${userNickName}/${item.expNo}`);
+                        }}
+                      >
+                        {item?.expTitle}
+                      </div>
+                    }
                     description={item.expTime}
                   />
                   <div>

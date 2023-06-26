@@ -22,6 +22,7 @@ const SignIn = (props) => {
 
   const LoginForm = styled.div`
     display: flex;
+    flex-direction: column;
     background-color: #f7f6dc;
     flex-wrap: wrap;
     justify-content: center;

@@ -16,6 +16,7 @@ import Profile from "pages/Profile";
 import RegisterExp from "components/Register/RegisterExp";
 import RegisterSns from "components/Register/RegisterSns";
 import SliderTest from "components/Sns/LoginSns";
+import Receipt from "components/Profile/Receipt";
 
 const App = () => {
   const [isShow, setIsShow] = useState(true);
@@ -30,7 +31,12 @@ const App = () => {
             <Route path="/search" element={<Search />} />
             {/* <Route path="/profile" element={<Profile />} /> */}
             <Route path="/:userNick" element={<Profile />} />
-
+            <Route path="/:userNick/:expNo" element={<Receipt />} />
+            <Route
+              path="/:userNick/:expNo/registerexp"
+              element={<RegisterExp />}
+            />
+            {/* <Route path="/expNo" element={<Receipt />} /> */}
             <Route path="/tripregistration" element={<TripRegistration />} />
             <Route path="/popularcard" element={<PopularCard />} />
             <Route path="/registerexp" element={<RegisterExp />} />
