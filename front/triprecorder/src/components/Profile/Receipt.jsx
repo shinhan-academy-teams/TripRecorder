@@ -5,6 +5,7 @@ import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { userNick } from "../../recoil/UserInfo";
 import { useRecoilState } from "recoil";
+import { cardState } from "../../recoil/Profile";
 
 const Receipt = ({
   expWay,
@@ -17,8 +18,10 @@ const Receipt = ({
 }) => {
   let { expNo } = useParams();
 
+  const [card, setCard] = useRecoilState(cardState);
   const [userNickName, setUserNickName] = useRecoilState(userNick);
   let [exp, setExp] = useState();
+  let [cd, setCd] = useState();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
     setIsModalOpen(true);
@@ -31,11 +34,22 @@ const Receipt = ({
     setIsModalOpen(false);
   };
   useEffect(() => {
-    console.log(expNo);
+    console.log(card);
     profileService.getExpDetail(expNo).then((res) => {
       setExp(res);
     });
+    // let getAllcar = async () => {
+    // profileService.getAllCard().then((res) => {
+    //   console.log(res.find(({ cardNo }) => cardNo === exp?.["cardNo"]));
+    //   setCard(res);
+    // });
+    // };
+    // getAllcar();
+
+    // setCd(card?.find(({ cardNo }) => cardNo === exp?.["cardNo"]));
+    // console.log(cd?.["cardNo"]);
   }, []);
+
   const BoxContainer = styled.div`
     display: flex;
     justify-content: center;
@@ -110,11 +124,15 @@ flex-direction: column; */
         <BoxHeader>
           {/* <Button
             onClick={() => {
-              console.log(exp);
-              console.log(exp["expNo"]);
+              console.log(
+                exp
+                // card?.find(({ cardNo }) => cardNo === exp?.["cardNo"])?.[
+                //   "cardName"
+                // ]
+              );
             }}
           >
-            dwdw
+            test
           </Button> */}
           <p>영수증</p>
           <h3>Invoice</h3>
@@ -130,7 +148,16 @@ flex-direction: column; */
           </BoxCol>
           <BoxCol>
             <p>날짜 + 시간</p>
-            <p>{exp?.["expTime"]}</p>
+            <p>
+              {exp?.["expTime"]
+                ? new Date(exp?.["expTime"]).toISOString().split("T")[0] +
+                  " " +
+                  new Date(exp?.["expTime"])
+                    .toISOString()
+                    .split("T")[1]
+                    .split(".")[0]
+                : ""}
+            </p>
           </BoxCol>
           <BoxCol>
             <p>장소</p>
@@ -146,7 +173,15 @@ flex-direction: column; */
           </SubTable>
           <LegalCopy>
             <p>
-              <strong>결제 카드</strong> {exp?.["cardNo"]}
+              <strong>결제 카드</strong>{" "}
+              {
+                // cd?.["cardName"]
+                exp?.["cardNo"] !== null
+                  ? card?.find(({ cardNo }) => cardNo === exp?.["cardNo"])?.[
+                      "cardName"
+                    ]
+                  : "현금"
+              }
             </p>
             <p>
               <strong>결제 카테고리</strong> {exp?.["expCate"]}

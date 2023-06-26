@@ -6,10 +6,12 @@ import styled from "@emotion/styled";
 import { useRecoilState } from "recoil";
 import { tripNoState } from "../../recoil/Profile";
 import { userNick } from "../../recoil/UserInfo";
+import { cardState } from "../../recoil/Profile";
 import { useNavigate } from "react-router-dom";
 const Expense = () => {
   const [loading, setLoading] = useState(false);
   const [userNickName, setUserNickName] = useRecoilState(userNick);
+  const [card, setCard] = useRecoilState(cardState);
   const [data, setData] = useState([]);
   const [tno, setTno] = useRecoilState(tripNoState);
   const navigate = useNavigate();
@@ -36,6 +38,10 @@ const Expense = () => {
   };
   useEffect(() => {
     loadMoreData();
+
+    profileService.getAllCard().then((res) => {
+      setCard(res);
+    });
   }, []);
   return (
     <>
@@ -55,14 +61,6 @@ const Expense = () => {
             // width: "2.5rem",
           }}
         >
-          <Button
-            onClick={() => {
-              // navigate(`/${userNickName}/${item.expNo}`); 유저 경비
-              navigate("/expNo");
-            }}
-          >
-            상세
-          </Button>
           <InfoDiv>총 예산: {data[0]?.tripExp}</InfoDiv>
           <InfoDiv>쓴 돈: {data[0]?.useExp}</InfoDiv>
           <InfoDiv>남은 돈: {data[0]?.remainExp}</InfoDiv>

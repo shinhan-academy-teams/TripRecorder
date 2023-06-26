@@ -82,6 +82,15 @@ const getConnected = (tripNum) => {
     .catch((err) => console.log(err));
 };
 
+const getAllCard = () => {
+  return api
+    .post("/card/list")
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => console.log(err));
+};
+
 const profileService = {
   getSnsPostList,
   getCategoryList,
@@ -92,6 +101,7 @@ const profileService = {
   getExpDetail,
   delExp,
   getConnected,
+  getAllCard,
 };
 
 export default profileService;
