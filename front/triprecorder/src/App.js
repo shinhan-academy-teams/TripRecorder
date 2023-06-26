@@ -17,6 +17,7 @@ import RegisterExp from "components/Register/RegisterExp";
 import RegisterSns from "components/Register/RegisterSns";
 import SliderTest from "components/Sns/LoginSns";
 import Receipt from "components/Profile/Receipt";
+import SnsDetailPage from "components/Sns/SnsDetailPage";
 
 const App = () => {
   const [isShow, setIsShow] = useState(true);
@@ -43,6 +44,7 @@ const App = () => {
             <Route path="/registersns" element={<RegisterSns />} />
             <Route path="*" element={<NotFound />} />
             <Route path="test" element={<SliderTest />} />
+            <Route path="/sns/detail/:snsNo" element={<SnsDetailPage />} />
           </Routes>
         </div>
       </BrowserRouter>

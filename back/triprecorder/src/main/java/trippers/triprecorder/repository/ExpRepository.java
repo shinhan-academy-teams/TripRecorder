@@ -2,6 +2,7 @@ package trippers.triprecorder.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,4 +21,6 @@ public interface ExpRepository extends JpaRepository<ExpVO, Long> {
 			+ "WHERE e.exp_cate = :category AND NOT e.exp_way = 'cash' " + "GROUP BY e.card_no "
 			+ "ORDER BY usageCount DESC LIMIT 3", nativeQuery = true)
 	List<Object> findTop3CardNumbersByExpCate(@Param("category")String category);
+	// 카테고리 별 경비 불러오기
+	List<ExpVO> findByTrip(TripVO trip, Sort sort);
 }

@@ -137,6 +137,7 @@ const Profile = () => {
                               src={imageItem.thumbnail}
                               likes={imageItem.heartCnt}
                               comments={imageItem.replyCnt}
+                              snsNo={imageItem.snsNo}
                             />
                           )
                         )}

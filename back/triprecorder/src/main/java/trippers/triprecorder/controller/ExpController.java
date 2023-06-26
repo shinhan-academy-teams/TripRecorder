@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.mysql.cj.x.protobuf.MysqlxCrud.Order.Direction;
 
 import trippers.triprecorder.dto.ExpInfoDto;
 import trippers.triprecorder.dto.ExpSimpleDto;
@@ -114,7 +115,9 @@ public class ExpController {
     // 경비 리스트
     @GetMapping("/{tripNo}/list")
     public JSONObject getExpList(@PathVariable Long tripNo) {
-    	List<ExpVO> tmpExp = erepo.findAll(Sort.by("expTime"));
+    	TripVO trip = trepo.findById(tripNo).orElse(null);
+    	List<ExpVO> tmpExp = erepo.findByTrip(trip, Sort.by("expTime"));
+    	
     	List<ExpSimpleDto> expList = new ArrayList<>();
     	Long tripExp = trepo.findById(tripNo).orElse(null).getTripExp();
     	Long useExp = 0L;
