@@ -44,14 +44,14 @@ const Profile = () => {
       setPrfUserNo(res);
     });
 
-    profileService.getCategoryList(userNum).then((res) => {
+    profileService.getCategoryList(prfUserNo).then((res) => {
       // profileUserNo
       console.log(res);
       // setImages(res);
       setImageState(res);
       setLoading(false);
     });
-  }, []);
+  }, [prfUserNo]);
 
   return (
     // <div className={styles.divbox}>
@@ -114,7 +114,7 @@ const Profile = () => {
                             setImageState([]);
                             setLoading(true);
                             profileService
-                              .getCategoryList(userNum)
+                              .getCategoryList(prfUserNo)
                               .then((res) => {
                                 console.log(res);
                                 // setImages(res);
@@ -195,7 +195,7 @@ const Profile = () => {
                             setImageState([]);
                             setLoading(true);
                             profileService
-                              .getCategoryList(userNum)
+                              .getCategoryList(prfUserNo)
                               .then((res) => {
                                 console.log(res);
                                 // setImages(res);

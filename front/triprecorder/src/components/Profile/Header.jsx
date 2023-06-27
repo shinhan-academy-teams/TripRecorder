@@ -73,8 +73,21 @@ const Header = () => {
 
           <div class="profile-user-settings">
             <h1 class="profile-user-name">{userNickName}</h1>
-
-            {userNum ? (
+            <button
+              class="btn profile-edit-btn"
+              onClick={() => {
+                console.log(localStorage.getItem("userNo"), prfUserNo);
+              }}
+              style={{
+                // opacity: 0.5,
+                // cursor: "not-allowed",
+                backgroundColor: "#7fb77e",
+                color: "#ffffff",
+              }}
+            >
+              Test
+            </button>
+            {localStorage.getItem("userNo") === prfUserNo ? (
               <button
                 class="btn profile-edit-btn"
                 onClick={() => {
@@ -144,10 +157,9 @@ const Header = () => {
 
           <div class="profile-bio">
             <p>
-              <span class="profile-real-name">Jane Doe</span> Lorem ipsum dolor
-              sit, amet consectetur adipisicing elit 📷✈️🏕️
-              <span class="profile-real-name">Apple(실명)</span> 여행을 떠나요
-              📷✈️🏕️
+              <span class="profile-real-name">
+                {progInfo ? progInfo["profileMsg"] : "📷✈️🏕️"}
+              </span>
             </p>
           </div>
         </div>

@@ -2,14 +2,18 @@ import { ExclamationCircleFilled } from "@ant-design/icons";
 import { Button, Carousel, Modal, Space, message } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import api from "api/axios";
+import profileService from "api/profile.service";
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { profileUserNo } from "recoil/Profile";
 import "style/sns.scss";
 const { confirm } = Modal;
 
 const SnsDetail = ({ snsData, snsList, updateSnsList }) => {
+  const [prfUserNo, setPrfUserNo] = useRecoilState(profileUserNo);
   // 링크 이동
   const navigate = useNavigate();
   // 게시글 사진, 댓글, 해시태그 정보 (리스트로 들어오는 정보)
@@ -102,8 +106,12 @@ const SnsDetail = ({ snsData, snsList, updateSnsList }) => {
   // 사용자 프로필로 이동
   const moveToProfile = (event) => {
     const userNick = event.currentTarget.getAttribute("value");
-    console.log(userNo);
-    navigate("/" + userNick);
+    console.log(userNo, "####");
+    navigate(`${userNick}`);
+    profileService.getUserNo(userNick).then((res) => {
+      console.log(res, "@@@@@@@2");
+      setPrfUserNo(res);
+    });
   };
   // 경비 모달
   const showExpInfo = (event) => {
