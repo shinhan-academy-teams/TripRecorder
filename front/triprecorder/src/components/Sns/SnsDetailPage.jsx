@@ -1,42 +1,37 @@
 import { RollbackOutlined } from "@ant-design/icons";
+import { message } from "antd";
 import api from "api/axios";
 import SnsDetail from "components/Search/SnsDetail";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const SnsDetailPage = () => {
   const [snsList, setSnsList] = useState([]);
+  const navigate = useNavigate();
   let { snsNo } = useParams();
+  let { userNick } = useParams();
 
   // 데이터 불러오기
   useEffect(() => {
     api.get("/sns/detail/" + snsNo).then((res) => {
       const data = res.data;
       setSnsList([data]);
-      console.log("sns " + snsList);
     });
   }, []);
 
   // 게시글 컴포넌트가 변경되었을 때 (삭제)
   const updateSnsList = (newList) => {
-    setSnsList("delete");
+    message.success("게시글이 삭제되었습니다!");
+    navigate(-1);
   };
 
   return (
     <div className="bigDiv" style={{ textAlign: "center" }}>
       <button
         className="btn profile-settings-btn"
+        style={{ textAlign: "right" }}
         onClick={() => {
-          // setImageState([]);
-          // setLoading(true);
-          // profileService
-          //   .getCategoryList(userNum)
-          //   .then((res) => {
-          //     console.log(res);
-          //     // setImages(res);
-          //     setImageState(res);
-          //     setLoading(false);
-          //   });
+          navigate(-1);
         }}
       >
         <RollbackOutlined />
@@ -47,10 +42,10 @@ const SnsDetailPage = () => {
             snsData={data}
             snsList={snsList}
             updateSnsList={updateSnsList}
+            key={i}
           />
         );
       })}
-      {snsList === "delete" ? <h1>삭제된 게시글입니다.</h1> : <></>}
     </div>
   );
 };
