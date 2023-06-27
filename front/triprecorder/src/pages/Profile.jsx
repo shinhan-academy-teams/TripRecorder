@@ -15,10 +15,12 @@ import {
   RollbackOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
+import { profileUserNo } from "../recoil/Profile";
 import CategoryExpenseItem from "components/Profile/CategoryExpenseItem";
 import { Link, useParams } from "react-router-dom";
 const Profile = () => {
   const [image, setImageState] = useRecoilState(imagesState);
+  const [prfUserNo, setPrfUserNo] = useRecoilState(profileUserNo);
   const [loading, setLoading] = useState(true);
 
   // const getProfile = () => {
@@ -37,15 +39,19 @@ const Profile = () => {
 
     console.log(userNick, "##");
 
-    // profileService.getProfileInfo()
+    profileService.getUserNo(userNick).then((res) => {
+      // console.log(userNick, "@@@@@@@@@@@@@");
+      setPrfUserNo(res);
+    });
 
-    profileService.getCategoryList(userNum).then((res) => {
+    profileService.getCategoryList(prfUserNo).then((res) => {
+      // profileUserNo
       console.log(res);
       // setImages(res);
       setImageState(res);
       setLoading(false);
     });
-  }, []);
+  }, [prfUserNo]);
 
   return (
     // <div className={styles.divbox}>
@@ -108,7 +114,7 @@ const Profile = () => {
                             setImageState([]);
                             setLoading(true);
                             profileService
-                              .getCategoryList(userNum)
+                              .getCategoryList(prfUserNo)
                               .then((res) => {
                                 console.log(res);
                                 // setImages(res);
@@ -189,7 +195,7 @@ const Profile = () => {
                             setImageState([]);
                             setLoading(true);
                             profileService
-                              .getCategoryList(userNum)
+                              .getCategoryList(prfUserNo)
                               .then((res) => {
                                 console.log(res);
                                 // setImages(res);

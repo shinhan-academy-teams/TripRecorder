@@ -101,11 +101,11 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    padding: 3rem 0 0 0;
+    padding: 0;
 
     img {
       width: auto;
-      height: 3rem;
+      height: 50px;
     }
 
     .profileContents {
@@ -131,7 +131,7 @@
   }
 
   .contentsContainer {
-    margin: 2rem 0 0 0;
+    margin: 0;
 
     ul {
       display: flex;
