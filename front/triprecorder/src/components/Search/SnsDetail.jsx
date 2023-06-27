@@ -67,6 +67,7 @@ const SnsDetail = ({ snsData, snsList, updateSnsList }) => {
 
             console.log(res.data);
             setReplyData([...replyData, res.data]);
+            setReplyContent("");
           })
           .catch((err) => {
             message.error("댓글 작성에 실패했습니다. 😥");
@@ -154,13 +155,13 @@ const SnsDetail = ({ snsData, snsList, updateSnsList }) => {
     <div className="all">
       {/* 게시글 사진 */}
       <div className="leftDiv">
-        <Carousel style={{ width: "800px" }}>
+        <Carousel style={{ width: "600px" }}>
           {photoData.map((src, i) => {
             return (
               <div key={i}>
                 <img
                   src={src}
-                  style={{ width: "800px", height: "800px" }}
+                  style={{ width: "600px", height: "600px" }}
                   alt="게시물"
                 />
               </div>
@@ -170,7 +171,7 @@ const SnsDetail = ({ snsData, snsList, updateSnsList }) => {
       </div>
       <div className="rightDiv" style={{ textAlign: "left" }}>
         {/* 게시글 작성자 및 내용, 해시태그 */}
-        <div style={{ height: "25%" }}>
+        <div style={{ height: "250px" }}>
           <div className="profile1">
             <img
               onClick={moveToProfile}
@@ -180,9 +181,9 @@ const SnsDetail = ({ snsData, snsList, updateSnsList }) => {
               alt="프로필 이미지"
             />
             <div>
-              <h1 value={snsData.snsUser.userNick} onClick={moveToProfile}>
+              <h2 value={snsData.snsUser.userNick} onClick={moveToProfile}>
                 {snsData.snsUser.userNick}
-              </h1>
+              </h2>
               <h3>{snsData.snsContent}</h3>
               {hashtagData.map((hashtag, i) => {
                 return <span key={i}>{hashtag} </span>;
@@ -226,7 +227,7 @@ const SnsDetail = ({ snsData, snsList, updateSnsList }) => {
           style={{
             overflowY: "auto",
             overflowX: "hidden",
-            height: "65%",
+            height: "250px",
           }}
         >
           {replyData.map((reply, i) => {
@@ -295,6 +296,7 @@ const SnsDetail = ({ snsData, snsList, updateSnsList }) => {
                 rows={4}
                 name="rep"
                 onChange={replyRegisterChange}
+                value={replyContent}
               />
               <Button
                 type="primary"

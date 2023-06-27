@@ -7,6 +7,8 @@
   left: 25%;
   display: grid;
   align-items: center;
+  // overflow-x: auto;
+  // width: 100vw;
 }
 
 .all {
@@ -16,13 +18,13 @@
 
   .leftDiv {
     object-fit: cover;
-    width: 800px;
+    width: 600px;
   }
   .rightDiv {
     object-fit: cover;
     background-color: #f8f6f4;
-    height: 800px;
-    width: 500px;
+    height: 600px;
+    width: 600px;
     position: relative;
   }
 }
@@ -30,14 +32,13 @@
 .profile1 {
   display: flex;
   align-items: center;
-  width: 600px;
+  width: 500px;
 
   .profileImg {
     width: 65px;
     border-radius: 50%;
     border: 5px solid $darkGreen;
     object-fit: cover;
-    margin: 3px;
     margin: 30px;
   }
 
@@ -78,57 +79,3 @@
   bottom: 0;
   width: 500px;
 }
-
-// .all {
-//   margin: 30px;
-// }
-
-// .userInfo {
-//   display: flex;
-//   align-items: center;
-
-//   .profileImg {
-//     width: 65px;
-//     border-radius: 50%;
-//     object-fit: cover;
-//     margin: 15px;
-//   }
-
-//   h2 {
-//     font-style: italic;
-//     margin-left: 10px;
-//   }
-// }
-
-// .snsInfo {
-//   width: 700px;
-//   display: flex;
-//   align-items: center;
-//   .snsimg {
-//     width: 700px;
-//     height: 700px;
-//   }
-// }
-
-// .reply {
-//   width: 40%;
-//   display: flex;
-//   align-items: center;
-//   background-color: $lightGrey;
-//   // border-radius: 5%;
-//   margin: 10px;
-//   padding: 5px;
-
-//   .repProfile {
-//     width: 50px;
-//     border-radius: 50%;
-//     object-fit: cover;
-//     margin-left: 20px;
-//   }
-
-//   h3 {
-//     object-fit: cover;
-//     margin-left: 20px;
-//     margin-right: 20px;
-//   }
-// }
