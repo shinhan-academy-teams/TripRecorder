@@ -24,10 +24,6 @@ import {
   tripSnsAtom,
   ReceiptAtom,
   // ReceiptDataAtom,
-  expPlaceAtom,
-  expAddressAtom,
-  expMoneyAtom,
-  dateTimeAtom,
 } from "recoil/RegisterExpAtom";
 import api from "api/axios";
 import AWS from "aws-sdk";
@@ -43,7 +39,7 @@ const RegisterExp = () => {
   // const [showBtn, setShowBtn] = useRecoilState(showBtnAtom); //데이터 추출 버튼 보이기
   const [cards, setCards] = useRecoilState(cardsAtom); //카드 이름
   const [tripSns, setTripSns] = useRecoilState(tripSnsAtom); //게시글
-  const [tno, setTno] = useRecoilState(tripNoState);
+  const [tno] = useRecoilState(tripNoState);
 
   // 카드 리스트 가져오기
   useEffect(() => {
@@ -401,10 +397,10 @@ const RegisterExp = () => {
           >
             <Radio.Group onChange={setValue} value={value}>
               <Space direction="horizontal" style={{ margin: 5 }}>
-                <Radio value={"현금"} onClick={() => setShow(false)}>
+                <Radio value={"cash"} onClick={() => setShow(false)}>
                   현금
                 </Radio>
-                <Radio value={"카드"} onClick={() => setShow(true)}>
+                <Radio value={"card"} onClick={() => setShow(true)}>
                   카드
                 </Radio>
               </Space>
