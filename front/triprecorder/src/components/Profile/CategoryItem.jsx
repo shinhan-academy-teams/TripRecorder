@@ -23,7 +23,6 @@ const CategoryItem = ({ src, tripName, tripNo }) => {
         <div
           class="gallery-item-info"
           onClick={() => {
-            console.log(tripNo);
             setTno(tripNo);
             profileService.getSnsPostList(tripNo).then((res) => {
               setImageState(res);

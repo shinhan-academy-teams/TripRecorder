@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Logo from "assets/recorder_green.png";
-import Profile from "assets/profile.png";
 import {
   LogoutOutlined,
   SearchOutlined,
@@ -17,6 +16,7 @@ import {
 } from "../../recoil/UserInfo";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { Alert, Button, Space } from "antd";
 
 const Navbar = () => {
   const [userNum, setUserNum] = useRecoilState(userNo);
@@ -44,6 +44,27 @@ const Navbar = () => {
     setUserNickName(localStorage.getItem("userNick"));
     setUserProf(localStorage.getItem("userProfile"));
   }, [window.localStorage.length]);
+
+  const logoutAlert = () => {
+    <Space direction="vertical" style={{width:"100%"}}>
+      <Alert
+      message="로그아웃 하시겠습니까?"
+      type="success"
+      showIcon
+      action={
+        <Space direction="vertical">
+          <Button size="small" type="primary">
+            확인
+          </Button>
+          <Button size="small" danger type="ghost">
+            취소
+          </Button>
+        </Space>
+      }
+      closable
+    />
+    </Space>
+  };
   return (
     <div className={closeMenu === false ? "sidebar" : "sidebar active"}>
       <div
@@ -72,22 +93,57 @@ const Navbar = () => {
         <div className="burgerMenu"></div>
       </div>
       {isLog ? (
-        <div
-          className={
-            closeMenu === false ? "profileContainer" : "profileContainer active"
-          }
-        >
-          <img src={userProf} alt="profile" className="profile" />
+        <div>
           <div
-            className="profileContents"
-            style={{ cursor: "pointer" }}
-            onClick={() => {
-              console.log(userProf);
-              navigate(`/${userNickName}`);
-            }}
+            className={
+              closeMenu === false
+                ? "profileContainer"
+                : "profileContainer active"
+            }
           >
-            <p className="name">{userNickName}</p>
-            {/* <p>zzahee366@gmail.com</p> */}
+            <img
+              src={userProf}
+              alt="profile"
+              className="profile"
+              style={{ borderRadius: "50%" }}
+            />
+            <div
+              className="profileContents"
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                console.log(userProf);
+                navigate(`/${userNickName}`);
+              }}
+            >
+              <p className="name">{userNickName}</p>
+            </div>
+          </div>
+          <div className="contentsContainer">
+            <ul>
+              <li className={location.pathname === "/login" ? "active" : ""}>
+                <Link to={"/"} className="link_icon">
+                  <LogoutOutlined
+                    style={{ padding: "0 1rem 0 0.5rem", fontSize: "20px" }}
+                  />
+                </Link>
+                <Link
+                  to={"/"}
+                  className="link_name"
+                  onClick={() => {
+                    // console.log("1");
+                    Cookies.remove("jwtToken");
+                    setIsLog(false);
+
+                    setUserNum("");
+                    setUserNickName("");
+                    setUserProf("");
+                    localStorage.clear();
+                  }}
+                >
+                  로그아웃
+                </Link>
+              </li>
+            </ul>
           </div>
         </div>
       ) : (
@@ -117,30 +173,6 @@ const Navbar = () => {
         }
       >
         <ul>
-          <li className={location.pathname === "/login" ? "active" : ""}>
-            <Link to={"/"} className="link_icon">
-              <LogoutOutlined
-                style={{ padding: "0 1rem 0 0.5rem", fontSize: "20px" }}
-              />
-            </Link>
-            <Link
-              to={"/"}
-              className="link_name"
-              onClick={() => {
-                // console.log("1");
-                Cookies.remove("jwtToken");
-                setIsLog(false);
-
-                setUserNum("");
-                setUserNickName("");
-                setUserProf("");
-                localStorage.clear();
-              }}
-            >
-              로그아웃
-            </Link>
-          </li>
-
           <li className={location.pathname === "/search" ? "active" : ""}>
             <Link to={"/search"} className="link_icon">
               <SearchOutlined
