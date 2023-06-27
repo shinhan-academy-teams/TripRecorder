@@ -2,7 +2,7 @@ import { AppstoreAddOutlined, SettingOutlined } from "@ant-design/icons";
 import { Button, Modal } from "antd";
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { imagesState } from "../../recoil/Profile";
+import { imagesState, profileUserNo } from "../../recoil/Profile";
 import User from "components/Search/User";
 import profileService from "api/profile.service";
 import { Link, useNavigate } from "react-router-dom";
@@ -11,6 +11,7 @@ const Header = () => {
   const [image, setImageState] = useRecoilState(imagesState);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isfollowingOpen, setIsFollowingOpen] = useState(false);
+  const [prfUserNo, setPrfUserNo] = useRecoilState(profileUserNo);
 
   const [userProf, setUserProf] = useRecoilState(userProfile);
   const [userNum, setUserNum] = useRecoilState(userNo);
@@ -18,15 +19,19 @@ const Header = () => {
 
   const [follower, setFollower] = useState();
   const [following, setFollowing] = useState();
+  const [progInfo, setProfInfo] = useState();
 
   useEffect(() => {
-    profileService.getFollowingList(155).then((res) => {
+    profileService.getFollowingList(userNum).then((res) => {
       setFollowing(res);
       console.log(res);
     });
-    profileService.getFollowerList(155).then((res) => {
+    profileService.getFollowerList(userNum).then((res) => {
       setFollower(res);
       console.log(res);
+    });
+    profileService.getProfileInfo(prfUserNo).then((res) => {
+      setProfInfo(res);
     });
   }, []);
   const showFolloweModal = () => {
@@ -72,10 +77,12 @@ const Header = () => {
             {userNum ? (
               <button
                 class="btn profile-edit-btn"
-                // onClick={() => }
+                onClick={() => {
+                  navigate("detail");
+                }}
                 style={{
-                  opacity: 0.5,
-                  cursor: "not-allowed",
+                  // opacity: 0.5,
+                  // cursor: "not-allowed",
                   backgroundColor: "#7fb77e",
                   color: "#ffffff",
                 }}
@@ -95,26 +102,30 @@ const Header = () => {
               </button>
             )}
 
-            <button
+            {/* <button
               class="btn profile-settings-btn"
               aria-label="profile settings"
               onClick={() => {
-                navigate(`${userNick}/detail`);
+                navigate(`detail`);
               }}
             >
               <SettingOutlined />
               <i class="fas fa-cog" aria-hidden="true"></i>
-            </button>
+            </button> */}
           </div>
 
           <div class="profile-stats">
             <ul>
               <li
                 onClick={() => {
-                  console.log("2");
+                  // console.log("2");
+                  console.log(progInfo);
                 }}
               >
-                여행티어 <span class="profile-stat-count">🫅</span>
+                여행티어{" "}
+                <span class="profile-stat-count">
+                  {progInfo ? progInfo["userLevel"] : "🫅"}
+                </span>
               </li>
               <li onClick={showFolloweModal}>
                 팔로워{" "}

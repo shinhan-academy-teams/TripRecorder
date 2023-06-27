@@ -19,6 +19,7 @@ import SliderTest from "components/Sns/LoginSns";
 import Receipt from "components/Profile/Receipt";
 import SnsDetailPage from "components/Sns/SnsDetailPage";
 import SnsDetail from "components/Search/SnsDetail";
+import UpdateProfile from "components/Profile/UpdateProfile";
 
 const App = () => {
   const [isShow, setIsShow] = useState(true);
@@ -34,7 +35,7 @@ const App = () => {
             {/* <Route path="/profile" element={<Profile />} /> */}
             <Route path="/:userNick" element={<Profile />} />
             <Route path="/:userNick/:expNo" element={<Receipt />} />
-            <Route path="/:userNick/detail" element={<SnsDetail />} />
+            <Route path="/:userNick/detail" element={<UpdateProfile />} />
             {/* <Route path="/expNo" element={<Receipt />} /> */}
             <Route path="/tripregistration" element={<TripRegistration />} />
             <Route path="/popularcard" element={<PopularCard />} />
