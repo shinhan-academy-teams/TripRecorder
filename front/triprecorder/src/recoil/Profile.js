@@ -15,6 +15,10 @@ export const cardState = atom({
   key: "cardState",
   default: [], // 기본값
 });
+export const profileUserNo = atom({
+  key: "profileUserNo",
+  default: 0, // 기본값
+});
 
 // 전역 함수를 생성하는 Recoil selector 생성
 export const imagesSelector = selector({

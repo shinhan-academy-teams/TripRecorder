@@ -49,7 +49,7 @@ const getExpList = (userNo) => {
 
 const getProfileInfo = (userNo) => {
   return api
-    .get(`profile/${userNo}`)
+    .get(`/profile/${userNo}`)
     .then((res) => {
       return res.data;
     })
@@ -91,6 +91,15 @@ const getAllCard = () => {
     .catch((err) => console.log(err));
 };
 
+const getUserNo = (nickname) => {
+  return api
+    .post("/auth/findByNick", { nickname })
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => console.log(err));
+};
+
 const profileService = {
   getSnsPostList,
   getCategoryList,
@@ -102,6 +111,7 @@ const profileService = {
   delExp,
   getConnected,
   getAllCard,
+  getUserNo,
 };
 
 export default profileService;

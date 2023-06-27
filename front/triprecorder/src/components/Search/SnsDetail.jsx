@@ -2,14 +2,18 @@ import { ExclamationCircleFilled } from "@ant-design/icons";
 import { Button, Carousel, Modal, Space, message } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import api from "api/axios";
+import profileService from "api/profile.service";
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { profileUserNo } from "recoil/Profile";
 import "style/sns.scss";
 const { confirm } = Modal;
 
 const SnsDetail = ({ snsData, snsList, updateSnsList }) => {
+  const [prfUserNo, setPrfUserNo] = useRecoilState(profileUserNo);
   // 링크 이동
   const navigate = useNavigate();
   // 게시글 사진, 댓글, 해시태그 정보 (리스트로 들어오는 정보)
@@ -29,11 +33,11 @@ const SnsDetail = ({ snsData, snsList, updateSnsList }) => {
 
   // 컴포넌트 로드 시 데이터 설정
   useEffect(() => {
-    setPhotoData(snsData.snsPhoto.map((data) => data));
-    setReplyData(snsData.reply.map((data) => data));
-    setHashtagData(snsData.hashtag.map((data) => data));
-    setHeart(snsData.heart);
-    setHeartCnt(snsData.heartCnt);
+    setPhotoData(snsData?.snsPhoto?.map((data) => data));
+    setReplyData(snsData?.reply?.map((data) => data));
+    setHashtagData(snsData?.hashtag?.map((data) => data));
+    setHeart(snsData?.heart);
+    setHeartCnt(snsData?.heartCnt);
   }, [snsData]);
 
   // 좋아요 등록 및 취수
@@ -61,7 +65,7 @@ const SnsDetail = ({ snsData, snsList, updateSnsList }) => {
   const replyRegisterClick = () => {
     userNo
       ? api
-          .post("/reply/register/" + snsData.snsNo, { replyContent })
+          .post("/reply/register/" + snsData?.snsNo, { replyContent })
           .then((res) => {
             message.success("댓글을 등록했습니다. 😊");
 
@@ -102,8 +106,12 @@ const SnsDetail = ({ snsData, snsList, updateSnsList }) => {
   // 사용자 프로필로 이동
   const moveToProfile = (event) => {
     const userNick = event.currentTarget.getAttribute("value");
-    console.log(userNo);
-    navigate("/" + userNick);
+    console.log(userNo, "####");
+    navigate(`${userNick}`);
+    profileService.getUserNo(userNick).then((res) => {
+      console.log(res, "@@@@@@@2");
+      setPrfUserNo(res);
+    });
   };
   // 경비 모달
   const showExpInfo = (event) => {
@@ -139,7 +147,7 @@ const SnsDetail = ({ snsData, snsList, updateSnsList }) => {
           .delete("/sns/delete/" + snsNo)
           .then(() => {
             message.success("게시글 삭제에 성공했습니다.");
-            const newList = snsList.filter((sns) => sns.snsNo != snsNo);
+            const newList = snsList.filter((sns) => sns?.snsNo != snsNo);
             console.log(newList);
             updateSnsList(newList);
           })
@@ -156,7 +164,7 @@ const SnsDetail = ({ snsData, snsList, updateSnsList }) => {
       {/* 게시글 사진 */}
       <div className="leftDiv">
         <Carousel style={{ width: "600px" }}>
-          {photoData.map((src, i) => {
+          {photoData?.map((src, i) => {
             return (
               <div key={i}>
                 <img
@@ -175,26 +183,28 @@ const SnsDetail = ({ snsData, snsList, updateSnsList }) => {
           <div className="profile1">
             <img
               onClick={moveToProfile}
-              value={snsData.snsUser.userNick}
+              value={snsData?.snsUser.userNick}
               className="profileImg"
-              src={snsData.snsUser.userProfile}
+              src={snsData?.snsUser.userProfile}
               alt="프로필 이미지"
             />
             <div>
-              <h2 value={snsData.snsUser.userNick} onClick={moveToProfile}>
-                {snsData.snsUser.userNick}
+              <h2 value={snsData?.snsUser.userNick} onClick={moveToProfile}>
+                {snsData?.snsUser.userNick}
               </h2>
-              <h3>{snsData.snsContent}</h3>
-              {hashtagData.map((hashtag, i) => {
+              <h3>{snsData?.snsContent}</h3>
+              {hashtagData?.map((hashtag, i) => {
                 return <span key={i}>{hashtag} </span>;
               })}
               <p>
-                {new Date(snsData.snsRegdate).toISOString().split("T")[0] +
-                  " " +
-                  new Date(snsData.snsRegdate)
-                    .toISOString()
-                    .split("T")[1]
-                    .split(".")[0]}
+                {snsData
+                  ? new Date(snsData?.snsRegdate).toISOString().split("T")[0] +
+                    " " +
+                    new Date(snsData?.snsRegdate)
+                      .toISOString()
+                      .split("T")[1]
+                      .split(".")[0]
+                  : ""}
               </p>
             </div>
           </div>
@@ -203,7 +213,7 @@ const SnsDetail = ({ snsData, snsList, updateSnsList }) => {
             <Button onClick={heartClick}>
               {heart ? "♥️" : "♡"} {heartCnt}
             </Button>
-            {snsData.expNo ? (
+            {snsData?.expNo ? (
               <>
                 <Button value={snsData.expNo} onClick={showExpInfo}>
                   경비 정보
@@ -212,8 +222,8 @@ const SnsDetail = ({ snsData, snsList, updateSnsList }) => {
             ) : (
               <></>
             )}
-            {snsData.snsUser.userNo == userNo ? (
-              <Button value={snsData.snsNo} onClick={snsDeleteClick} danger>
+            {snsData?.snsUser?.userNo == userNo ? (
+              <Button value={snsData?.snsNo} onClick={snsDeleteClick} danger>
                 게시글 삭제
               </Button>
             ) : (
@@ -230,7 +240,7 @@ const SnsDetail = ({ snsData, snsList, updateSnsList }) => {
             height: "250px",
           }}
         >
-          {replyData.map((reply, i) => {
+          {replyData?.map((reply, i) => {
             return (
               <div
                 className="reply"
@@ -241,34 +251,38 @@ const SnsDetail = ({ snsData, snsList, updateSnsList }) => {
               >
                 <img
                   onClick={moveToProfile}
-                  value={reply.replyUser.userNick}
+                  value={reply?.replyUser.userNick}
                   className="repProfile"
-                  src={reply.replyUser.userProfile}
+                  src={reply?.replyUser.userProfile}
                   alt="댓글 프로필"
                 />
                 <h3
                   onClick={moveToProfile}
-                  value={reply.replyUser.userNick}
+                  value={reply?.replyUser.userNick}
                   className="repName"
                 >
-                  {reply.replyUser.userNick}
+                  {reply?.replyUser.userNick}
                 </h3>
                 <div style={{ width: "40%" }}>
-                  <h3>{reply.replyContent}</h3>
+                  <h3>{reply?.replyContent}</h3>
                   <p>
-                    {new Date(reply.replyRegdate).toISOString().split("T")[0] +
-                      " " +
-                      new Date(reply.replyRegdate)
-                        .toISOString()
-                        .split("T")[1]
-                        .split(".")[0]}
+                    {reply
+                      ? new Date(reply?.replyRegdate)
+                          .toISOString()
+                          .split("T")[0] +
+                        " " +
+                        new Date(reply?.replyRegdate)
+                          .toISOString()
+                          .split("T")[1]
+                          .split(".")[0]
+                      : ""}
                   </p>
                 </div>
                 <div style={{ textAlign: "right" }}>
-                  {userNo == reply.replyUser.userNo ? (
+                  {userNo === reply?.replyUser.userNo ? (
                     <Button
                       danger
-                      value={reply.replyNo}
+                      value={reply?.replyNo}
                       onClick={replyDeleteClick}
                     >
                       X
