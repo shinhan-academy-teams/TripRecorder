@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { userNick } from "../../recoil/UserInfo";
 import { useRecoilState } from "recoil";
 import { cardState } from "../../recoil/Profile";
-
+import { useNavigate } from "react-router-dom";
 const Receipt = ({
   expWay,
   expAddress,
@@ -17,7 +17,7 @@ const Receipt = ({
   expCate,
 }) => {
   let { expNo } = useParams();
-
+  const navigate = useNavigate();
   const [card, setCard] = useRecoilState(cardState);
   const [userNickName, setUserNickName] = useRecoilState(userNick);
   let [exp, setExp] = useState();
@@ -28,7 +28,8 @@ const Receipt = ({
   };
   const handleOk = () => {
     setIsModalOpen(false);
-    // profileService.delExp(expNo).then((res) => console.log(res));
+    profileService.delExp(expNo).then((res) => console.log(res));
+    navigate(-1);
   };
   const handleCancel = () => {
     setIsModalOpen(false);

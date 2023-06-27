@@ -1,6 +1,6 @@
 import { AppstoreAddOutlined, SettingOutlined } from "@ant-design/icons";
 import { Button, Modal } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 import { imagesState } from "../../recoil/Profile";
 import User from "components/Search/User";
@@ -18,20 +18,26 @@ const Header = () => {
 
   const [follower, setFollower] = useState();
   const [following, setFollowing] = useState();
-  const showFolloweModal = () => {
-    setIsModalOpen(true);
-    profileService.getFollowerList(155).then((res) => {
-      setFollower(res);
-      console.log(res);
-    });
-    // .getFollowerList(localStorage.getItem("userNo"))
-  };
-  const showFollowingModal = () => {
-    setIsFollowingOpen(true);
+
+  useEffect(() => {
     profileService.getFollowingList(155).then((res) => {
       setFollowing(res);
       console.log(res);
     });
+    profileService.getFollowerList(155).then((res) => {
+      setFollower(res);
+      console.log(res);
+    });
+  }, []);
+  const showFolloweModal = () => {
+    setIsModalOpen(true);
+
+    // .getFollowerList(localStorage.getItem("userNo"))
+  };
+
+  const showFollowingModal = () => {
+    setIsFollowingOpen(true);
+
     // .getFollowerList(localStorage.getItem("userNo"))
   };
   const handleOk = () => {
@@ -92,6 +98,9 @@ const Header = () => {
             <button
               class="btn profile-settings-btn"
               aria-label="profile settings"
+              onClick={() => {
+                navigate(`${userNick}/detail`);
+              }}
             >
               <SettingOutlined />
               <i class="fas fa-cog" aria-hidden="true"></i>
@@ -108,10 +117,16 @@ const Header = () => {
                 여행티어 <span class="profile-stat-count">🫅</span>
               </li>
               <li onClick={showFolloweModal}>
-                팔로워 <span class="profile-stat-count">188</span>
+                팔로워{" "}
+                <span class="profile-stat-count">
+                  {follower ? follower?.length : 0}
+                </span>
               </li>
               <li onClick={showFollowingModal}>
-                팔로우 <span class="profile-stat-count">206</span>
+                팔로우{" "}
+                <span class="profile-stat-count">
+                  {following ? following.length : 0}
+                </span>
               </li>
             </ul>
           </div>
