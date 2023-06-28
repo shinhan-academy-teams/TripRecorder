@@ -27,7 +27,6 @@ const User = ({ userNick, src, userNo }) => {
             </span>
             <div className="username__info">
               <span className="username">{userNick}</span>
-              <span className="relation">UserId</span>
             </div>
           </div>
           {/* <button className="follow__button">UserId</button> */}
