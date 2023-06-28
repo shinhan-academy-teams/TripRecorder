@@ -157,10 +157,11 @@ const RegisterSns = () => {
       const file = e.target.files[i];
       const fileExt = file.name.split(".").pop();
       if (
-        (file.type !== "image/jpeg" || fileExt !== "jpg") &
-        (file.type !== "image/png" || fileExt !== "png")
+        (file.type !== "image/jpeg" || fileExt !== "jpeg") &
+        (file.type !== "image/png" || fileExt !== "png") &
+        (file.type !== "image/jpg" || fileExt !== "jpg")
       ) {
-        alert("jpg와 png파일만 Upload 가능합니다.");
+        alert("jpg, jpeg, png파일만 업로드 가능합니다.");
         return;
       }
       setProgress(0);
