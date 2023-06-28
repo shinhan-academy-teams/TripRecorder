@@ -79,7 +79,7 @@ public class SnsController {
 		}
 
 		trepo.findById(tripNo).ifPresent(trip -> sns.setSns(trip));
-		if (sns.getSnsContent().trim().equals("")) {
+		if (sns.getSnsContent() == null || sns.getSnsContent().trim().equals("")) {
 			sns.setSnsContent(null);
 		}
 
@@ -146,6 +146,7 @@ public class SnsController {
 			obj.put("snsNo", sns.getSnsNo());
 			obj.put("heartCnt", heartCnt);
 			obj.put("replyCnt", replyCnt);
+			obj.put("tripNo", trip.getTripNo());
 
 			String imgKey = sns.getSnsPhoto().split("@")[0];
 			obj.put("thumbnail", AwsUtil.getImageURL(imgKey));

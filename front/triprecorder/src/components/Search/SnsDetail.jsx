@@ -279,7 +279,7 @@ const SnsDetail = ({ snsData, snsList, updateSnsList }) => {
                   </p>
                 </div>
                 <div style={{ textAlign: "right" }}>
-                  {userNo === reply?.replyUser.userNo ? (
+                  {userNo == reply?.replyUser.userNo ? (
                     <Button
                       danger
                       value={reply?.replyNo}
@@ -288,7 +288,7 @@ const SnsDetail = ({ snsData, snsList, updateSnsList }) => {
                       X
                     </Button>
                   ) : (
-                    <></>
+                    <Button style={{ visibility: "hidden" }}>X</Button>
                   )}
                 </div>
               </div>

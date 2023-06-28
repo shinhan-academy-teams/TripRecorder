@@ -4,7 +4,7 @@ import styles from "../style/profile2.module.scss";
 import Header from "components/Profile/Header";
 import GalleryItem from "components/Profile/GalleryItem";
 import profileService from "api/profile.service";
-import { Button, Tabs } from "antd";
+import { Button, Modal, Tabs, message } from "antd";
 import CategoryItem from "components/Profile/CategoryItem";
 import Expense from "components/Profile/Expense";
 import { useRecoilState } from "recoil";
@@ -12,16 +12,23 @@ import { imagesState } from "../recoil/Profile";
 import { userNo, userNick, userProfile } from "../recoil/UserInfo";
 import {
   AppstoreAddOutlined,
+  DeleteOutlined,
+  ExclamationCircleFilled,
   RollbackOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
 import { profileUserNo } from "../recoil/Profile";
 import CategoryExpenseItem from "components/Profile/CategoryExpenseItem";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import api from "api/axios";
+const { confirm } = Modal;
+
 const Profile = () => {
   const [image, setImageState] = useRecoilState(imagesState);
   const [prfUserNo, setPrfUserNo] = useRecoilState(profileUserNo);
   const [loading, setLoading] = useState(true);
+  const [tripNo, setTripNo] = useState();
+  const loginUserNo = localStorage.getItem("userNo");
 
   // const getProfile = () => {
   //   profileService
@@ -29,6 +36,7 @@ const Profile = () => {
   //     .then((res) => console.log(res));
   // };
   const [userNum, setUserNum] = useRecoilState(userNo);
+  const navigate = useNavigate();
   let { userNick } = useParams();
   useEffect(() => {
     // profileService.getSnsPostList(4).then((res) => {
@@ -51,7 +59,36 @@ const Profile = () => {
       setImageState(res);
       setLoading(false);
     });
-  }, [prfUserNo]);
+  }, [prfUserNo, userNick]);
+
+  // 여행 카테고리 들어가면 tripNo 변경
+  const updateTripNo = (newNo) => {
+    setTripNo(newNo);
+  };
+  // 여행 카테고리 삭제
+  const deleteCategory = () => {
+    console.log(tripNo);
+    confirm({
+      title: "여행 카테고리 삭제",
+      icon: <ExclamationCircleFilled />,
+      content: "정말 카테고리를 삭제하시겠습니까?",
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
+      onOk() {
+        api
+          .delete("/trip/delete/" + tripNo)
+          .then((res) => {
+            message.success("여행 카테고리를 삭제했습니다!");
+            navigate("/");
+          })
+          .catch((err) => message.error("여행 카테고리 삭제에 실패했습니다."));
+      },
+      onCancel() {
+        console.log("Cancel");
+      },
+    });
+  };
 
   return (
     // <div className={styles.divbox}>
@@ -80,23 +117,27 @@ const Profile = () => {
                         }}
                       >
                         {image[0]?.tripName ? (
-                          <Link to={"/tripregistration"}>
-                            <button
-                              className="btn profile-settings-btn"
-                              onClick={() => {
-                                // navigate("/tripregistration", {
-                                //   state: {
-                                //     id: 1,
-                                //     job: "개발자",
-                                //   },
-                                // });
-                                console.log(image, "category");
-                              }}
-                            >
-                              <AppstoreAddOutlined />
-                            </button>
-                          </Link>
-                        ) : (
+                          prfUserNo == loginUserNo ? (
+                            <Link to={"/tripregistration"}>
+                              <button
+                                className="btn profile-settings-btn"
+                                onClick={() => {
+                                  // navigate("/tripregistration", {
+                                  //   state: {
+                                  //     id: 1,
+                                  //     job: "개발자",
+                                  //   },
+                                  // });
+                                  console.log(image, "category");
+                                }}
+                              >
+                                <AppstoreAddOutlined />
+                              </button>
+                            </Link>
+                          ) : (
+                            <></>
+                          )
+                        ) : prfUserNo == loginUserNo ? (
                           <Link to={"/registersns"}>
                             <button
                               className="btn profile-settings-btn"
@@ -107,6 +148,8 @@ const Profile = () => {
                               <AppstoreAddOutlined />
                             </button>
                           </Link>
+                        ) : (
+                          <></>
                         )}
                         <button
                           className="btn profile-settings-btn"
@@ -125,6 +168,18 @@ const Profile = () => {
                         >
                           <RollbackOutlined />
                         </button>
+                        {image[0]?.tripName ? (
+                          <></>
+                        ) : prfUserNo == loginUserNo ? (
+                          <button
+                            onClick={deleteCategory}
+                            className="btn profile-settings-btn"
+                          >
+                            <DeleteOutlined />
+                          </button>
+                        ) : (
+                          <></>
+                        )}
                       </div>
                       {/* {loading ? <div className="loader" /> : ""} */}
 
@@ -136,6 +191,7 @@ const Profile = () => {
                               src={imageItem.thumbnail}
                               tripName={imageItem.tripName}
                               tripNo={imageItem.tripNo}
+                              updateTripNo={updateTripNo}
                             />
                           ) : (
                             <GalleryItem
@@ -161,23 +217,27 @@ const Profile = () => {
                         }}
                       >
                         {image[0]?.tripName ? (
-                          <Link to={"/tripregistration"}>
-                            <button
-                              className="btn profile-settings-btn"
-                              onClick={() => {
-                                // navigate("/tripregistration", {
-                                //   state: {
-                                //     id: 1,
-                                //     job: "개발자",
-                                //   },
-                                // });
-                                console.log(image, "category");
-                              }}
-                            >
-                              <AppstoreAddOutlined />
-                            </button>
-                          </Link>
-                        ) : (
+                          prfUserNo == loginUserNo ? (
+                            <Link to={"/tripregistration"}>
+                              <button
+                                className="btn profile-settings-btn"
+                                onClick={() => {
+                                  // navigate("/tripregistration", {
+                                  //   state: {
+                                  //     id: 1,
+                                  //     job: "개발자",
+                                  //   },
+                                  // });
+                                  console.log(image, "category");
+                                }}
+                              >
+                                <AppstoreAddOutlined />
+                              </button>
+                            </Link>
+                          ) : (
+                            <></>
+                          )
+                        ) : prfUserNo == loginUserNo ? (
                           <Link to={"/registerexp"}>
                             <button
                               className="btn profile-settings-btn"
@@ -188,6 +248,8 @@ const Profile = () => {
                               <AppstoreAddOutlined />
                             </button>
                           </Link>
+                        ) : (
+                          <></>
                         )}
                         <button
                           className="btn profile-settings-btn"
@@ -206,6 +268,18 @@ const Profile = () => {
                         >
                           <RollbackOutlined />
                         </button>
+                        {image[0]?.tripName ? (
+                          <></>
+                        ) : prfUserNo == loginUserNo ? (
+                          <button
+                            onClick={deleteCategory}
+                            className="btn profile-settings-btn"
+                          >
+                            <DeleteOutlined />
+                          </button>
+                        ) : (
+                          <></>
+                        )}
                       </div>
                       {loading ? <div className="loader" /> : ""}
                       <div className="gallery">
