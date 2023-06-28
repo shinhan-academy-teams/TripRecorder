@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import tripRecorder from "assets/tripRecorder.png";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, Modal } from "antd";
 import Cookies from "js-cookie";
 import authService from "api/auth.service";
 import { useRecoilState } from "recoil";
@@ -13,6 +13,16 @@ const SignIn = (props) => {
   const [userNickName, setUserNickName] = useRecoilState(userNick);
   const [userProf, setUserProf] = useRecoilState(userProfile);
   const [isLog, setIsLog] = useRecoilState(isLoggedIn);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
   const DivInner = styled.div`
     margin-bottom: 0.75rem;
   `;
@@ -82,7 +92,8 @@ const SignIn = (props) => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        // showModal();
+        console.log(err, "@@@@@@");
       });
   };
 
@@ -210,6 +221,14 @@ const SignIn = (props) => {
           가입하기
         </Link>
       </Footer>
+      <Modal
+        title="로그인 실패 ! 🤔"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <p> 다시 로그인 해주세요 ! 😊</p>
+      </Modal>
     </LoginForm>
   );
 };

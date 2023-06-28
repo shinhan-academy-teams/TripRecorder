@@ -107,7 +107,7 @@ const SnsDetail = ({ snsData, snsList, updateSnsList }) => {
   const moveToProfile = (event) => {
     const userNick = event.currentTarget.getAttribute("value");
     console.log(userNo, "####");
-    navigate(`${userNick}`);
+    navigate(`/${userNick}`);
     profileService.getUserNo(userNick).then((res) => {
       console.log(res, "@@@@@@@2");
       setPrfUserNo(res);

@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.FeaturePolicyConfig;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -144,23 +145,32 @@ public class SnsController {
 		if (tokenObj != null)
 			userNo = EncodingUtil.getUserNo(request);
 		Integer[] scope = null;
-		List<SnsVO> tmpSnsList = srepo.findBySnsOrderBySnsNoDesc(trip);
 
 		// 모르는 사람의 게시글인 경우
 		// 전체 공개 게시글
-		if (userNo == 0L)
+		if (userNo == 0L) {
 			scope = new Integer[] { 1 };
-		
+		}
 		// 내 프로필인 경우
 		// 모든 데이터 공개
-		else if (userNo == profileUserNo)
+		else if (userNo.equals(profileUserNo)) {
 			scope = new Integer[] { -1, 0, 1 };
+		}
+			
 
-		// 팔로잉의 게시글인 경우
-		// 전체 공개, 팔로워 공개 게시글
-		else if (frepo.findByFollowerAndFollowing(urepo.findById(userNo).orElse(null),
-				urepo.findById(profileUserNo).orElse(null)) != null)
-			scope = new Integer[] { 0, 1 };
+		else {
+			UserVO follower = urepo.findById(userNo).orElse(null);
+			UserVO following = urepo.findById(profileUserNo).orElse(null);
+
+			FollowVO follow = frepo.findByFollowerAndFollowing(follower, following);
+			if(follow == null) {
+				scope = new Integer[] { 1 };
+			} else {
+				scope = new Integer[] { 1, 0 };
+			}
+		}
+		
+		List<SnsVO> tmpSnsList = srepo.findBySnsAndSnsScopeIn(trip, scope);
 
 		tmpSnsList.forEach(sns -> {
 			Integer heartCnt = hrepo.findBySns(sns).size();
