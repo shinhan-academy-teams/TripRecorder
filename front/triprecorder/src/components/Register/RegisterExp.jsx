@@ -125,7 +125,10 @@ const RegisterExp = () => {
           values["expWay"],
           values["expCate"]
         )
-        .then((res) => message.success("경비 등록이 완료되었습니다. 😊"))
+        .then((res) => {
+          message.success("경비 등록이 완료되었습니다. 😊");
+          navigate("/");
+        })
         .catch((err) =>
           message.error("경비 등록에 실패했습니다. 다시 시도하세요. 😥")
         );
@@ -149,7 +152,7 @@ const RegisterExp = () => {
         .then((res) => {
           console.log(userNick);
           message.success("경비 등록이 완료되었습니다. 😊");
-          navigate("/" + userNick);
+          navigate("/");
         })
         .catch((err) =>
           message.error("경비 등록에 실패했습니다. 다시 시도하세요. 😥")
@@ -353,12 +356,6 @@ const RegisterExp = () => {
             <Form.Item
               label="영수증 등록"
               name="receipt"
-              rules={[
-                {
-                  required: true,
-                  message: "",
-                },
-              ]}
               style={{ justifyContent: "center" }}
               // onChange={() => setShowBtn(true)}
             >
@@ -473,10 +470,10 @@ const RegisterExp = () => {
             ]}
           >
             <InputNumber
-              formatter={(value) =>
-                `₩ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-              }
-              parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+              prefix="₩"
+              style={{
+                width: "100%",
+              }}
             />
           </Form.Item>
 
