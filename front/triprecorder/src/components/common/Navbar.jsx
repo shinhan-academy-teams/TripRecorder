@@ -9,6 +9,8 @@ import {
 } from "@ant-design/icons";
 import "style/navbar.scss";
 import { useRecoilState } from "recoil";
+import { profileUserNo } from "recoil/Profile";
+import profileService from "api/profile.service";
 import {
   userNo,
   userNick,
@@ -33,7 +35,7 @@ const Navbar = () => {
   const [localUserNick, setLocalUserNick] = useRecoilState(LocalUserNickAtom);
   const [localUserProfile, setlocalUserProfile] =
     useRecoilState(LocalUserProfileAtom);
-
+  const [prfUserNo, setPrfUserNo] = useRecoilState(profileUserNo);
   const location = useLocation();
 
   const navigate = useNavigate();
@@ -140,12 +142,7 @@ const Navbar = () => {
                 : "profileContainer active"
             }
           >
-            <img
-              src={userProf}
-              alt="profile"
-              className="profile"
-              style={{ borderRadius: "50%" }}
-            />
+            <img src={userProf} alt="profile" className="profile" />
             <div className="profileContents" style={{ cursor: "pointer" }}>
               <p className="name">{userNickName}</p>
             </div>
