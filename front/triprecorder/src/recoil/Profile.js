@@ -19,6 +19,14 @@ export const profileUserNo = atom({
   key: "profileUserNo",
   default: 0, // 기본값
 });
+export const followerModalState = atom({
+  key: "followerModalState",
+  default: false, // 기본값
+});
+export const followingModalState = atom({
+  key: "followingModalState",
+  default: false, // 기본값
+});
 
 // 전역 함수를 생성하는 Recoil selector 생성
 export const imagesSelector = selector({
@@ -34,15 +42,14 @@ export const imagesSelector = selector({
   },
 });
 
-
 //주소
 export const ProfileAtom = atom({
   key: "ProfileAtom",
-  default: "no"
-})
+  default: "no",
+});
 
 //키
 export const keyAtom = atom({
   key: "keyAtom",
-  default: "no"
+  default: "no",
 });

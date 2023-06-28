@@ -2,7 +2,12 @@ import { AppstoreAddOutlined, SettingOutlined } from "@ant-design/icons";
 import { Button, Modal } from "antd";
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
-import { imagesState, profileUserNo } from "../../recoil/Profile";
+import {
+  imagesState,
+  profileUserNo,
+  followerModalState,
+  followingModalState,
+} from "../../recoil/Profile";
 import User from "components/Search/User";
 import profileService from "api/profile.service";
 import { Link, useNavigate } from "react-router-dom";
@@ -10,8 +15,11 @@ import { userProfile, userNo, userNick } from "../../recoil/UserInfo";
 import styled from "styled-components";
 const Header = () => {
   const [image, setImageState] = useRecoilState(imagesState);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isfollowingOpen, setIsFollowingOpen] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useRecoilState(followerModalState);
+  // const [isfollowingOpen, setIsFollowingOpen] = useState(false);
+  const [isfollowingOpen, setIsFollowingOpen] =
+    useRecoilState(followingModalState);
   const [prfUserNo, setPrfUserNo] = useRecoilState(profileUserNo);
   const [userProf, setUserProf] = useRecoilState(userProfile);
   const [userNum, setUserNum] = useRecoilState(userNo);
@@ -91,7 +99,13 @@ const Header = () => {
       <div class="container">
         <div class="profile">
           <div class="profile-image">
-            <img src={progInfo ? progInfo["profilePhoto"] : ""} alt="profile" />
+            <img
+              style={{ maxWidth: "100%", height: "auto" }}
+              // max-width: 100%;
+              // height: auto;
+              src={progInfo ? progInfo["profilePhoto"] : ""}
+              alt="profile"
+            />
           </div>
           <div class="profile-user-settings">
             <h1 class="profile-user-name">
