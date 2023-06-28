@@ -90,6 +90,8 @@ const Profile = () => {
     });
   };
 
+  const num = loginUserNo ? 2 : 1;
+
   return (
     // <div className={styles.divbox}>
     <div className={styles.divbox} style={{ fontSize: "10px" }}>
@@ -99,7 +101,7 @@ const Profile = () => {
           <Tabs
             defaultActiveKey="1"
             centered
-            items={new Array(2).fill(null).map((_, i) => {
+            items={new Array(num).fill(null).map((_, i) => {
               const id = String(i + 1);
               const label = ["게시물", "경비"];
               return {

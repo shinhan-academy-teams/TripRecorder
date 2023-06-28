@@ -9,7 +9,6 @@ const SnsDetailPage = () => {
   const [snsList, setSnsList] = useState([]);
   const navigate = useNavigate();
   let { snsNo } = useParams();
-  let { userNick } = useParams();
 
   // 데이터 불러오기
   useEffect(() => {

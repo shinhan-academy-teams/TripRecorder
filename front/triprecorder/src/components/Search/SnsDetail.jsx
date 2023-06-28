@@ -126,6 +126,9 @@ const SnsDetail = ({ snsData, snsList, updateSnsList }) => {
       .catch((err) => console.log("error", err));
   };
   const handleOk = () => {
+    userNo
+      ? navigate("/" + snsData.snsUser.userNick + "/" + exp.expNo)
+      : navigate("/login");
     setIsModalOpen(false);
   };
   const handleCancel = () => {
@@ -330,10 +333,15 @@ const SnsDetail = ({ snsData, snsList, updateSnsList }) => {
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
+        cancelText="닫기"
+        okText="경비상세"
       >
         <p>제목: {exp.expTitle}</p>
         <p>사용처: {exp.expPlace}</p>
-        <p>결제 금액: {exp.expMoney}원</p>
+        <p>
+          결제 금액:{" "}
+          {userNo ? exp.expMoney + "원" : "로그인 후 조회 가능합니다🥲"}
+        </p>
       </Modal>
     </div>
   );

@@ -10,5 +10,5 @@ public class CardDto {
 	private String cardName;
 	private String cardPhoto;
 	private String cardAnnual;
-
+	private String cardLink;
 }
