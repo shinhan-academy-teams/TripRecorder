@@ -39,6 +39,7 @@ const Header = () => {
     });
   }, [prfUserNo, follower?.length]);
   useEffect(() => {
+    // console.log();
     // console.log(follower);
     // if (
     //   follower

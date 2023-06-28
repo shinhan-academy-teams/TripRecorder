@@ -101,6 +101,7 @@ const getUserNo = (nickname) => {
 };
 
 const follow = (userNo) => {
+  // console.log();
   return api
     .post(`/follow/register/${userNo}`)
     .then((res) => {
