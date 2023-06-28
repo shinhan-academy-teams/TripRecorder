@@ -22,6 +22,7 @@ const Header = () => {
   const [followState, setFollowState] = useState("");
   const [opacity, setOpacity] = useState("1");
   // const [followButton, setFollowButton] = useState(true);
+
   useEffect(() => {
     profileService.getFollowingList(prfUserNo).then((res) => {
       setFollowing(res);
@@ -149,6 +150,7 @@ const Header = () => {
                   );
                   // console.log(following, "following");
                   await console.log(follower?.length, "follower-length");
+
                   await profileService.follow(prfUserNo);
                   await console.log(follower?.length, "follower");
                   // console.log(
@@ -156,12 +158,14 @@ const Header = () => {
                   //     if (val["userNo"] == userNum) return true;
                   //   })
                   // );
+
                   // if(follower
                   //   ?.map((val, idx) => {
                   //     if (val["userNo"] == userNum) return true;
                   //   })
                   //   .includes(true) == true){
                   //   }
+
                   // profileService.follow(prfUserNo).then((res) => {
                   //   if (res == true) {
                   //     setFollowState("팔로잉");

@@ -89,6 +89,7 @@ const getUserNo = (nickname) => {
     })
     .catch((err) => console.log(err));
 };
+
 const follow = (userNo) => {
   return api
     .post(`/follow/register/${userNo}`)
@@ -97,6 +98,7 @@ const follow = (userNo) => {
     })
     .catch((err) => console.log(err));
 };
+
 const profileService = {
   getSnsPostList,
   getCategoryList,
