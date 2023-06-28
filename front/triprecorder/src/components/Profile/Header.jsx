@@ -22,6 +22,7 @@ const Header = () => {
   const [followState, setFollowState] = useState("");
   const [opacity, setOpacity] = useState("1");
   // const [followButton, setFollowButton] = useState(true);
+
   useEffect(() => {
     profileService.getFollowingList(prfUserNo).then((res) => {
       setFollowing(res);
@@ -96,10 +97,10 @@ const Header = () => {
             <h1 class="profile-user-name">
               {progInfo ? progInfo["userNick"] : "nick"}
             </h1>
-            <button
+            {/* <button
               class="btn profile-edit-btn"
               onClick={() => {
-                // console.log(userNum, prfUserNo);
+                console.log(userNum, prfUserNo);
                 console.log(
                   follower
                     ?.map((val, idx) => {
@@ -107,6 +108,8 @@ const Header = () => {
                     })
                     .includes(true) == true && userNum != null
                 );
+                console.log(prfUserNo, "prfUserNo");
+                console.log(prfUserNo, "prfUserNo");
               }}
               style={{
                 backgroundColor: "#7FB77E",
@@ -114,12 +117,12 @@ const Header = () => {
               }}
             >
               Test
-            </button>
+            </button> */}
             {userNum == prfUserNo ? (
               <button
                 class="btn profile-edit-btn"
                 onClick={() => {
-                  navigate("detail");
+                  navigate(`/${userNickName}/${userNum}/detail`);
                 }}
                 style={{
                   // opacity: 0.5,
@@ -128,7 +131,7 @@ const Header = () => {
                   color: "#FFFFFF",
                 }}
               >
-                나의 프로필
+                프로필 수정
               </button>
             ) : follower
                 ?.map((val, idx) => {
@@ -149,54 +152,13 @@ const Header = () => {
                   );
                   // console.log(following, "following");
                   await console.log(follower?.length, "follower-length");
+
                   await profileService.follow(prfUserNo);
+                  profileService.getFollowerList(prfUserNo).then((res) => {
+                    setFollower(res);
+                    console.log(res);
+                  });
                   await console.log(follower?.length, "follower");
-                  // console.log(
-                  //   follower?.map((val, idx) => {
-                  //     if (val["userNo"] == userNum) return true;
-                  //   })
-                  // );
-                  // if(follower
-                  //   ?.map((val, idx) => {
-                  //     if (val["userNo"] == userNum) return true;
-                  //   })
-                  //   .includes(true) == true){
-                  //   }
-                  // profileService.follow(prfUserNo).then((res) => {
-                  //   if (res == true) {
-                  //     setFollowState("팔로잉");
-                  //     setOpacity("0.5");
-                  //   } else {
-                  //     setFollowState("팔로우");
-                  //     setOpacity("1");
-                  //   }
-                  // });
-                  // if (
-                  //   follower
-                  //     ?.map((val, idx) => {
-                  //       if (val["userNo"] == userNum) return true;
-                  //     })
-                  //     .includes(true) == true
-                  // ) {
-                  //   setFollowState("팔로잉");
-                  //   setOpacity("0.5");
-                  // }
-                  // {
-                  //   profileService.follow(prfUserNo).then((res) => {
-                  //     // if (res == true) {
-                  // setFollowState("팔로우");
-                  // setOpacity("1");
-                  // } else {
-                  // setFollowState("팔로잉");
-                  // setOpacity("0.5");
-                  //     // }
-                  //     console.log(res);
-                  //   });
-                  // } else {
-                  //   profileService.follow(prfUserNo);
-                  //   setFollowState("팔로우");
-                  //   setOpacity("1");
-                  // }
                 }}
                 style={{
                   backgroundColor: "#7FB77E",
@@ -206,6 +168,25 @@ const Header = () => {
               >
                 {/* {followState} */}
                 팔로잉
+              </button>
+            ) : userNum ? (
+              <button
+                class="btn profile-edit-btn"
+                onClick={() => {
+                  profileService.follow(prfUserNo).then((res) => {
+                    console.log(res);
+                  });
+                  profileService.getFollowerList(prfUserNo).then((res) => {
+                    setFollower(res);
+                    console.log(res);
+                  });
+                }}
+                style={{
+                  backgroundColor: "#7FB77E",
+                  color: "#FFFFFF",
+                }}
+              >
+                팔로우
               </button>
             ) : (
               <button
