@@ -100,6 +100,15 @@ const getUserNo = (nickname) => {
     .catch((err) => console.log(err));
 };
 
+const follow = (userNo) => {
+  return api
+    .post(`/follow/register/${userNo}`)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => console.log(err));
+};
+
 const profileService = {
   getSnsPostList,
   getCategoryList,
@@ -112,6 +121,7 @@ const profileService = {
   getConnected,
   getAllCard,
   getUserNo,
+  follow,
 };
 
 export default profileService;

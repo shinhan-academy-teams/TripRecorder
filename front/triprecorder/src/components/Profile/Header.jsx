@@ -7,6 +7,7 @@ import User from "components/Search/User";
 import profileService from "api/profile.service";
 import { Link, useNavigate } from "react-router-dom";
 import { userProfile, userNo, userNick } from "../../recoil/UserInfo";
+import styled from "styled-components";
 const Header = () => {
   const [image, setImageState] = useRecoilState(imagesState);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,19 +21,48 @@ const Header = () => {
   const [follower, setFollower] = useState();
   const [following, setFollowing] = useState();
   const [progInfo, setProfInfo] = useState();
+  const [followState, setFollowState] = useState("");
+  const [opacity, setOpacity] = useState("1");
+  // const [followButton, setFollowButton] = useState(true);
 
   useEffect(() => {
-    profileService.getFollowingList(userNum).then((res) => {
+    profileService.getFollowingList(prfUserNo).then((res) => {
       setFollowing(res);
       console.log(res);
     });
-    profileService.getFollowerList(userNum).then((res) => {
+    profileService.getFollowerList(prfUserNo).then((res) => {
       setFollower(res);
       console.log(res);
     });
     profileService.getProfileInfo(prfUserNo).then((res) => {
       setProfInfo(res);
     });
+  }, [prfUserNo, follower?.length]);
+  useEffect(() => {
+    // console.log(follower);
+    // if (
+    //   follower
+    //     ?.map((val, idx) => {
+    //       if (val["userNo"] == userNum) return true;
+    //     })
+    //     .includes(true) == true
+    // ) {
+    //   setFollowState("팔로잉");
+    //   setOpacity("0.5");
+    // } else {
+    //   setFollowState("팔로우");
+    //   setOpacity("1");
+    // }
+    // profileService.follow(prfUserNo).then((res) => {
+    //   console.log(res);
+    //   if (res == true) {
+    //     setFollowState("팔로잉");
+    //     setOpacity("0.5");
+    //   } else {
+    // setFollowState("팔로우");
+    // setOpacity("1");
+    //   }
+    // });
   }, []);
   const showFolloweModal = () => {
     setIsModalOpen(true);
@@ -68,26 +98,33 @@ const Header = () => {
       <div class="container">
         <div class="profile">
           <div class="profile-image">
-            <img src={userProf} alt="" />
+            <img src={progInfo ? progInfo["profilePhoto"] : ""} alt="profile" />
           </div>
 
           <div class="profile-user-settings">
-            <h1 class="profile-user-name">{userNickName}</h1>
+            <h1 class="profile-user-name">
+              {progInfo ? progInfo["userNick"] : "nick"}
+            </h1>
             <button
               class="btn profile-edit-btn"
               onClick={() => {
-                console.log(localStorage.getItem("userNo"), prfUserNo);
+                // console.log(userNum, prfUserNo);
+                console.log(
+                  follower
+                    ?.map((val, idx) => {
+                      if (val["userNo"] == userNum) return true;
+                    })
+                    .includes(true) == true && userNum != null
+                );
               }}
               style={{
-                // opacity: 0.5,
-                // cursor: "not-allowed",
                 backgroundColor: "#7fb77e",
                 color: "#ffffff",
               }}
             >
               Test
             </button>
-            {localStorage.getItem("userNo") === prfUserNo ? (
+            {userNum == prfUserNo ? (
               <button
                 class="btn profile-edit-btn"
                 onClick={() => {
@@ -102,6 +139,86 @@ const Header = () => {
               >
                 나의 프로필
               </button>
+            ) : follower
+                ?.map((val, idx) => {
+                  if (val["userNo"] == userNum) return true;
+                })
+                .includes(true) == true && userNum != null ? (
+              // 팔로우시 return true
+              <button
+                class="btn profile-edit-btn"
+                onClick={async () => {
+                  console.log(userNum);
+                  console.log(
+                    follower
+                      ?.map((val, idx) => {
+                        if (val["userNo"] == userNum) return true;
+                      })
+                      .includes(true)
+                  );
+                  // console.log(following, "following");
+                  await console.log(follower?.length, "follower-length");
+
+                  await profileService.follow(prfUserNo);
+                  await console.log(follower?.length, "follower");
+                  // console.log(
+                  //   follower?.map((val, idx) => {
+                  //     if (val["userNo"] == userNum) return true;
+                  //   })
+                  // );
+
+                  // if(follower
+                  //   ?.map((val, idx) => {
+                  //     if (val["userNo"] == userNum) return true;
+                  //   })
+                  //   .includes(true) == true){
+                  //   }
+
+                  // profileService.follow(prfUserNo).then((res) => {
+                  //   if (res == true) {
+                  //     setFollowState("팔로잉");
+                  //     setOpacity("0.5");
+                  //   } else {
+                  //     setFollowState("팔로우");
+                  //     setOpacity("1");
+                  //   }
+                  // });
+                  // if (
+                  //   follower
+                  //     ?.map((val, idx) => {
+                  //       if (val["userNo"] == userNum) return true;
+                  //     })
+                  //     .includes(true) == true
+                  // ) {
+                  //   setFollowState("팔로잉");
+                  //   setOpacity("0.5");
+                  // }
+                  // {
+                  //   profileService.follow(prfUserNo).then((res) => {
+                  //     // if (res == true) {
+                  // setFollowState("팔로우");
+                  // setOpacity("1");
+                  // } else {
+                  // setFollowState("팔로잉");
+                  // setOpacity("0.5");
+                  //     // }
+                  //     console.log(res);
+                  //   });
+                  // } else {
+                  //   profileService.follow(prfUserNo);
+                  //   setFollowState("팔로우");
+                  //   setOpacity("1");
+                  // }
+                }}
+                style={{
+                  backgroundColor: "#7fb77e",
+                  color: "#ffffff",
+                  opacity: 0.5,
+                }}
+              >
+                {/* {followState} */}
+                팔로잉
+              </button>
             ) : (
               <button
                 class="btn profile-edit-btn"
@@ -111,7 +228,7 @@ const Header = () => {
                   color: "#ffffff",
                 }}
               >
-                팔로우
+                팔로우(Notuser)
               </button>
             )}
 
