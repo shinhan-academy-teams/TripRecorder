@@ -13,7 +13,11 @@ const CategoryExpenseItem = ({ src, tripName, tripNo }) => {
   //   };
   return (
     <div>
-      <div class="gallery-item" tabindex="0">
+      <div
+        class="gallery-item"
+        tabindex="0"
+        style={{ maxWidth: "352px", height: "auto" }}
+      >
         <img
           onClick={() => alert("2")}
           src={src}

@@ -3,10 +3,14 @@ import { Avatar, Divider, Tooltip } from "antd";
 import React from "react";
 import "../../style/searchProfile.scss";
 import { Link, useNavigate } from "react-router-dom";
+import { followerModalState, followingModalState } from "../../recoil/Profile";
+import { useRecoilState } from "recoil";
 
 const User = ({ userNick, src, userNo }) => {
   const navigate = useNavigate();
-
+  const [isModalOpen, setIsModalOpen] = useRecoilState(followerModalState);
+  const [isfollowingOpen, setIsFollowingOpen] =
+    useRecoilState(followingModalState);
   return (
     <div className="suggestions">
       {/* <div className="suggestions__title">검색창</div> */}
@@ -15,6 +19,8 @@ const User = ({ userNick, src, userNo }) => {
           className="suggestions__username"
           onClick={() => {
             navigate(`/${userNick}`);
+            setIsModalOpen(false);
+            setIsFollowingOpen(false);
           }}
         >
           <div className="username__left">
