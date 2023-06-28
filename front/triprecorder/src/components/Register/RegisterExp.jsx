@@ -304,7 +304,7 @@ const RegisterExp = () => {
             maxWidth: 450,
             margin: "0 auto",
           }}
-          initialValues={{ expWay: "현금" }}
+          initialValues={{ expWay: "cash" }}
           fields={fields}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}

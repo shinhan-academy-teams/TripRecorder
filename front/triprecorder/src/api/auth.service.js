@@ -186,10 +186,30 @@ const RegisterRep = (replyContent, snsNo) => {
   });
 };
 
-//좋아요
-// const Heart = (snsNo) =>{
-//   return api.post("/heart/register/"+snsNo, )
-// };
+//수정
+const UpdateProfile = (
+  userNo,
+  userName,
+  userNick,
+  userEmail,
+  userGender,
+  profilePhoto,
+  profileMsg
+) => {
+  return api.put("/profile/click", {
+    user: {
+      userNo,
+      userName,
+      userNick,
+      userEmail,
+      userGender,
+    },
+    profile: {
+      profilePhoto,
+      profileMsg,
+    },
+  });
+};
 
 const authService = {
   checkDuplicateId,
@@ -203,6 +223,7 @@ const authService = {
   ReceiptAddress,
   RegisterSns,
   RegisterRep,
+  UpdateProfile,
 };
 
 export default authService;

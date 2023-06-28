@@ -33,3 +33,16 @@ export const imagesSelector = selector({
     };
   },
 });
+
+
+//주소
+export const ProfileAtom = atom({
+  key: "ProfileAtom",
+  default: "no"
+})
+
+//키
+export const keyAtom = atom({
+  key: "keyAtom",
+  default: "no"
+});
