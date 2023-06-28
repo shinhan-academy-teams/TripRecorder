@@ -134,11 +134,35 @@ public class SnsController {
 
 	// 게시글 조회(사용자 프로필)
 	@GetMapping("/{tripNo}/list")
-	public List<JSONObject> getTripSnsList(@PathVariable Long tripNo) {
+	public List<JSONObject> getTripSnsList(HttpServletRequest request, @PathVariable Long tripNo) {
 		List<JSONObject> snsList = new ArrayList<>();
 		TripVO trip = trepo.findById(tripNo).orElse(null);
+		Long profileUserNo = trip.getUser().getUserNo();
 
-		srepo.findBySnsOrderBySnsNoDesc(trip).forEach(sns -> {
+		String tokenObj = request.getHeader("Authorization");
+		Long userNo = 0L;
+		if (tokenObj != null)
+			userNo = EncodingUtil.getUserNo(request);
+		Integer[] scope = null;
+		List<SnsVO> tmpSnsList = srepo.findBySnsOrderBySnsNoDesc(trip);
+
+		// 모르는 사람의 게시글인 경우
+		// 전체 공개 게시글
+		if (userNo == 0L)
+			scope = new Integer[] { 1 };
+		
+		// 내 프로필인 경우
+		// 모든 데이터 공개
+		else if (userNo == profileUserNo)
+			scope = new Integer[] { -1, 0, 1 };
+
+		// 팔로잉의 게시글인 경우
+		// 전체 공개, 팔로워 공개 게시글
+		else if (frepo.findByFollowerAndFollowing(urepo.findById(userNo).orElse(null),
+				urepo.findById(profileUserNo).orElse(null)) != null)
+			scope = new Integer[] { 0, 1 };
+
+		tmpSnsList.forEach(sns -> {
 			Integer heartCnt = hrepo.findBySns(sns).size();
 			Integer replyCnt = rrepo.findBySns(sns).size();
 

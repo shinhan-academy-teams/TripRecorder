@@ -125,29 +125,17 @@ const Expense = () => {
             <SubscriptionDiv>
               <CardDiv>
                 <CardInner>
-                  <img
-                    alt=""
-                    src="/src/assets/짱구.jpg"
-                    style={{ width: "2rem" }}
-                  />
+                  <span>총 예산: {data[0]?.tripExp}</span>
                 </CardInner>
               </CardDiv>{" "}
               <CardDiv>
                 <CardInner>
-                  <img
-                    alt=""
-                    src="/src/assets/짱구.jpg"
-                    style={{ width: "2rem" }}
-                  />
+                  <span>쓴 돈: {data[0]?.useExp}</span>
                 </CardInner>
               </CardDiv>{" "}
               <CardDiv>
                 <CardInner>
-                  <img
-                    alt=""
-                    src="/src/assets/짱구.jpg"
-                    style={{ width: "2rem" }}
-                  />
+                  <span>남은 돈: {data[0]?.remainExp}</span>
                 </CardInner>
               </CardDiv>
             </SubscriptionDiv>
