@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AWS from "aws-sdk";
 import { Row, Col, Alert } from "reactstrap";
 import { useRecoilState } from "recoil";
@@ -31,6 +31,8 @@ import authService from "api/auth.service";
 import { PlusOutlined } from "@ant-design/icons";
 import api from "api/axios";
 import { tripNoState } from "../../recoil/Profile";
+import { useNavigate } from "react-router-dom";
+import { userNick } from "recoil/UserInfo";
 
 const { Option } = Select;
 
@@ -54,7 +56,7 @@ const RegisterSns = () => {
 
   //해시태그
   const { token } = theme.useToken();
-  const [tags, setTags] = useRecoilState(tagsAtom);
+  const [tags, setTags] = useState([]);
   const [inputVisible, setInputVisible] = useRecoilState(inputVisibleAtom);
   const [inputValue, setInputValue] = useRecoilState(inputValueAtom);
   const [editInputIndex, setEditInputIndex] =
@@ -66,6 +68,7 @@ const RegisterSns = () => {
 
   const inputRef = useRef(null);
   const editInputRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (inputVisible) {
@@ -225,7 +228,11 @@ const RegisterSns = () => {
         fileString,
         values["snsScope"]
       )
-      .then((res) => console.log(res))
+      .then((res) => {
+        console.log(res);
+        console.log("닉네임 : ", userNick);
+        navigate("/");
+      })
       .catch((err) => console.log(err));
   };
 
