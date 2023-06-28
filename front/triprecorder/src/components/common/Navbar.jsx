@@ -17,12 +17,19 @@ import {
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { Alert, Button, Space } from "antd";
+import {
+  LocalUserNickAtom,
+  LocalUserProfileAtom,
+} from "recoil/LocalStorageAtom";
 
 const Navbar = () => {
   const [userNum, setUserNum] = useRecoilState(userNo);
   const [userNickName, setUserNickName] = useRecoilState(userNick);
   const [userProf, setUserProf] = useRecoilState(userProfile);
   const [isLog, setIsLog] = useRecoilState(isLoggedIn);
+  const [localUserNick, setLocalUserNick] = useRecoilState(LocalUserNickAtom);
+  const [localUserProfile, setlocalUserProfile] =
+    useRecoilState(LocalUserProfileAtom);
 
   const location = useLocation();
 
@@ -33,6 +40,25 @@ const Navbar = () => {
   const handleCloseMenu = () => {
     setCloseMenu(!closeMenu);
   };
+
+  // localstorage 변경에 따라 바뀌는지 확인
+  useEffect(() => {
+    const handleStorageChange = (e) => {
+      if (e.key === "userProfile") {
+        setlocalUserProfile(e.newValue);
+      }
+      if (e.key === "userNick") {
+        setLocalUserNick(e.newValue);
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
   useEffect(() => {
     // setCloseMenu(closeMenu);
     let user = localStorage.getItem("userNo");
@@ -43,28 +69,28 @@ const Navbar = () => {
     setUserNum(localStorage.getItem("userNo"));
     setUserNickName(localStorage.getItem("userNick"));
     setUserProf(localStorage.getItem("userProfile"));
-  }, [window.localStorage.length]);
+  }, [window.localStorage.length, localUserNick, localUserProfile]);
 
-  const logoutAlert = () => {
-    <Space direction="vertical" style={{width:"100%"}}>
-      <Alert
-      message="로그아웃 하시겠습니까?"
-      type="success"
-      showIcon
-      action={
-        <Space direction="vertical">
-          <Button size="small" type="primary">
-            확인
-          </Button>
-          <Button size="small" danger type="ghost">
-            취소
-          </Button>
-        </Space>
-      }
-      closable
-    />
-    </Space>
-  };
+  // const logoutAlert = () => {
+  //   <Space direction="vertical" style={{ width: "100%" }}>
+  //     <Alert
+  //       message="로그아웃 하시겠습니까?"
+  //       type="success"
+  //       showIcon
+  //       action={
+  //         <Space direction="vertical">
+  //           <Button size="small" type="primary">
+  //             확인
+  //           </Button>
+  //           <Button size="small" danger type="ghost">
+  //             취소
+  //           </Button>
+  //         </Space>
+  //       }
+  //       closable
+  //     />
+  //   </Space>;
+  // };
   return (
     <div className={closeMenu === false ? "sidebar" : "sidebar active"}>
       <div
@@ -137,6 +163,8 @@ const Navbar = () => {
                     setUserNum("");
                     setUserNickName("");
                     setUserProf("");
+                    localStorage.setItem("userNick", "");
+                    setLocalUserNick("");
                     localStorage.clear();
                   }}
                 >
@@ -193,7 +221,10 @@ const Navbar = () => {
                 style={{ padding: "0 1rem 0 0.5rem", fontSize: "20px" }}
               />
             </Link>
-            <Link to={"/tripregistration"} className="link_name">
+            <Link
+              to={userNick ? "/login" : "/tripregistration"}
+              className="link_name"
+            >
               여행등록
             </Link>
           </li>
