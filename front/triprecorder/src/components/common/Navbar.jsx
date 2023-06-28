@@ -5,6 +5,7 @@ import {
   SearchOutlined,
   PlusOutlined,
   CreditCardOutlined,
+  ExclamationCircleFilled,
 } from "@ant-design/icons";
 import "style/navbar.scss";
 import { useRecoilState } from "recoil";
@@ -16,11 +17,13 @@ import {
 } from "../../recoil/UserInfo";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import { Alert, Button, Space } from "antd";
+import { Modal } from "antd";
 import {
   LocalUserNickAtom,
   LocalUserProfileAtom,
 } from "recoil/LocalStorageAtom";
+
+const { confirm } = Modal;
 
 const Navbar = () => {
   const [userNum, setUserNum] = useRecoilState(userNo);
@@ -71,26 +74,32 @@ const Navbar = () => {
     setUserProf(localStorage.getItem("userProfile"));
   }, [window.localStorage.length, localUserNick, localUserProfile]);
 
-  // const logoutAlert = () => {
-  //   <Space direction="vertical" style={{ width: "100%" }}>
-  //     <Alert
-  //       message="로그아웃 하시겠습니까?"
-  //       type="success"
-  //       showIcon
-  //       action={
-  //         <Space direction="vertical">
-  //           <Button size="small" type="primary">
-  //             확인
-  //           </Button>
-  //           <Button size="small" danger type="ghost">
-  //             취소
-  //           </Button>
-  //         </Space>
-  //       }
-  //       closable
-  //     />
-  //   </Space>;
-  // };
+  const logoutAlert = () => {
+    confirm({
+      title: "로그아웃",
+      icon: <ExclamationCircleFilled />,
+      content: "로그아웃하시겠습니까?",
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
+      onOk() {
+        Cookies.remove("jwtToken");
+        setIsLog(false);
+
+        setUserNum("");
+        setUserNickName("");
+        setUserProf("");
+        localStorage.setItem("userNick", "");
+        setLocalUserNick("");
+        localStorage.clear();
+
+        navigate("/");
+      },
+      onCancel() {
+        console.log("Cancel");
+      },
+    });
+  };
   return (
     <div className={closeMenu === false ? "sidebar" : "sidebar active"}>
       <div
@@ -121,6 +130,10 @@ const Navbar = () => {
       {isLog ? (
         <div>
           <div
+            onClick={() => {
+              console.log(userProf);
+              navigate(`/${userNickName}`);
+            }}
             className={
               closeMenu === false
                 ? "profileContainer"
@@ -133,14 +146,7 @@ const Navbar = () => {
               className="profile"
               style={{ borderRadius: "50%" }}
             />
-            <div
-              className="profileContents"
-              style={{ cursor: "pointer" }}
-              onClick={() => {
-                console.log(userProf);
-                navigate(`/${userNickName}`);
-              }}
-            >
+            <div className="profileContents" style={{ cursor: "pointer" }}>
               <p className="name">{userNickName}</p>
             </div>
           </div>
@@ -152,22 +158,7 @@ const Navbar = () => {
                     style={{ padding: "0 1rem 0 0.5rem", fontSize: "20px" }}
                   />
                 </Link>
-                <Link
-                  to={"/"}
-                  className="link_name"
-                  onClick={() => {
-                    // console.log("1");
-                    Cookies.remove("jwtToken");
-                    setIsLog(false);
-
-                    setUserNum("");
-                    setUserNickName("");
-                    setUserProf("");
-                    localStorage.setItem("userNick", "");
-                    setLocalUserNick("");
-                    localStorage.clear();
-                  }}
-                >
+                <Link className="link_name" onClick={logoutAlert}>
                   로그아웃
                 </Link>
               </li>
@@ -222,7 +213,7 @@ const Navbar = () => {
               />
             </Link>
             <Link
-              to={userNick ? "/login" : "/tripregistration"}
+              to={userNickName ? "/tripregistration" : "/login"}
               className="link_name"
             >
               여행등록

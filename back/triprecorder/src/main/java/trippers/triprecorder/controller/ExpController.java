@@ -108,6 +108,7 @@ public class ExpController {
     	exp.put("expTitle", tmpExp.getExpTitle());
     	exp.put("expPlace", tmpExp.getExpPlace());
     	exp.put("expMoney", tmpExp.getExpMoney());
+    	exp.put("expNo", tmpExp.getExpNo());
     	
     	return exp;
     }
