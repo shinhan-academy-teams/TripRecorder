@@ -39,6 +39,8 @@ public class CardVO {
 	private String cardPhoto;
 	@Column(nullable = false)
 	private String cardAnnual;
+	@Column(nullable = false)
+	private String cardLink;
 	
 	// 할인정보
 	@JsonIgnore

@@ -64,7 +64,8 @@ public class CardController {
 			CardVO tmpCard = crepo.findById(Long.valueOf(str)).orElse(null);
 
 			CardDto card = CardDto.builder().cardNo(tmpCard.getCardNo()).cardName(tmpCard.getCardName())
-					.cardPhoto(tmpCard.getCardPhoto()).cardAnnual(tmpCard.getCardAnnual()).build();
+					.cardPhoto(tmpCard.getCardPhoto()).cardAnnual(tmpCard.getCardAnnual())
+					.cardLink(tmpCard.getCardLink()).build();
 
 			topCardList.add(card);
 		});

@@ -3,10 +3,12 @@ import profileService from "api/profile.service";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
-import { userNick } from "../../recoil/UserInfo";
+// import { userNick } from "../../recoil/UserInfo";
 import { useRecoilState } from "recoil";
 import { cardState } from "../../recoil/Profile";
 import { useNavigate } from "react-router-dom";
+import { RollbackOutlined } from "@ant-design/icons";
+import api from "api/axios";
 const Receipt = ({
   expWay,
   expAddress,
@@ -19,10 +21,25 @@ const Receipt = ({
   let { expNo } = useParams();
   const navigate = useNavigate();
   const [card, setCard] = useRecoilState(cardState);
-  const [userNickName, setUserNickName] = useRecoilState(userNick);
+  // const [userNickName, setUserNickName] = useRecoilState(userNick);
   let [exp, setExp] = useState();
   let [cd, setCd] = useState();
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // 경비 주인이면 삭제 버튼 보이게 하기 위한 로그인 정보들
+  let { userNick } = useParams();
+  const [userNo, setUserNo] = useState();
+  const loginUserNo = localStorage.getItem("userNo");
+  useEffect(() => {
+    const nickname = userNick;
+    api
+      .post("/auth/findByNick", { nickname })
+      .then((res) => {
+        setUserNo(res.data);
+      })
+      .catch((err) => console.log("error", err));
+  }, []);
+
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -120,10 +137,20 @@ flex-direction: column; */
     margin: 15px 0;
   `;
   return (
-    <BoxContainer>
-      <BoxTicket>
-        <BoxHeader>
-          {/* <Button
+    <div className="bigDiv" style={{ textAlign: "center" }}>
+      <button
+        className="btn profile-settings-btn"
+        style={{ textAlign: "right", paddingRight: "25%" }}
+        onClick={() => {
+          navigate(-1);
+        }}
+      >
+        <RollbackOutlined />
+      </button>
+      <BoxContainer>
+        <BoxTicket>
+          <BoxHeader>
+            {/* <Button
             onClick={() => {
               console.log(
                 exp
@@ -135,93 +162,93 @@ flex-direction: column; */
           >
             test
           </Button> */}
-          <p>영수증</p>
-          <h3>Invoice</h3>
-        </BoxHeader>
-        <BoxContent>
-          <BoxCol>
-            <p>결제 방식</p>
-            <p>{exp?.["expWay"]}</p>
-          </BoxCol>
-          <BoxCol>
-            <p>사용처</p>
-            <p>{exp?.["expAddress"]}</p>
-          </BoxCol>
-          <BoxCol>
-            <p>날짜 + 시간</p>
-            <p>
-              {exp?.["expTime"]
-                ? new Date(exp?.["expTime"]).toISOString().split("T")[0] +
-                  " " +
-                  new Date(exp?.["expTime"])
-                    .toISOString()
-                    .split("T")[1]
-                    .split(".")[0]
-                : ""}
-            </p>
-          </BoxCol>
-          <BoxCol>
-            <p>장소</p>
-            <p>{exp?.["expPlace"]}</p>
-          </BoxCol>
-          <SubTable>
-            <tbody>
-              <tr>
-                <th>지출</th>
-                <td>{exp?.["expMoney"]} KRW</td>
-              </tr>
-            </tbody>
-          </SubTable>
-          <LegalCopy>
-            <p>
-              <strong>결제 카드</strong>{" "}
-              {
-                // cd?.["cardName"]
-                exp?.["cardNo"] !== null
-                  ? card?.find(({ cardNo }) => cardNo === exp?.["cardNo"])?.[
-                      "cardName"
-                    ]
-                  : "현금"
-              }
-            </p>
-            <p>
-              <strong>결제 카테고리</strong> {exp?.["expCate"]}
-            </p>
-          </LegalCopy>
-        </BoxContent>
-        <div style={{ display: "flex", justifyContent: "space-evenly" }}>
-          <Link to={`/${userNickName}/${expNo}/registerexp`}>
-            <Button style={{ backgroundColor: "#7fb77e", color: "#ffffff" }}>
-              수정
-            </Button>
-          </Link>
-          <Button
-            style={{ backgroundColor: "#7fb77e", color: "#ffffff" }}
-            onClick={showModal}
-            // onClick={() => {
+            <p>영수증</p>
+            <h3>Invoice</h3>
+          </BoxHeader>
+          <BoxContent>
+            <BoxCol>
+              <p>결제방식</p>
+              <p>{exp?.["expWay"]}</p>
+            </BoxCol>
+            <BoxCol>
+              <p>사용처</p>
+              <p>{exp?.["expAddress"]}</p>
+            </BoxCol>
+            <BoxCol>
+              <p>거래일시</p>
+              <p>
+                {exp?.["expTime"]
+                  ? new Date(exp?.["expTime"]).toISOString().split("T")[0] +
+                    " " +
+                    new Date(exp?.["expTime"])
+                      .toISOString()
+                      .split("T")[1]
+                      .split(".")[0]
+                  : ""}
+              </p>
+            </BoxCol>
+            <BoxCol>
+              <p>장소</p>
+              <p>{exp?.["expPlace"]}</p>
+            </BoxCol>
+            <SubTable>
+              <tbody>
+                <tr>
+                  <th>지출</th>
+                  <td>{exp?.["expMoney"]} KRW</td>
+                </tr>
+              </tbody>
+            </SubTable>
+            <LegalCopy>
+              <p>
+                <strong>결제 카드</strong>{" "}
+                {
+                  // cd?.["cardName"]
+                  exp?.["cardNo"] !== null
+                    ? card?.find(({ cardNo }) => cardNo === exp?.["cardNo"])?.[
+                        "cardName"
+                      ]
+                    : "현금"
+                }
+              </p>
+              <p>
+                <strong>결제 카테고리</strong> {exp?.["expCate"]}
+              </p>
+            </LegalCopy>
+          </BoxContent>
+          <div style={{ display: "flex", justifyContent: "space-evenly" }}>
+            {loginUserNo == userNo ? (
+              <Button
+                style={{ backgroundColor: "#7fb77e", color: "#ffffff" }}
+                onClick={showModal}
+                // onClick={() => {
 
-            //   profileService.delExp(expNo).then((res) => console.log(res));
-            // }}
-          >
-            삭제
-          </Button>
-          <Modal
-            okButtonProps={{
-              style: { backgroundColor: "#7fb77e", color: "#ffffff" },
-            }}
-            cancelButtonProps={{
-              style: { backgroundColor: "#7fb77e", color: "#ffffff" },
-            }}
-            title="해당 게시글을 삭제하시겠습니까?🤔"
-            open={isModalOpen}
-            onOk={handleOk}
-            onCancel={handleCancel}
-          >
-            <p>삭제를 원하시면 OK를 눌러주세요 !</p>
-          </Modal>
-        </div>
-      </BoxTicket>
-    </BoxContainer>
+                //   profileService.delExp(expNo).then((res) => console.log(res));
+                // }}
+              >
+                삭제
+              </Button>
+            ) : (
+              <></>
+            )}
+            <Modal
+              okButtonProps={{
+                style: { backgroundColor: "#7fb77e", color: "#ffffff" },
+              }}
+              cancelButtonProps={{
+                style: { backgroundColor: "#7fb77e", color: "#ffffff" },
+              }}
+              title="해당 게시글을 삭제하시겠습니까?🤔"
+              open={isModalOpen}
+              onOk={handleOk}
+              onCancel={handleCancel}
+            >
+              <p>삭제를 원하시면 OK를 눌러주세요 !</p>
+            </Modal>
+          </div>
+        </BoxTicket>
+      </BoxContainer>
+    </div>
   );
 };
 

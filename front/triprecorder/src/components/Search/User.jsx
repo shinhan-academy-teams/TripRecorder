@@ -11,18 +11,16 @@ const User = ({ userNick, src, userNo }) => {
     <div className="suggestions">
       {/* <div className="suggestions__title">검색창</div> */}
       <div className="suggestions__usernames">
-        <div className="suggestions__username">
+        <div
+          className="suggestions__username"
+          onClick={() => {
+            navigate(`/${userNick}`);
+          }}
+        >
           <div className="username__left">
             <span className="avatar">
               {/* <Link to={}> */}
-              <Avatar
-                src={src}
-                onClick={() => {
-                  navigate(`/${userNick}`);
-                }}
-              >
-                Rdwd
-              </Avatar>
+              <Avatar src={src}>Rdwd</Avatar>
               {/* </Link> */}
             </span>
             <div className="username__info">

@@ -118,7 +118,7 @@ const UpdateProfile = () => {
         localStorage.setItem("userProfile", res.data.userProfile);
         setUserNick(res.data.userNick);
         setUserProfile(res.data.userProfile);
-        navigate("/");
+        navigate("/" + res.data.userNick);
       })
       .catch((err) => console.log(err));
   };

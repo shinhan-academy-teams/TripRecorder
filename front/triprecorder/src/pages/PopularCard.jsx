@@ -88,7 +88,12 @@ const PopularCard = () => {
       <div>
         {cardList.map((data, i) => {
           return (
-            <CardInfo image={data.cardPhoto} name={data.cardName} key={i} />
+            <CardInfo
+              image={data.cardPhoto}
+              name={data.cardName}
+              link={data.cardLink}
+              key={i}
+            />
           );
         })}
       </div>
