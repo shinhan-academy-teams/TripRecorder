@@ -13,11 +13,9 @@ const Header = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isfollowingOpen, setIsFollowingOpen] = useState(false);
   const [prfUserNo, setPrfUserNo] = useRecoilState(profileUserNo);
-
   const [userProf, setUserProf] = useRecoilState(userProfile);
   const [userNum, setUserNum] = useRecoilState(userNo);
   const [userNickName, setUserNickName] = useRecoilState(userNick);
-
   const [follower, setFollower] = useState();
   const [following, setFollowing] = useState();
   const [progInfo, setProfInfo] = useState();
@@ -39,7 +37,6 @@ const Header = () => {
     });
   }, [prfUserNo, follower?.length]);
   useEffect(() => {
-    // console.log();
     // console.log(follower);
     // if (
     //   follower
@@ -67,13 +64,10 @@ const Header = () => {
   }, []);
   const showFolloweModal = () => {
     setIsModalOpen(true);
-
     // .getFollowerList(localStorage.getItem("userNo"))
   };
-
   const showFollowingModal = () => {
     setIsFollowingOpen(true);
-
     // .getFollowerList(localStorage.getItem("userNo"))
   };
   const handleOk = () => {
@@ -85,14 +79,12 @@ const Header = () => {
   const handleFollowingCancel = () => {
     setIsFollowingOpen(false);
   };
-
   const error = () => {
     Modal.error({
-      title: "팔로우를 못합니다😠",
-      content: "로그인 하시고 다시 팔로우 해주세요🤔",
+      title: "팔로우를 못합니다:화난:",
+      content: "로그인 하시고 다시 팔로우 해주세요:생각하는_얼굴:",
     });
   };
-
   const navigate = useNavigate();
   return (
     <div id="header">
@@ -101,7 +93,6 @@ const Header = () => {
           <div class="profile-image">
             <img src={progInfo ? progInfo["profilePhoto"] : ""} alt="profile" />
           </div>
-
           <div class="profile-user-settings">
             <h1 class="profile-user-name">
               {progInfo ? progInfo["userNick"] : "nick"}
@@ -119,8 +110,8 @@ const Header = () => {
                 );
               }}
               style={{
-                backgroundColor: "#7fb77e",
-                color: "#ffffff",
+                backgroundColor: "#7FB77E",
+                color: "#FFFFFF",
               }}
             >
               Test
@@ -134,8 +125,8 @@ const Header = () => {
                 style={{
                   // opacity: 0.5,
                   // cursor: "not-allowed",
-                  backgroundColor: "#7fb77e",
-                  color: "#ffffff",
+                  backgroundColor: "#7FB77E",
+                  color: "#FFFFFF",
                 }}
               >
                 나의 프로필
@@ -212,8 +203,8 @@ const Header = () => {
                   // }
                 }}
                 style={{
-                  backgroundColor: "#7fb77e",
-                  color: "#ffffff",
+                  backgroundColor: "#7FB77E",
+                  color: "#FFFFFF",
                   opacity: 0.5,
                 }}
               >
@@ -225,14 +216,13 @@ const Header = () => {
                 class="btn profile-edit-btn"
                 onClick={error}
                 style={{
-                  backgroundColor: "#7fb77e",
-                  color: "#ffffff",
+                  backgroundColor: "#7FB77E",
+                  color: "#FFFFFF",
                 }}
               >
                 팔로우(Notuser)
               </button>
             )}
-
             {/* <button
               class="btn profile-settings-btn"
               aria-label="profile settings"
@@ -244,7 +234,6 @@ const Header = () => {
               <i class="fas fa-cog" aria-hidden="true"></i>
             </button> */}
           </div>
-
           <div class="profile-stats">
             <ul>
               <li
@@ -255,7 +244,7 @@ const Header = () => {
               >
                 여행티어{" "}
                 <span class="profile-stat-count">
-                  {progInfo ? progInfo["userLevel"] : "🫅"}
+                  {progInfo ? progInfo["userLevel"] : ":왕관을_쓴_사람:"}
                 </span>
               </li>
               <li onClick={showFolloweModal}>
@@ -272,16 +261,14 @@ const Header = () => {
               </li>
             </ul>
           </div>
-
           <div class="profile-bio">
             <p>
               <span class="profile-real-name">
-                {progInfo ? progInfo["profileMsg"] : "📷✈️🏕️"}
+                {progInfo ? progInfo["profileMsg"] : ":카메라::비행기::야영:"}
               </span>
             </p>
           </div>
         </div>
-
         <Modal
           title="팔로워"
           open={isModalOpen}
@@ -312,7 +299,6 @@ const Header = () => {
             })}
           </div>
         </Modal>
-
         <Modal
           title="팔로우"
           open={isfollowingOpen}
@@ -347,10 +333,8 @@ const Header = () => {
         {/* <AppstoreAddOutlined /> */}
         {/* <!-- End of profile section --> */}
       </div>
-
       {/* <!-- End of container --> */}
     </div>
   );
 };
-
 export default Header;
