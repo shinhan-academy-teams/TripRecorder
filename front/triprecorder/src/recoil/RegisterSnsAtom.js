@@ -26,10 +26,10 @@ export const openRangeAtom = atom({
 });
 
 //해시태그 배열
-export const tagsAtom = atom({
-  key: "tagsAtom",
-  default: [],
-});
+// export const tagsAtom = atom({
+//   key: "tagsAtom",
+//   default: [],
+// });
 
 export const inputVisibleAtom = atom({
   key: "inputVisibleAtom",
