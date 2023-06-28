@@ -12,8 +12,15 @@ const CategoryItem = ({ src, tripName, tripNo, updateTripNo }) => {
   //     profileService.getSnsPostList(e).then((res) => console.log(res));
   //   };
   return (
+    // max-width: 100%;
+    // height: auto;
+
     <div>
-      <div class="gallery-item" tabindex="0">
+      <div
+        class="gallery-item"
+        tabindex="0"
+        style={{ maxWidth: "352px", height: "auto" }}
+      >
         <img
           onClick={() => alert("2")}
           src={src}

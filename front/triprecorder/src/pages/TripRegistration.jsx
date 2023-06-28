@@ -126,7 +126,6 @@ const TripRegistration = (props) => {
         initialValues={{
           remember: true,
           tripexpense: 1000,
-          tripExp: 100,
         }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
@@ -182,10 +181,10 @@ const TripRegistration = (props) => {
           ]}
         >
           <InputNumber
-            formatter={(value) =>
-              `₩ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-            }
-            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+            prefix="₩"
+            style={{
+              width: "100%",
+            }}
           />
         </Form.Item>
         <Btn htmlType="submit">Submit</Btn>

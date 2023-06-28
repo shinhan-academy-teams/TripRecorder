@@ -11,7 +11,11 @@ const GalleryItem = ({ src, likes, comments, snsNo }) => {
         navigate("/sns/detail/" + snsNo);
       }}
     >
-      <div class="gallery-item" tabindex="0">
+      <div
+        class="gallery-item"
+        tabindex="0"
+        style={{ maxWidth: "352px", height: "auto" }}
+      >
         <img src={src} class="gallery-image" alt="" />
 
         <div class="gallery-item-info">

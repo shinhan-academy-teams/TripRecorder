@@ -69,7 +69,10 @@ const login = (userId, userPw) => {
       }
       return res;
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      return err;
+    });
 };
 
 const TripRegistration = (tripName, tripDest, tripStart, tripEnd, tripExp) => {
