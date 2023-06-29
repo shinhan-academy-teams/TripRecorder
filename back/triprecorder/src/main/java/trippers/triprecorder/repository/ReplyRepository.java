@@ -1,11 +1,13 @@
 package trippers.triprecorder.repository;
 
-import org.springframework.data.repository.PagingAndSortingRepository;
+import java.util.List;
 
-import trippers.triprecorder.vo.ProfileVO;
-import trippers.triprecorder.vo.ReplyVO;
-import trippers.triprecorder.vo.SnsVO;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ReplyRepository extends PagingAndSortingRepository<ReplyVO, Long>{
+import trippers.triprecorder.entity.ReplyVO;
+import trippers.triprecorder.entity.SnsVO;
 
+public interface ReplyRepository extends JpaRepository<ReplyVO, Long>{
+	// 특정 게시글에 해당하는 댓글 리스트 (for. 게시글)
+	List<ReplyVO> findBySns(SnsVO sns);
 }

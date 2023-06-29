@@ -1,9 +1,10 @@
 package trippers.triprecorder.repository;
 
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import trippers.triprecorder.vo.ProfileVO;
+import trippers.triprecorder.entity.ProfileVO;
+import trippers.triprecorder.entity.UserVO;
 
-public interface ProfileRepository extends PagingAndSortingRepository<ProfileVO, Long>{
+public interface ProfileRepository extends JpaRepository<ProfileVO, Long> {
 
 }

@@ -1,9 +1,14 @@
 package trippers.triprecorder.repository;
 
-import org.springframework.data.repository.PagingAndSortingRepository;
+import java.util.List;
 
-import trippers.triprecorder.vo.DiscountVO;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface DiscountRepository extends PagingAndSortingRepository<DiscountVO, Long>{
+import trippers.triprecorder.entity.CardVO;
+import trippers.triprecorder.entity.DiscountVO;
 
+public interface DiscountRepository extends JpaRepository<DiscountVO, Long> {
+	//카테고리와 카드번호를 가지고 할인혜택조회 메서드
+    List<DiscountVO> findByDcCateAndCardIn(String category, List<CardVO> cards);
 }
+
