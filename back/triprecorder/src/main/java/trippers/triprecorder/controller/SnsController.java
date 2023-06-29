@@ -156,20 +156,19 @@ public class SnsController {
 		else if (userNo.equals(profileUserNo)) {
 			scope = new Integer[] { -1, 0, 1 };
 		}
-			
 
 		else {
 			UserVO follower = urepo.findById(userNo).orElse(null);
 			UserVO following = urepo.findById(profileUserNo).orElse(null);
 
 			FollowVO follow = frepo.findByFollowerAndFollowing(follower, following);
-			if(follow == null) {
+			if (follow == null) {
 				scope = new Integer[] { 1 };
 			} else {
 				scope = new Integer[] { 1, 0 };
 			}
 		}
-		
+
 		List<SnsVO> tmpSnsList = srepo.findBySnsAndSnsScopeIn(trip, scope);
 
 		tmpSnsList.forEach(sns -> {
