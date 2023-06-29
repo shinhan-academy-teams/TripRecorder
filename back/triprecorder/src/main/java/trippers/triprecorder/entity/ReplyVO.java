@@ -24,7 +24,7 @@ import lombok.ToString;
 @Table(name = "reply")
 @Getter
 @Setter
-@ToString(exclude = {"user", "sns"})
+@ToString(exclude = { "user", "sns" })
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

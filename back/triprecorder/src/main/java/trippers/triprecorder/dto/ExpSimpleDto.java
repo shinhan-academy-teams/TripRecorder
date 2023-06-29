@@ -8,6 +8,7 @@ import lombok.Data;
 @Data
 @Builder
 public class ExpSimpleDto {
+	// 간단한 경비
 	private Long expNo;
 	private String expTitle;
 	private String expPlace;

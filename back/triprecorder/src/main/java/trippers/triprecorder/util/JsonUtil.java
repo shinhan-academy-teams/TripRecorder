@@ -17,10 +17,10 @@ public class JsonUtil {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
-		return jsonObj; 
+
+		return jsonObj;
 	}
-	
+
 	// Java Object를 JSON 문자열로 반환
 	public static String getObjectToJsonString(Object obj) throws JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();

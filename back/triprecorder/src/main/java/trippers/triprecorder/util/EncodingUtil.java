@@ -17,13 +17,13 @@ public class EncodingUtil {
 		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 		return bCryptPasswordEncoder.encode(userPw);
 	}
-	
+
 	// 비밀번호 검증
 	public static boolean verifyUserPw(String rawPw, String encodedPw) {
 		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 		return bCryptPasswordEncoder.matches(rawPw, encodedPw);
 	}
-	
+
 	// 복호화한 문자열
 	public static String getDecodedStr(String str) {
 		Base64.Decoder decoder = Base64.getUrlDecoder();
@@ -33,10 +33,10 @@ public class EncodingUtil {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		
+
 		return decodeStr;
 	}
-	
+
 	// 토큰에서 userNo 받아오기
 	public static Long getUserNo(HttpServletRequest request) {
 		String jwt = request.getHeader("Authorization");

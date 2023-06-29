@@ -22,16 +22,16 @@ import lombok.ToString;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ExpDto {
-	
+
 	@JsonProperty("storeInfo")
 	private String expPlace;
-	
+
 	@JsonProperty("addresses")
 	private String expAddress;
-	
+
 	@JsonProperty("totalPrice")
-	private Long expMoney;	
-	
+	private Long expMoney;
+
 	@JsonProperty("timestamp")
 	private String expTime;
 }

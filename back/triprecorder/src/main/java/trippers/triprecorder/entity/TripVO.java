@@ -27,7 +27,7 @@ import lombok.ToString;
 @Table(name = "trip")
 @Getter
 @Setter
-@ToString(exclude = {"user", "sns", "exp"})
+@ToString(exclude = { "user", "sns", "exp" })
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -48,12 +48,12 @@ public class TripVO {
 	private Timestamp tripEnd;
 	@Column(nullable = false)
 	private Long tripExp;
-	
+
 	// sns 게시글
 	@JsonIgnore
 	@OneToMany(mappedBy = "sns", cascade = CascadeType.ALL)
 	private List<SnsVO> sns;
-	
+
 	// 여행 경비 (영수증)
 	@JsonIgnore
 	@OneToMany(mappedBy = "trip", cascade = CascadeType.ALL)

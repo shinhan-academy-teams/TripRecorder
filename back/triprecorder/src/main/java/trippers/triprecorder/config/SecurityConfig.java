@@ -21,6 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	private final UserRepository urepo;
 	private final ProfileRepository prepo;
 	
+	// security
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http

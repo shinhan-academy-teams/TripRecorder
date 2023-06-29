@@ -22,38 +22,40 @@ import trippers.triprecorder.entity.UserVO;
 import trippers.triprecorder.repository.UserRepository;
 
 @Log
-public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
+public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 	private UserRepository urepo;
 
 	public JwtAuthorizationFilter(AuthenticationManager authenticationManager, UserRepository userRepository) {
 		super(authenticationManager);
 		this.urepo = userRepository;
 	}
-	
+
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		log.info("** 인증이나 권한이 필요한 주소 요청 **");
-		
+
 		String jwtHeader = request.getHeader(JwtProperties.HEADER_STRING);
 		log.info("jwtHeader: " + jwtHeader);
-		
-		if(jwtHeader == null || !jwtHeader.startsWith(JwtProperties.TOKEN_PREFIX)) {
+
+		if (jwtHeader == null || !jwtHeader.startsWith(JwtProperties.TOKEN_PREFIX)) {
 			chain.doFilter(request, response);
 			return;
 		}
-		
-		String jwtToken = request.getHeader(JwtProperties.HEADER_STRING).replace(JwtProperties.TOKEN_PREFIX, "");
-		String userid = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(jwtToken).getClaim("userId").asString();
 
-		if(userid != null) {
+		String jwtToken = request.getHeader(JwtProperties.HEADER_STRING).replace(JwtProperties.TOKEN_PREFIX, "");
+		String userid = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(jwtToken).getClaim("userId")
+				.asString();
+
+		if (userid != null) {
 			UserVO userEntity = urepo.findByUserId(userid);
 			PrincipalDetails principalDetails = new PrincipalDetails(userEntity);
 
-			Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
-			
+			Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null,
+					principalDetails.getAuthorities());
+
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			chain.doFilter(request, response);
 		}
-	} 
+	}
 }

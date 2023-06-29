@@ -30,7 +30,7 @@ import lombok.ToString;
 @Table(name = "sns")
 @Getter
 @Setter
-@ToString(exclude = {"sns", "reply", "heart", "hashtag", "exp"})
+@ToString(exclude = { "sns", "reply", "heart", "hashtag", "exp" })
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -41,7 +41,7 @@ public class SnsVO {
 	@Column(nullable = false)
 	private String snsTitle;
 	@ManyToOne
-	@JoinColumn(name="trip_no")
+	@JoinColumn(name = "trip_no")
 	private TripVO sns;
 	private String snsContent;
 	@Column(nullable = false)
@@ -50,12 +50,12 @@ public class SnsVO {
 	private Timestamp snsRegdate;
 	@Column(nullable = false)
 	private Integer snsScope;
-	
+
 	// 댓글
 	@JsonIgnore
 	@OneToMany(mappedBy = "sns", cascade = CascadeType.ALL)
 	private List<ReplyVO> reply;
-	
+
 	// 좋아요
 	@JsonIgnore
 	@OneToMany(mappedBy = "sns", cascade = CascadeType.ALL)

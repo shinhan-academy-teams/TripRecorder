@@ -39,6 +39,7 @@ import trippers.triprecorder.util.AwsUtil;
 import trippers.triprecorder.util.EncodingUtil;
 import trippers.triprecorder.util.MakeSnsUtil;
 
+// sns 게시글
 @RestController
 @RequestMapping("/sns")
 public class SnsController {

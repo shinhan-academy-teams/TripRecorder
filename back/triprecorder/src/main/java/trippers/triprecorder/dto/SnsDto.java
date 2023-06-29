@@ -11,7 +11,7 @@ import lombok.Data;
 public class SnsDto {
 	private Long tripNo;
 	private Long expNo;
-	
+
 	private Long snsNo;
 	private String snsTitle;
 	private String snsContent;
@@ -19,7 +19,7 @@ public class SnsDto {
 	private Timestamp snsRegdate;
 	private Integer snsScope;
 	private UserSimpleDto snsUser;
-	
+
 	private List<ReplyDto> reply;
 	private boolean isHeart;
 	private Integer heartCnt;

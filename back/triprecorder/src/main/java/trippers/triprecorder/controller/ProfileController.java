@@ -120,13 +120,10 @@ public class ProfileController {
 		tmpUser.setProfile(profile);
 
 		UserVO savedUser = urepo.save(tmpUser);
-		
-		UserSimpleDto newUser = UserSimpleDto.builder()
-				.userNo(savedUser.getUserNo())
-				.userNick(savedUser.getUserNick())
+
+		UserSimpleDto newUser = UserSimpleDto.builder().userNo(savedUser.getUserNo()).userNick(savedUser.getUserNick())
 				.userId(savedUser.getUserId())
-				.userProfile(AwsUtil.getImageURL(savedUser.getProfile().getProfilePhoto()))
-				.build();
+				.userProfile(AwsUtil.getImageURL(savedUser.getProfile().getProfilePhoto())).build();
 
 		return newUser;
 	}
