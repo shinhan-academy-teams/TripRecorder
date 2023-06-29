@@ -20,7 +20,6 @@ const SnsDetailPage = () => {
 
   // 게시글 컴포넌트가 변경되었을 때 (삭제)
   const updateSnsList = (newList) => {
-    message.success("게시글이 삭제되었습니다!");
     navigate(-1);
   };
 

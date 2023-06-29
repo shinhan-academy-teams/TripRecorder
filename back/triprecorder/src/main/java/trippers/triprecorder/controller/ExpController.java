@@ -60,27 +60,6 @@ public class ExpController {
 		
 		return "OK";
     }
-//    
-//    
-//    
-//    //경비수정
-//    @PutMapping("/updateexp/{expNo}")
-//    public String updateOcrData(@PathVariable Long expNo, @RequestBody ExpVO exp) {
-//
-//    	ExpVO existingExp = erepo.findByExpNo(expNo);
-//        if (existingExp == null) {
-//            return "ExpVO with ID " + expNo + " not found";
-//        }
-//
-//        exp.setExpNo(expNo); 
-//        ExpVO updatedExp = erepo.save(exp); 
-//        
-//        if (updatedExp != null) {
-//            return "수정완료";
-//        } else {
-//            return "수정실패";
-//        }
-//    }
     
     // 연결된 게시글이 없는 경비 조회
     @PostMapping("/list/{tripNo}")
