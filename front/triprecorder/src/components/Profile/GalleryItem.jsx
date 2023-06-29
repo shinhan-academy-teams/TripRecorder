@@ -14,7 +14,7 @@ const GalleryItem = ({ src, likes, comments, snsNo }) => {
       <div
         class="gallery-item"
         tabindex="0"
-        style={{ maxWidth: "352px", height: "auto" }}
+        style={{ maxWidth: "352px", height: "342px" }}
       >
         <img src={src} class="gallery-image" alt="" />
 

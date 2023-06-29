@@ -16,7 +16,7 @@ const CategoryExpenseItem = ({ src, tripName, tripNo }) => {
       <div
         class="gallery-item"
         tabindex="0"
-        style={{ maxWidth: "352px", height: "auto" }}
+        style={{ maxWidth: "352px", height: "342px" }}
       >
         <img
           onClick={() => alert("2")}

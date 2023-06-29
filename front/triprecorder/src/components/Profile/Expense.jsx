@@ -44,7 +44,7 @@ const Expense = () => {
     margin-left: 0;
     margin-top: 3rem;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
 
     @media (min-width: 768px) {
@@ -55,12 +55,13 @@ const Expense = () => {
   `;
   const CardDiv = styled.div`
     border-radius: 0.75rem;
-    background: #fffbec;
+    background: #7fb77e;
   `;
   const CardInner = styled.div`
     display: flex;
     padding: 2rem;
-    background-color: #ffffff;
+    color: "#ffffff"
+    background-color: #7fb77e;
     --transform-translate-x: 1rem;
     --transform-translate-y: 1rem;
     flex-direction: column;
@@ -112,6 +113,29 @@ const Expense = () => {
           justifyContent: "space-between",
         }}
       >
+        <SubscriptionDiv>
+          {/* <div style={{ display: "flex", justifyContent: "space-evenly" }}> */}
+          <CardDiv>
+            <CardInner>
+              <span style={{ color: "white" }}>
+                총 예산: {data[0]?.tripExp}
+              </span>
+            </CardInner>
+          </CardDiv>{" "}
+          <CardDiv>
+            <CardInner>
+              <span style={{ color: "white" }}>쓴 돈: {data[0]?.useExp}</span>
+            </CardInner>
+          </CardDiv>{" "}
+          <CardDiv>
+            <CardInner>
+              <span style={{ color: "white" }}>
+                남은 돈: {data[0]?.remainExp}
+              </span>
+            </CardInner>
+          </CardDiv>
+          {/* </div> */}
+        </SubscriptionDiv>
         <div
           style={{
             display: "flex",
@@ -121,25 +145,9 @@ const Expense = () => {
             // width: "2.5rem",
           }}
         >
-          <MainDiv>
-            <SubscriptionDiv>
-              <CardDiv>
-                <CardInner>
-                  <span>총 예산: {data[0]?.tripExp}</span>
-                </CardInner>
-              </CardDiv>{" "}
-              <CardDiv>
-                <CardInner>
-                  <span>쓴 돈: {data[0]?.useExp}</span>
-                </CardInner>
-              </CardDiv>{" "}
-              <CardDiv>
-                <CardInner>
-                  <span>남은 돈: {data[0]?.remainExp}</span>
-                </CardInner>
-              </CardDiv>
-            </SubscriptionDiv>
-          </MainDiv>
+          {/* <MainDiv> */}
+
+          {/* </MainDiv> */}
           {/* <InfoDiv>총 예산: {data[0]?.tripExp}</InfoDiv>
           <InfoDiv>쓴 돈: {data[0]?.useExp}</InfoDiv>
           <InfoDiv>남은 돈: {data[0]?.remainExp}</InfoDiv> */}
@@ -176,6 +184,7 @@ const Expense = () => {
               renderItem={(item, idx) => (
                 <List.Item key={idx}>
                   <List.Item.Meta
+                    style={{ textAlign: "left" }}
                     // avatar={<Avatar src={item.picture.large} />}
                     title={
                       <div

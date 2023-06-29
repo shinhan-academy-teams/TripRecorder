@@ -1,6 +1,7 @@
 import api from "./axios";
 import Cookies from "js-cookie";
-
+import { ModalOpen } from "recoil/UserInfo";
+import { useRecoilState } from "recoil";
 const checkDuplicateId = (userId) => {
   return api
     .post("/auth/signup/useridCheck", { userId })
@@ -70,8 +71,10 @@ const login = (userId, userPw) => {
       return res;
     })
     .catch((err) => {
-      console.log(err);
-      return err;
+      const [isModalOpen, setIsModalOpen] = useRecoilState(ModalOpen);
+      console.log(err.message);
+      setIsModalOpen(true);
+      return err.message;
     });
 };
 
