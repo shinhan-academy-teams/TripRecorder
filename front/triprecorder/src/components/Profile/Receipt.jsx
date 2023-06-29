@@ -238,7 +238,7 @@ flex-direction: column; */
               cancelButtonProps={{
                 style: { backgroundColor: "#7fb77e", color: "#ffffff" },
               }}
-              title="해당 게시글을 삭제하시겠습니까?🤔"
+              title="해당 게시글을 경비를하시겠습니까?🤔"
               open={isModalOpen}
               onOk={handleOk}
               onCancel={handleCancel}
