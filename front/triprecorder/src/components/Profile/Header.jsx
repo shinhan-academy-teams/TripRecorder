@@ -44,32 +44,7 @@ const Header = () => {
       setProfInfo(res);
     });
   }, [prfUserNo, follower?.length]);
-  useEffect(() => {
-    // console.log(follower);
-    // if (
-    //   follower
-    //     ?.map((val, idx) => {
-    //       if (val["userNo"] == userNum) return true;
-    //     })
-    //     .includes(true) == true
-    // ) {
-    //   setFollowState("팔로잉");
-    //   setOpacity("0.5");
-    // } else {
-    //   setFollowState("팔로우");
-    //   setOpacity("1");
-    // }
-    // profileService.follow(prfUserNo).then((res) => {
-    //   console.log(res);
-    //   if (res == true) {
-    //     setFollowState("팔로잉");
-    //     setOpacity("0.5");
-    //   } else {
-    // setFollowState("팔로우");
-    // setOpacity("1");
-    //   }
-    // });
-  }, []);
+
   const showFolloweModal = () => {
     setIsModalOpen(true);
     // .getFollowerList(localStorage.getItem("userNo"))
@@ -109,27 +84,7 @@ const Header = () => {
             <h1 class="profile-user-name">
               {progInfo ? progInfo["userNick"] : "nick"}
             </h1>
-            {/* <button
-              class="btn profile-edit-btn"
-              onClick={() => {
-                console.log(userNum, prfUserNo);
-                console.log(
-                  follower
-                    ?.map((val, idx) => {
-                      if (val["userNo"] == userNum) return true;
-                    })
-                    .includes(true) == true && userNum != null
-                );
-                console.log(prfUserNo, "prfUserNo");
-                console.log(prfUserNo, "prfUserNo");
-              }}
-              style={{
-                backgroundColor: "#7FB77E",
-                color: "#FFFFFF",
-              }}
-            >
-              Test
-            </button> */}
+
             {userNum == prfUserNo ? (
               <button
                 class="btn profile-edit-btn"
