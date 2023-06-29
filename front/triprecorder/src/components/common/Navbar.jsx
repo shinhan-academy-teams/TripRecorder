@@ -142,7 +142,7 @@ const Navbar = () => {
                 : "profileContainer active"
             }
           >
-            <img src={userProf} alt="profile" />
+            <img src={userProf} alt="profile"  className="proimg"/>
             <div className="profileContents" style={{ cursor: "pointer" }}>
               <p className="name">{userNickName}</p>
             </div>
