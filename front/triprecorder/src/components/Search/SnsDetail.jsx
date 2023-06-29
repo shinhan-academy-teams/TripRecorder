@@ -214,7 +214,7 @@ const SnsDetail = ({ snsData, snsList, updateSnsList }) => {
           {/* 좋아요, 경비 보기, 게시글 삭제*/}
           <div style={{ marginLeft: "50px" }}>
             <Button onClick={heartClick}>
-              {heart ? "♥️" : "♡"} {heartCnt}
+              {heart ? "❤️" : "♡"} {heartCnt}
             </Button>
             {snsData?.expNo ? (
               <>
