@@ -99,13 +99,7 @@ const Header = () => {
       <div class="container">
         <div class="profile">
           <div class="profile-image">
-            <img
-              style={{ maxWidth: "100%", height: "auto" }}
-              // max-width: 100%;
-              // height: auto;
-              src={progInfo ? progInfo["profilePhoto"] : ""}
-              alt="profile"
-            />
+            <img src={progInfo ? progInfo["profilePhoto"] : ""} alt="profile" />
           </div>
           <div class="profile-user-settings">
             <h1 class="profile-user-name">

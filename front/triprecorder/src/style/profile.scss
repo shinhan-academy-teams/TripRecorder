@@ -28,9 +28,9 @@ Flexbox and floats are used as a fallback so that browsers which don't support g
 //   padding-bottom: 3rem;
 // }
 
-img {
-  display: block;
-}
+// img {
+//   display: block;
+// }
 
 .container {
   max-width: 93.5rem;
@@ -52,14 +52,6 @@ img {
   outline: 0.5rem auto #4d90fe;
 }
 
-.visually-hidden {
-  position: absolute !important;
-  height: 1px;
-  width: 1px;
-  overflow: hidden;
-  clip: rect(1px, 1px, 1px, 1px);
-}
-
 /* Profile Section */
 
 .profile {
@@ -74,7 +66,6 @@ img {
 
 .profile-image {
   float: left;
-  width: calc(33.333% - 1rem);
   display: flex;
   justify-content: center;
   align-items: center;

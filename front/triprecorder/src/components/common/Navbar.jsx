@@ -130,7 +130,7 @@ const Navbar = () => {
         <div className="burgerMenu"></div>
       </div>
       {isLog ? (
-        <div>
+        <div className="bigProfile">
           <div
             onClick={() => {
               console.log(userProf);
@@ -142,7 +142,7 @@ const Navbar = () => {
                 : "profileContainer active"
             }
           >
-            <img src={userProf} alt="profile" className="profile" />
+            <img src={userProf} alt="profile" />
             <div className="profileContents" style={{ cursor: "pointer" }}>
               <p className="name">{userNickName}</p>
             </div>
@@ -168,7 +168,7 @@ const Navbar = () => {
             closeMenu === false ? "profileContainer" : "profileContainer active"
           }
         >
-          <img src={Logo} alt="profile" className="profile" />
+          <img src={Logo} alt="profile" className="profileimage" />
           <div
             className="profileContents"
             style={{ cursor: "pointer" }}
