@@ -30,6 +30,7 @@ import trippers.triprecorder.util.AwsUtil;
 import trippers.triprecorder.util.EncodingUtil;
 import trippers.triprecorder.util.MakeSnsUtil;
 
+// 검색
 @RestController
 @RequestMapping("/search")
 public class SearchController {

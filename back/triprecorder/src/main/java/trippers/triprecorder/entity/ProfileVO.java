@@ -19,19 +19,21 @@ import lombok.ToString;
 
 @Entity
 @Table(name = "profile")
-@Getter @Setter @ToString(exclude = {"user"})
+@Getter
+@Setter
+@ToString(exclude = { "user" })
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class ProfileVO {
 	@Id
 	private Long profileNo;
-	
+
 	@MapsId
 	@OneToOne
-	@JoinColumn(name="user_no")
+	@JoinColumn(name = "user_no")
 	UserVO user;
-	
+
 	@Column(nullable = false, columnDefinition = "VARCHAR(255) default 'profile/default_profile.png'")
 	@Builder.Default
 	private String profilePhoto = "profile/default_profile.png";

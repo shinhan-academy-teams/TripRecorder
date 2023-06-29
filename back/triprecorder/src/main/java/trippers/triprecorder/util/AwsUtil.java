@@ -33,15 +33,15 @@ public class AwsUtil {
 	public static void deleteBucketObjects(String[] keyName) {
 		AwsUtil awsUtil = new AwsUtil();
 		ArrayList<ObjectIdentifier> toDelete = new ArrayList<>();
-		for(String key : keyName) {
+		for (String key : keyName) {
 			toDelete.add(ObjectIdentifier.builder().key(key).build());
 		}
-		
+
 		DeleteObjectsRequest dor = DeleteObjectsRequest.builder().bucket(BUCKET_NAME)
 				.delete(Delete.builder().objects(toDelete).build()).build();
-		
+
 		awsUtil.s3.deleteObjects(dor);
-		
+
 		awsUtil.s3.close();
 	}
 }

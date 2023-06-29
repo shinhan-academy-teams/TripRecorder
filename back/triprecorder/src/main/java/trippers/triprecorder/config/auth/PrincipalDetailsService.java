@@ -11,13 +11,13 @@ import trippers.triprecorder.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor
-public class PrincipalDetailsService implements UserDetailsService{
-	private final  UserRepository userRepository;
-	
+public class PrincipalDetailsService implements UserDetailsService {
+	private final UserRepository userRepository;
+
 	@Override
 	public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-		UserVO userEntity = userRepository.findByUserId(userId); 
+		UserVO userEntity = userRepository.findByUserId(userId);
 		return new PrincipalDetails(userEntity);
 	}
-	
+
 }

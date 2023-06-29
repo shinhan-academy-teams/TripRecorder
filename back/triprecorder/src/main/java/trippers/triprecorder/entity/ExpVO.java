@@ -25,7 +25,7 @@ import lombok.ToString;
 @Table(name = "exp")
 @Getter
 @Setter
-@ToString(exclude = {"card", "trip", "sns"})
+@ToString(exclude = { "card", "trip", "sns" })
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -37,7 +37,7 @@ public class ExpVO {
 	private String expTitle;
 	@ManyToOne
 	@JoinColumn(name = "card_no")
-	private CardVO card; // null 처리 백엔드에서 필요 
+	private CardVO card; // null 처리 백엔드에서 필요
 	@ManyToOne
 	@JoinColumn(name = "trip_no")
 	private TripVO trip;

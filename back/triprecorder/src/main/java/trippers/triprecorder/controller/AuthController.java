@@ -15,6 +15,7 @@ import trippers.triprecorder.entity.UserVO;
 import trippers.triprecorder.repository.UserRepository;
 import trippers.triprecorder.util.EncodingUtil;
 
+// 회원
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
