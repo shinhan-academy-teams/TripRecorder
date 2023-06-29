@@ -19,3 +19,12 @@ export const isLoggedIn = atom({
   key: "isLoggedIn",
   default: false,
 });
+export const ModalOpen = atom({
+  key: "ModalOpen",
+  default: false,
+});
+
+export const isshow = atom({
+  key: "isshow",
+  default: true,
+});
