@@ -183,7 +183,7 @@ const Profile = () => {
                           <></>
                         )}
                       </div>
-                      {/* {loading ? <div className="loader" /> : ""} */}
+                      {loading ? <div className="loader" /> : ""}
 
                       <div className="gallery">
                         {image?.map((imageItem, index) =>

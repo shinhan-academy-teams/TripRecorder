@@ -6,14 +6,21 @@ import { Form, Input, Button, Modal } from "antd";
 import Cookies from "js-cookie";
 import authService from "api/auth.service";
 import { useRecoilState } from "recoil";
-import { userNo, userNick, userProfile, isLoggedIn } from "../recoil/UserInfo";
+import {
+  userNo,
+  userNick,
+  userProfile,
+  isLoggedIn,
+  ModalOpen,
+} from "../recoil/UserInfo";
 
 const SignIn = (props) => {
   const [userNum, setUserNum] = useRecoilState(userNo);
   const [userNickName, setUserNickName] = useRecoilState(userNick);
   const [userProf, setUserProf] = useRecoilState(userProfile);
   const [isLog, setIsLog] = useRecoilState(isLoggedIn);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useRecoilState(ModalOpen);
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -92,8 +99,7 @@ const SignIn = (props) => {
         }
       })
       .catch((err) => {
-        // showModal();
-        console.log(err, "@@@@@@");
+        showModal();
       });
   };
 
@@ -222,12 +228,15 @@ const SignIn = (props) => {
         </Link>
       </Footer>
       <Modal
-        title="로그인 실패 ! 🤔"
+        title="로그인 실패 ❌"
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
+        okButtonProps={{
+          style: { backgroundColor: "#7fb77e", color: "#ffffff" },
+        }}
       >
-        <p> 다시 로그인 해주세요 ! 😊</p>
+        <p> 다시 로그인 해주세요 ! </p>
       </Modal>
     </LoginForm>
   );
