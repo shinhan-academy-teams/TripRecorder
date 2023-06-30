@@ -25,7 +25,7 @@ import lombok.ToString;
 @Table(name = "card")
 @Getter
 @Setter
-@ToString(exclude = {"dc", "exp"}) 
+@ToString(exclude = { "dc", "exp" })
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -39,14 +39,16 @@ public class CardVO {
 	private String cardPhoto;
 	@Column(nullable = false)
 	private String cardAnnual;
-	
+	@Column(nullable = false)
+	private String cardLink;
+
 	// 할인정보
 	@JsonIgnore
 	@OneToMany(mappedBy = "card", cascade = CascadeType.ALL)
 	private List<DiscountVO> dc;
-	
+
 	// 여행 경비 (영수증)
-	@JsonIgnore 
+	@JsonIgnore
 	@OneToMany(mappedBy = "card", fetch = FetchType.LAZY)
 	private List<ExpVO> exp;
 }

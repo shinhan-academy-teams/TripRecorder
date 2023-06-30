@@ -11,6 +11,23 @@ export const tripNoState = atom({
   default: 0, // 기본값
 });
 
+export const cardState = atom({
+  key: "cardState",
+  default: [], // 기본값
+});
+export const profileUserNo = atom({
+  key: "profileUserNo",
+  default: 0, // 기본값
+});
+export const followerModalState = atom({
+  key: "followerModalState",
+  default: false, // 기본값
+});
+export const followingModalState = atom({
+  key: "followingModalState",
+  default: false, // 기본값
+});
+
 // 전역 함수를 생성하는 Recoil selector 생성
 export const imagesSelector = selector({
   key: "imagesSelector",
@@ -23,4 +40,16 @@ export const imagesSelector = selector({
       return fn(args);
     };
   },
+});
+
+//주소
+export const ProfileAtom = atom({
+  key: "ProfileAtom",
+  default: "no",
+});
+
+//키
+export const keyAtom = atom({
+  key: "keyAtom",
+  default: "no",
 });

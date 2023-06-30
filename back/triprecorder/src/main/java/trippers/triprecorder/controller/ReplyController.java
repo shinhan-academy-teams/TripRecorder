@@ -34,35 +34,28 @@ public class ReplyController {
 	ReplyRepository rrepo;
 	@Autowired
 	ProfileRepository prepo;
-	
+
 	// 댓글 등록
 	@PostMapping("/register/{snsNo}")
-	public ReplyDto postRegisterReply(HttpServletRequest request, @RequestBody ReplyVO reply, @PathVariable Long snsNo) {
+	public ReplyDto postRegisterReply(HttpServletRequest request, @RequestBody ReplyVO reply,
+			@PathVariable Long snsNo) {
 		Long userNo = EncodingUtil.getUserNo(request);
 		UserVO user = urepo.findById(userNo).orElse(null);
 		reply.setUser(user);
 		reply.setSns(srepo.findById(snsNo).orElse(null));
 		ReplyVO savedReply = rrepo.save(reply);
-		
+
 		ProfileVO profile = prepo.findById(userNo).orElse(null);
-		UserSimpleDto myUser = UserSimpleDto.builder()
-				.userNo(userNo)
-				.userNick(user.getUserNick())
-				.userId(user.getUserId())
-				.userProfile(AwsUtil.getImageURL(profile.getProfilePhoto()))
+		UserSimpleDto myUser = UserSimpleDto.builder().userNo(userNo).userNick(user.getUserNick())
+				.userId(user.getUserId()).userProfile(AwsUtil.getImageURL(profile.getProfilePhoto())).build();
+
+		ReplyDto myReply = ReplyDto.builder().snsNo(savedReply.getSns().getSnsNo()).replyNo(savedReply.getReplyNo())
+				.replyContent(savedReply.getReplyContent()).replyRegdate(savedReply.getReplyRegdate()).replyUser(myUser)
 				.build();
-		
-		ReplyDto myReply = ReplyDto.builder()
-				.snsNo(savedReply.getSns().getSnsNo())
-				.replyNo(savedReply.getReplyNo())
-				.replyContent(savedReply.getReplyContent())
-				.replyRegdate(savedReply.getReplyRegdate())
-				.replyUser(myUser)
-				.build();
-		
+
 		return myReply;
 	}
-	
+
 	// 댓글 삭제
 	@DeleteMapping("/delete/{replyNo}")
 	public String deleteReply(@PathVariable Long replyNo) {

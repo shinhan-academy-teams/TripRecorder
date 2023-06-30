@@ -21,6 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	private final UserRepository urepo;
 	private final ProfileRepository prepo;
 	
+	// security
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
@@ -34,9 +35,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 			.addFilter(new JwtAuthorizationFilter(authenticationManager(), urepo))
 			.authorizeRequests()
 			.antMatchers("/auth/**").permitAll()
-//			.antMatchers("/**/register/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-//			.antMatchers("/**/update/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
-//			.antMatchers("/**/delete/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+			.antMatchers("/**/register/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+			.antMatchers("/**/update/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+			.antMatchers("/**/delete/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
 			.antMatchers("/**/user/**").access("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')") 
 			.antMatchers("/**/admin/**").hasRole("ADMIN")
 			.anyRequest().permitAll() 

@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 import { DatePicker, Form, Input, InputNumber, message } from "antd";
 import authService from "api/auth.service";
 import api from "api/axios";
-import { tripNoState } from "../recoil/Profile";
+// import { tripNoState } from "../recoil/Profile";
 // import { useRecoilState } from "recoil";
 // import { useLocation } from "react-router-dom";
 // import dayjs from "dayjs";
@@ -97,7 +97,7 @@ const TripRegistration = (props) => {
 
     //등록후 alert
     await api
-      .get("/trip/regoster")
+      .get("/trip/register")
       .then((res) => {
         message.success("여행 등록이 완료되었습니다. 😊");
       })
@@ -126,7 +126,6 @@ const TripRegistration = (props) => {
         initialValues={{
           remember: true,
           tripexpense: 1000,
-          tripExp: 100,
         }}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
@@ -183,9 +182,12 @@ const TripRegistration = (props) => {
         >
           <InputNumber
             formatter={(value) =>
-              `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+              `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
             }
-            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+            prefix="₩"
+            style={{
+              width: "100%",
+            }}
           />
         </Form.Item>
         <Btn htmlType="submit">Submit</Btn>

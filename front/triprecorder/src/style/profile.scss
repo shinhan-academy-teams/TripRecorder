@@ -28,9 +28,9 @@ Flexbox and floats are used as a fallback so that browsers which don't support g
 //   padding-bottom: 3rem;
 // }
 
-img {
-  display: block;
-}
+// img {
+//   display: block;
+// }
 
 .container {
   max-width: 93.5rem;
@@ -52,14 +52,6 @@ img {
   outline: 0.5rem auto #4d90fe;
 }
 
-.visually-hidden {
-  position: absolute !important;
-  height: 1px;
-  width: 1px;
-  overflow: hidden;
-  clip: rect(1px, 1px, 1px, 1px);
-}
-
 /* Profile Section */
 
 .profile {
@@ -74,7 +66,6 @@ img {
 
 .profile-image {
   float: left;
-  width: calc(33.333% - 1rem);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -98,12 +89,12 @@ img {
 
 .profile-user-name {
   display: inline-block;
-  font-size: 3.2rem;
-  font-weight: 300;
+  font-size: 30px;
+  font-weight: 400;
 }
 
 .profile-edit-btn {
-  font-size: 1.4rem;
+  font-size: 14px;
   line-height: 1.8;
   border: 0.1rem solid #dbdbdb;
   border-radius: 0.3rem;
@@ -112,17 +103,17 @@ img {
 }
 
 .profile-settings-btn {
-  font-size: 2rem;
+  font-size: 20px;
   margin-left: 1rem;
 }
 
 .profile-stats {
-  margin-top: 2.3rem;
+  margin-top: 16px;
 }
 
 .profile-stats li {
   display: inline-block;
-  font-size: 1.6rem;
+  font-size: 16px;
   line-height: 1.5;
   margin-right: 4rem;
   cursor: pointer;
@@ -133,7 +124,7 @@ img {
 }
 
 .profile-bio {
-  font-size: 1.6rem;
+  font-size: 16px;
   font-weight: 400;
   line-height: 1.5;
   margin-top: 2.3rem;
@@ -253,6 +244,7 @@ img {
 
   .profile-user-name {
     font-size: 2.2rem;
+    font-weight: 400;
   }
 
   .profile-edit-btn {

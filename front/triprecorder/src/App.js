@@ -15,7 +15,9 @@ import "style/main.scss";
 import Profile from "pages/Profile";
 import RegisterExp from "components/Register/RegisterExp";
 import RegisterSns from "components/Register/RegisterSns";
-import SliderTest from "components/Sns/LoginSns";
+import Receipt from "components/Profile/Receipt";
+import SnsDetailPage from "components/Sns/SnsDetailPage";
+import UpdateProfile from "components/Profile/UpdateProfile";
 
 const App = () => {
   const [isShow, setIsShow] = useState(true);
@@ -30,13 +32,18 @@ const App = () => {
             <Route path="/search" element={<Search />} />
             {/* <Route path="/profile" element={<Profile />} /> */}
             <Route path="/:userNick" element={<Profile />} />
-
+            <Route path="/:userNick/:expNo" element={<Receipt />} />
+            <Route
+              path="/:userNick/:userNo/detail"
+              element={<UpdateProfile />}
+            />
+            {/* <Route path="/expNo" element={<Receipt />} /> */}
             <Route path="/tripregistration" element={<TripRegistration />} />
             <Route path="/popularcard" element={<PopularCard />} />
             <Route path="/registerexp" element={<RegisterExp />} />
             <Route path="/registersns" element={<RegisterSns />} />
             <Route path="*" element={<NotFound />} />
-            <Route path="test" element={<SliderTest />} />
+            <Route path="/sns/detail/:snsNo" element={<SnsDetailPage />} />
           </Routes>
         </div>
       </BrowserRouter>

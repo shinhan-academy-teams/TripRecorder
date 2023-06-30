@@ -26,8 +26,7 @@ public class MakeSnsUtil {
 				.snsScope(tmpSns.getSnsScope())
 				.snsUser(MakeSnsUtil.getAnyUser(tmpSns.getSns().getUser().getUserNo(), urepo))
 				.reply(MakeSnsUtil.getSnsReply(tmpSns, rrepo, urepo))
-				.isHeart(MakeSnsUtil.getSnsHeart(tmpSns, userNo, hrepo))
-				.heartCnt(hrepo.findBySns(tmpSns).size())
+				.isHeart(MakeSnsUtil.getSnsHeart(tmpSns, userNo, hrepo)).heartCnt(hrepo.findBySns(tmpSns).size())
 				.hashtag(MakeSnsUtil.getSnsHashtag(tmpSns, tagrepo)).build();
 
 		return sns;

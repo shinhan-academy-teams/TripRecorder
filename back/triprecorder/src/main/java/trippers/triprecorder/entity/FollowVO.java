@@ -17,7 +17,9 @@ import lombok.ToString;
 
 @Entity
 @Table(name = "follow")
-@Getter @Setter @ToString(exclude = {"follower", "following"})
+@Getter
+@Setter
+@ToString(exclude = { "follower", "following" })
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -25,15 +27,15 @@ public class FollowVO {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long followNo;
-	
+
 	// 팔로워 (follow를 누른 사람)
 	@ManyToOne
-	@JoinColumn(name="follower")
+	@JoinColumn(name = "follower")
 	private UserVO follower;
-	
+
 	// 팔로우 (follow를 받은 사람)
 	@ManyToOne
-	@JoinColumn(name="following")
+	@JoinColumn(name = "following")
 	private UserVO following;
-	
+
 }

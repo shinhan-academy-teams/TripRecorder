@@ -20,7 +20,7 @@ import lombok.ToString;
 @Table(name = "dc")
 @Getter
 @Setter
-@ToString(exclude = "card") 
+@ToString(exclude = "card")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -36,7 +36,7 @@ public class DiscountVO {
 	@Column(nullable = false)
 	private String dcDiscount;
 	@Column(nullable = false)
-	private Double dcAmount; 
+	private Double dcAmount;
 	@Column(nullable = false)
 	private String dcWay;
 }

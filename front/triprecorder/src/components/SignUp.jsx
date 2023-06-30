@@ -8,10 +8,29 @@ import {
   SmileOutlined,
   MailOutlined,
 } from "@ant-design/icons";
-import { Form, Input, Button, Radio, Select, Space } from "antd";
+import { Form, Input, Button, Radio, Select, Space, message } from "antd";
 import authService from "api/auth.service";
+import { isLoggedIn } from "../recoil/UserInfo";
+import { useRecoilState } from "recoil";
+import { useNavigate } from "react-router-dom";
 const { Option } = Select;
 const SignUp = (props) => {
+  const [messageApi, contextHolder] = message.useMessage();
+  const [isLog, setIsLog] = useRecoilState(isLoggedIn);
+  const success = () => {
+    messageApi.open({
+      type: "success",
+      content: "회원가입 성공 !😊 다시 로그인 해주세요 !",
+    });
+  };
+
+  const error = () => {
+    messageApi.open({
+      type: "error",
+      content: "회원가입 실패 ! 🤔 다시 작성해주세요 !",
+    });
+  };
+
   const DivInner = styled.div`
     margin-bottom: 0.75rem;
   `;
@@ -49,6 +68,7 @@ const SignUp = (props) => {
   const [form] = Form.useForm();
   const [, forceUpdate] = useState({});
 
+  const navigate = useNavigate();
   const onFinish = async (values) => {
     await authService
       .signup(
@@ -59,9 +79,21 @@ const SignUp = (props) => {
         values["email"].key + values["email"].value,
         values["Gender"]
       )
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      .then((res) => {
+        console.log(res);
+        if (res === "OK") {
+          console.log("succ");
+          success();
+          setTimeout(() => {
+            props.handleLoginState();
+          }, 4000);
+        } else {
+          error();
+        }
+      })
+      .catch((err) => {});
   };
+
   const [checkIDResult, setCheckIDResult] = useState(false);
   let [ID, setID] = useState("");
 
@@ -126,251 +158,260 @@ const SignUp = (props) => {
   }, [ID, Nick, Email]);
 
   return (
-    <LoginForm>
-      <div style={{ width: "22rem" }}>
-        {/* Heading */}
-        <h1
-          style={{
-            fontSize: "1.25rem",
-            lineHeight: "1.75rem",
-            fontWeight: "600",
-          }}
-        >
-          <Link href="http://localhost:3000/">
-            <ImgComponent src={tripRecorder} id="logo" />
-          </Link>
-        </h1>
-        <small
-          style={{
-            color: "#9CA3AF",
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          당신의 지갑을 지켜주는 여행용 SNS 플랫폼 TripRecoder
-        </small>
-        {/* Form */}
-        <Form
-          form={form}
-          name="horizontal_login"
-          onFinish={onFinish}
-          style={{ marginTop: "1rem" }}
-          labelCol={{ span: 8 }}
-        >
-          <DivInner>
-            <Form.Item
-              name="ID"
-              label="아이디"
-              validateStatus={checkIDResult ? "success" : "warning"}
-              hasFeedback
-              rules={[
-                {
-                  required: true,
-                  message: "ID를 적어주세요 !",
-                },
-              ]}
-            >
-              <Input
-                prefix={<UserOutlined className="site-form-item-icon" />}
-                onBlur={handleIDChange}
-                value={ID}
-                placeholder="ID 중복체크"
-              />
-            </Form.Item>
-          </DivInner>
-
-          <DivInner>
-            <Form.Item
-              name="Name"
-              label="이름"
-              rules={[
-                {
-                  required: true,
-                  message: "이름을 적어주세요 !",
-                },
-              ]}
-            >
-              <Input
-                prefix={<IdcardOutlined className="site-form-item-icon" />}
-                placeholder="너의 Name은"
-              />
-            </Form.Item>
-          </DivInner>
-
-          <DivInner>
-            <Form.Item
-              name="Gender"
-              label="성별"
-              rules={[
-                {
-                  required: true,
-                  message: "성별을 적어주세요 !",
-                },
-              ]}
-            >
-              <Radio.Group size="middle">
-                <Radio.Button value="남자">남자</Radio.Button>
-                <Radio.Button value="여자">여자</Radio.Button>
-              </Radio.Group>
-            </Form.Item>
-          </DivInner>
-
-          <DivInner>
-            <Form.Item
-              name="Nick"
-              label="닉네임"
-              validateStatus={checkNickResult ? "success" : "warning"}
-              hasFeedback
-              rules={[
-                {
-                  required: true,
-                  message: "닉네임을 적어주세요 !",
-                },
-              ]}
-            >
-              <Input
-                prefix={<SmileOutlined className="site-form-item-icon" />}
-                onBlur={handleNickChange}
-                value={Nick}
-                placeholder="닉네임 중복체크"
-              />
-            </Form.Item>
-          </DivInner>
-
-          <DivInner>
-            <Form.Item
-              name="PW"
-              label="비밀번호"
-              rules={[
-                {
-                  required: true,
-                  message: "비밀번호를 적어주세요 !",
-                },
-              ]}
-            >
-              <Input.Password
-                prefix={<LockOutlined className="site-form-item-icon" />}
-                type="password"
-                placeholder="Password"
-              />
-            </Form.Item>
-          </DivInner>
-          <DivInner>
-            <Space.Compact>
+    <>
+      {contextHolder}
+      {/* <Button
+        onClick={() => {
+          success();
+        }}
+      >
+        dw
+      </Button> */}
+      <LoginForm>
+        <div style={{ width: "22rem" }}>
+          {/* Heading */}
+          <h1
+            style={{
+              fontSize: "1.25rem",
+              lineHeight: "1.75rem",
+              fontWeight: "600",
+            }}
+          >
+            <Link href="http://localhost:3000/">
+              <ImgComponent src={tripRecorder} id="logo" />
+            </Link>
+          </h1>
+          <small
+            style={{
+              color: "#9CA3AF",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            당신의 지갑을 지켜주는 여행용 SNS 플랫폼 TripRecoder
+          </small>
+          {/* Form */}
+          <Form
+            form={form}
+            name="horizontal_login"
+            onFinish={onFinish}
+            style={{ marginTop: "1rem" }}
+            labelCol={{ span: 8 }}
+          >
+            <DivInner>
               <Form.Item
-                label="이메일"
-                validateStatus={checkEmailResult ? "success" : "warning"}
-                name={["email", "key"]}
+                name="ID"
+                label="아이디"
+                validateStatus={checkIDResult ? "success" : "warning"}
                 hasFeedback
                 rules={[
                   {
                     required: true,
-                    message: "Email을 적어주세요 !",
+                    message: "ID를 적어주세요 !",
                   },
                 ]}
               >
                 <Input
-                  prefix={<MailOutlined className="site-form-item-icon" />}
-                  style={{
-                    width: "100%",
-                  }}
-                  onBlur={handleEmailChange}
-                  value={Email}
-                  placeholder="Email 중복체크"
+                  prefix={<UserOutlined className="site-form-item-icon" />}
+                  onBlur={handleIDChange}
+                  value={ID}
+                  placeholder="ID 중복체크"
                 />
               </Form.Item>
-              <Form.Item
-                style={{ textTransform: "lowercase" }}
-                name={["email", "value"]}
-              >
-                <Select placeholder="@naver.com">
-                  <Option
-                    value="@naver.com"
-                    style={{ textTransform: "lowercase" }}
-                  >
-                    @naver.com
-                  </Option>
-                  <Option
-                    value="@daum.net"
-                    style={{ textTransform: "lowercase" }}
-                  >
-                    @daum.net
-                  </Option>
-                  <Option
-                    value="@gmail.com"
-                    style={{ textTransform: "lowercase" }}
-                  >
-                    @gmail.com
-                  </Option>
-                  <Option
-                    value="@kakao.com"
-                    style={{ textTransform: "lowercase" }}
-                  >
-                    @kakao.com
-                  </Option>
-                  <Option
-                    value="@yahoo.com"
-                    style={{ textTransform: "lowercase" }}
-                  >
-                    @yahoo.com
-                  </Option>
-                </Select>
-              </Form.Item>
-            </Space.Compact>
-            {/* </Form.Item> */}
-          </DivInner>
+            </DivInner>
 
-          <DivInner
+            <DivInner>
+              <Form.Item
+                name="Name"
+                label="이름"
+                rules={[
+                  {
+                    required: true,
+                    message: "이름을 적어주세요 !",
+                  },
+                ]}
+              >
+                <Input
+                  prefix={<IdcardOutlined className="site-form-item-icon" />}
+                  placeholder="너의 Name은"
+                />
+              </Form.Item>
+            </DivInner>
+
+            <DivInner>
+              <Form.Item
+                name="Gender"
+                label="성별"
+                rules={[
+                  {
+                    required: true,
+                    message: "성별을 적어주세요 !",
+                  },
+                ]}
+              >
+                <Radio.Group size="middle">
+                  <Radio.Button value="남자">남자</Radio.Button>
+                  <Radio.Button value="여자">여자</Radio.Button>
+                </Radio.Group>
+              </Form.Item>
+            </DivInner>
+
+            <DivInner>
+              <Form.Item
+                name="Nick"
+                label="닉네임"
+                validateStatus={checkNickResult ? "success" : "warning"}
+                hasFeedback
+                rules={[
+                  {
+                    required: true,
+                    message: "닉네임을 적어주세요 !",
+                  },
+                ]}
+              >
+                <Input
+                  prefix={<SmileOutlined className="site-form-item-icon" />}
+                  onBlur={handleNickChange}
+                  value={Nick}
+                  placeholder="닉네임 중복체크"
+                />
+              </Form.Item>
+            </DivInner>
+
+            <DivInner>
+              <Form.Item
+                name="PW"
+                label="비밀번호"
+                rules={[
+                  {
+                    required: true,
+                    message: "비밀번호를 적어주세요 !",
+                  },
+                ]}
+              >
+                <Input.Password
+                  prefix={<LockOutlined className="site-form-item-icon" />}
+                  type="password"
+                  placeholder="Password"
+                />
+              </Form.Item>
+            </DivInner>
+            <DivInner>
+              <Space.Compact>
+                <Form.Item
+                  label="이메일"
+                  validateStatus={checkEmailResult ? "success" : "warning"}
+                  name={["email", "key"]}
+                  hasFeedback
+                  rules={[
+                    {
+                      required: true,
+                      message: "Email을 적어주세요 !",
+                    },
+                  ]}
+                >
+                  <Input
+                    prefix={<MailOutlined className="site-form-item-icon" />}
+                    style={{
+                      width: "100%",
+                    }}
+                    onBlur={handleEmailChange}
+                    value={Email}
+                    placeholder="Email 중복체크"
+                  />
+                </Form.Item>
+                <Form.Item
+                  style={{ textTransform: "lowercase" }}
+                  name={["email", "value"]}
+                >
+                  <Select placeholder="@naver.com">
+                    <Option
+                      value="@naver.com"
+                      style={{ textTransform: "lowercase" }}
+                    >
+                      @naver.com
+                    </Option>
+                    <Option
+                      value="@daum.net"
+                      style={{ textTransform: "lowercase" }}
+                    >
+                      @daum.net
+                    </Option>
+                    <Option
+                      value="@gmail.com"
+                      style={{ textTransform: "lowercase" }}
+                    >
+                      @gmail.com
+                    </Option>
+                    <Option
+                      value="@kakao.com"
+                      style={{ textTransform: "lowercase" }}
+                    >
+                      @kakao.com
+                    </Option>
+                    <Option
+                      value="@yahoo.com"
+                      style={{ textTransform: "lowercase" }}
+                    >
+                      @yahoo.com
+                    </Option>
+                  </Select>
+                </Form.Item>
+              </Space.Compact>
+              {/* </Form.Item> */}
+            </DivInner>
+
+            <DivInner
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                alignContent: "center",
+                justifyContent: "flex-end",
+              }}
+            >
+              <Link href="#">비밀번호 찾기</Link>
+            </DivInner>
+            <DivInner style={{ display: "flex", justifyContent: "center" }}>
+              <Form.Item shouldUpdate>
+                {() => (
+                  <Button
+                    type="default"
+                    htmlType="submit"
+                    style={{
+                      backgroundColor: "#7fb77e",
+                      color: "#ffffff",
+                    }}
+                    size="large"
+                    disabled={
+                      !form.isFieldsTouched(false)
+                      // || !!form.getFieldsError()
+                      // .filter(({ errors }) => errors.length).length
+                    }
+                  >
+                    가입하기
+                  </Button>
+                )}
+              </Form.Item>
+            </DivInner>
+          </Form>
+        </div>
+        <Footer>
+          <span
             style={{
-              display: "flex",
-              flexWrap: "wrap",
-              alignContent: "center",
-              justifyContent: "flex-end",
+              color: "#9CA3AF",
+              fontSize: "0.75rem",
+              lineHeight: "1rem",
+              fontWeight: "600",
             }}
           >
-            <Link href="#">비밀번호 찾기</Link>
-          </DivInner>
-          <DivInner style={{ display: "flex", justifyContent: "center" }}>
-            <Form.Item shouldUpdate>
-              {() => (
-                <Button
-                  type="default"
-                  htmlType="submit"
-                  style={{
-                    backgroundColor: "#7fb77e",
-                    color: "#ffffff",
-                  }}
-                  size="large"
-                  disabled={
-                    !form.isFieldsTouched(true) ||
-                    !!form
-                      .getFieldsError()
-                      .filter(({ errors }) => errors.length).length
-                  }
-                >
-                  가입하기
-                </Button>
-              )}
-            </Form.Item>
-          </DivInner>
-        </Form>
-      </div>
-      <Footer>
-        <span
-          style={{
-            color: "#9CA3AF",
-            fontSize: "0.75rem",
-            lineHeight: "1rem",
-            fontWeight: "600",
-          }}
-        >
-          계정이 있나요?{" "}
-        </span>
-        <Link href="#" onClick={props.handleLoginState}>
-          로그인
-        </Link>
-      </Footer>
-    </LoginForm>
+            계정이 있나요?{" "}
+          </span>
+          <Link href="#" onClick={props.handleLoginState}>
+            로그인
+          </Link>
+        </Footer>
+      </LoginForm>
+    </>
   );
 };
 export default SignUp;

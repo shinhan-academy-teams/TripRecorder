@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import trippers.triprecorder.dto.ProfileDto;
 import trippers.triprecorder.dto.ProfileUpdateDto;
+import trippers.triprecorder.dto.UserSimpleDto;
 import trippers.triprecorder.entity.ProfileVO;
 import trippers.triprecorder.entity.UserVO;
 import trippers.triprecorder.repository.FollowRepository;
@@ -78,41 +79,41 @@ public class ProfileController {
 
 	// 저장 버튼 눌렀을 때 수정
 	@PutMapping("/click")
-	public String putUserProfileForUpdate(@RequestBody ObjectNode obj) throws JsonProcessingException {
+	public UserSimpleDto putUserProfileForUpdate(@RequestBody ObjectNode obj) throws JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper();
-		
+
 		UserVO user = mapper.treeToValue(obj.get("user"), UserVO.class);
 		ProfileVO tmpProfile = mapper.treeToValue(obj.get("profile"), ProfileVO.class);
 
 		UserVO tmpUser = urepo.findById(user.getUserNo()).orElse(null);
 		ProfileVO profile = prepo.findById(tmpUser.getUserNo()).orElse(null);
-		
-		if(!user.getUserName().equals("")) {
+
+		if (!user.getUserName().equals("")) {
 			tmpUser.setUserName(user.getUserName());
 		}
-		if(!user.getUserGender().equals("")) {
+		if (!user.getUserGender().equals("")) {
 			tmpUser.setUserGender(user.getUserGender());
 		}
-		if(!user.getUserNick().equals("")) {
+		if (!user.getUserNick().equals("")) {
 			tmpUser.setUserNick(user.getUserNick());
 		}
-		if(!user.getUserEmail().equals("")) {
+		if (!user.getUserEmail().equals("")) {
 			tmpUser.setUserEmail(user.getUserEmail());
 		}
-		if(!tmpProfile.getProfileMsg().equals("")) {
-			profile.setProfileMsg(tmpProfile.getProfileMsg());
-		}
-		if(!user.getUserPw().equals("")) {
-			tmpUser.setUserPw(EncodingUtil.encodingUserPw(user.getUserPw()));
-		}
+//		if(!tmpProfile.getProfileMsg().equals("")) {
+		profile.setProfileMsg(tmpProfile.getProfileMsg());
+//		}
+//		if(!user.getUserPw().equals("")) {
+//			tmpUser.setUserPw(EncodingUtil.encodingUserPw(user.getUserPw()));
+//		}
 
 		String profilePhoto = tmpProfile.getProfilePhoto();
 
 		if (profilePhoto.trim().isEmpty()) {
 			profile.setProfilePhoto("profile/default_profile.png");
-			
+
 		} else if (!profilePhoto.equals("no")) {
-			
+
 			profile.setProfilePhoto(profilePhoto);
 		}
 
@@ -120,10 +121,10 @@ public class ProfileController {
 
 		UserVO savedUser = urepo.save(tmpUser);
 
-		if (savedUser != null) {
-			return "ok";
-		} else {
-			return "fail";
-		}
+		UserSimpleDto newUser = UserSimpleDto.builder().userNo(savedUser.getUserNo()).userNick(savedUser.getUserNick())
+				.userId(savedUser.getUserId())
+				.userProfile(AwsUtil.getImageURL(savedUser.getProfile().getProfilePhoto())).build();
+
+		return newUser;
 	}
 }

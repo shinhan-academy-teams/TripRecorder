@@ -2,17 +2,34 @@ import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import tripRecorder from "assets/tripRecorder.png";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Form, Input, Button } from "antd";
+import { Form, Input, Button, Modal } from "antd";
 import Cookies from "js-cookie";
 import authService from "api/auth.service";
 import { useRecoilState } from "recoil";
-import { userNo, userNick, userProfile, isLoggedIn } from "../recoil/UserInfo";
+import {
+  userNo,
+  userNick,
+  userProfile,
+  isLoggedIn,
+  ModalOpen,
+} from "../recoil/UserInfo";
 
 const SignIn = (props) => {
   const [userNum, setUserNum] = useRecoilState(userNo);
   const [userNickName, setUserNickName] = useRecoilState(userNick);
   const [userProf, setUserProf] = useRecoilState(userProfile);
   const [isLog, setIsLog] = useRecoilState(isLoggedIn);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useRecoilState(ModalOpen);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
   const DivInner = styled.div`
     margin-bottom: 0.75rem;
   `;
@@ -22,6 +39,7 @@ const SignIn = (props) => {
 
   const LoginForm = styled.div`
     display: flex;
+    flex-direction: column;
     background-color: #f7f6dc;
     flex-wrap: wrap;
     justify-content: center;
@@ -81,7 +99,7 @@ const SignIn = (props) => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        showModal();
       });
   };
 
@@ -209,6 +227,17 @@ const SignIn = (props) => {
           가입하기
         </Link>
       </Footer>
+      <Modal
+        title="로그인 실패 ❌"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        okButtonProps={{
+          style: { backgroundColor: "#7fb77e", color: "#ffffff" },
+        }}
+      >
+        <p> 다시 로그인 해주세요 ! </p>
+      </Modal>
     </LoginForm>
   );
 };

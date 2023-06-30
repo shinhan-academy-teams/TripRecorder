@@ -1,6 +1,7 @@
 import api from "./axios";
 import Cookies from "js-cookie";
-
+import { ModalOpen } from "recoil/UserInfo";
+import { useRecoilState } from "recoil";
 const checkDuplicateId = (userId) => {
   return api
     .post("/auth/signup/useridCheck", { userId })
@@ -41,8 +42,14 @@ const signup = (userId, userPw, userName, userNick, userEmail, userGender) => {
       userEmail,
       userGender,
     })
-    .then((res) => console.log(res))
-    .catch((err) => console.log(err));
+    .then((res) => {
+      console.log(res);
+      return res.data;
+    })
+    .catch((err) => {
+      console.log(err);
+      return err;
+    });
 };
 
 const login = (userId, userPw) => {
@@ -63,7 +70,12 @@ const login = (userId, userPw) => {
       }
       return res;
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      const [isModalOpen, setIsModalOpen] = useRecoilState(ModalOpen);
+      console.log(err.message);
+      setIsModalOpen(true);
+      return err.message;
+    });
 };
 
 const TripRegistration = (tripName, tripDest, tripStart, tripEnd, tripExp) => {
@@ -180,10 +192,30 @@ const RegisterRep = (replyContent, snsNo) => {
   });
 };
 
-//좋아요
-// const Heart = (snsNo) =>{
-//   return api.post("/heart/register/"+snsNo, )
-// };
+//수정
+const UpdateProfile = (
+  userNo,
+  userName,
+  userNick,
+  userEmail,
+  userGender,
+  profilePhoto,
+  profileMsg
+) => {
+  return api.put("/profile/click", {
+    user: {
+      userNo,
+      userName,
+      userNick,
+      userEmail,
+      userGender,
+    },
+    profile: {
+      profilePhoto,
+      profileMsg,
+    },
+  });
+};
 
 const authService = {
   checkDuplicateId,
@@ -197,6 +229,7 @@ const authService = {
   ReceiptAddress,
   RegisterSns,
   RegisterRep,
+  UpdateProfile,
 };
 
 export default authService;

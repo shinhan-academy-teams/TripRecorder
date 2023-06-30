@@ -19,7 +19,7 @@ import lombok.ToString;
 @Table(name = "hashtag")
 @Getter
 @Setter
-@ToString(exclude = {"sns"})
+@ToString(exclude = { "sns" })
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import trippers.triprecorder.dto.MultiKey;
 
-
 @Builder
 @Data
 @NoArgsConstructor
@@ -22,14 +21,14 @@ import trippers.triprecorder.dto.MultiKey;
 @Entity
 @Table(name = "heart")
 @IdClass(MultiKey.class)
-@ToString(exclude = {"user", "sns"})
+@ToString(exclude = { "user", "sns" })
 public class HeartVO {
 	@Id
 	@ManyToOne
-	@JoinColumn(name="user_no")
+	@JoinColumn(name = "user_no")
 	private UserVO user;
 	@Id
 	@ManyToOne
-	@JoinColumn(name="sns_no")
+	@JoinColumn(name = "sns_no")
 	private SnsVO sns;
 }

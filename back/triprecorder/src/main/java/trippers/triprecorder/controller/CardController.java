@@ -48,7 +48,7 @@ public class CardController {
 	public List<CardDto> getTopCardList(@RequestBody JSONObject obj) {
 
 		List<Object> tmpCardList = erepo.findTop3CardNumbersByExpCate(obj.get("category").toString());
-		
+
 		List<CardDto> topCardList = new ArrayList<>();
 
 		tmpCardList.forEach(cardObj -> {
@@ -60,11 +60,12 @@ public class CardController {
 				e.printStackTrace();
 			}
 			str = str.replace("[", "").replace("]", "").split(",")[0];
-			
+
 			CardVO tmpCard = crepo.findById(Long.valueOf(str)).orElse(null);
 
 			CardDto card = CardDto.builder().cardNo(tmpCard.getCardNo()).cardName(tmpCard.getCardName())
-					.cardPhoto(tmpCard.getCardPhoto()).cardAnnual(tmpCard.getCardAnnual()).build();
+					.cardPhoto(tmpCard.getCardPhoto()).cardAnnual(tmpCard.getCardAnnual())
+					.cardLink(tmpCard.getCardLink()).build();
 
 			topCardList.add(card);
 		});
@@ -75,13 +76,13 @@ public class CardController {
 	@PostMapping("/carddiscount")
 	public List<DiscountDto> getCardDiscountList(@RequestBody JSONObject obj) {
 		Long price = Long.valueOf(obj.get("price").toString());
-		
+
 		Object cards = obj.get("cardNo");
 
 		String category = obj.get("category").toString();
 
 		ArrayList<Integer> cardNoList = (ArrayList<Integer>) cards;
-		
+
 		ArrayList<CardVO> cardList = new ArrayList<>();
 
 		cardNoList.forEach(cardNo -> {
@@ -92,26 +93,24 @@ public class CardController {
 		List<DiscountVO> dcList = drepo.findByDcCateAndCardIn(category, cardList);
 
 		List<DiscountDto> dcResult = new ArrayList<>();
-		
+
 		cardList.forEach(card -> {
 			boolean loop = false;
-			for(int i = 0; i < dcList.size(); i++) {
+			for (int i = 0; i < dcList.size(); i++) {
 				DiscountVO dc = dcList.get(i);
-				
-				if(dc.getCard().getCardNo() == card.getCardNo()) {
+
+				if (dc.getCard().getCardNo() == card.getCardNo()) {
 					dcResult.add(createDiscountDto(dc, price));
 					loop = true;
 					break;
-				} 
+				}
 			}
-			
+
 			// 해당 카테고리에 대한 혜택이 없는 카드인 경우
-			if(!loop) {
-				DiscountDto dto = DiscountDto.builder()
-						.annual(Long.valueOf(card.getCardAnnual()))
-						.totalDiscountAmount(0L)
-						.build();
-				
+			if (!loop) {
+				DiscountDto dto = DiscountDto.builder().annual(Long.valueOf(card.getCardAnnual()))
+						.totalDiscountAmount(0L).build();
+
 				dcResult.add(dto);
 			}
 		});
@@ -119,7 +118,7 @@ public class CardController {
 		return dcResult;
 	}
 
-	//혜택, 연회비 적용 메서드
+	// 혜택, 연회비 적용 메서드
 	private DiscountDto createDiscountDto(DiscountVO discountVO, Long price) {
 
 		CardVO card = discountVO.getCard();

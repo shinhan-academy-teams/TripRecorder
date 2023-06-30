@@ -1,17 +1,19 @@
-:root {
+// :root {
+//   font-size: 10px;
+// }
+.example {
   font-size: 10px;
 }
 
 .divbox {
   position: absolute;
   width: 50%;
-  // border: 3px solid #7fb77e;
-  border-radius: 30px;
-  top: 50%;
-  left: 40%;
+  top: 45%;
+  left: 45%;
   display: grid;
-  align-items: center;
-  transform: translate(-30%, -50%);
+  // align-items: flex-start;
+  justify-content: center;
+  transform: translate(-25%, -27%);
   text-align: center;
 }
 

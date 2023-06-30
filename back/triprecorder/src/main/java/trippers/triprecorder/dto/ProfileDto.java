@@ -14,6 +14,6 @@ public class ProfileDto {
 	private String userLevel;
 	private Integer follower;
 	private Integer following;
-	
+
 	private Integer isFollowing;
 }
