@@ -470,6 +470,9 @@ const RegisterExp = () => {
             ]}
           >
             <InputNumber
+              formatter={(value) =>
+                `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+              }
               prefix="₩"
               style={{
                 width: "100%",

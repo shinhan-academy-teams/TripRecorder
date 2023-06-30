@@ -195,7 +195,12 @@ flex-direction: column; */
               <tbody>
                 <tr>
                   <th>지출</th>
-                  <td>{exp?.["expMoney"]} KRW</td>
+                  <td>
+                    {exp?.["expMoney"]
+                      .toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
+                    KRW
+                  </td>
                 </tr>
               </tbody>
             </SubTable>
