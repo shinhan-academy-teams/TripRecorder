@@ -21,31 +21,39 @@ const BenefitBox = styled.div`
 `;
 
 const Benefit = ({ discount, payback, point, annual, total }) => {
+  const getMoney = (money) => {
+    return money.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
   return (
     <BenefitBox>
       <Card title="RECEIPT">
         <p>
           <span className="type">할인</span>
-          <span className="amount">{discount === null ? 0 : discount}</span>
+          <span className="amount">
+            {discount === null ? 0 : getMoney(discount)}
+          </span>
         </p>
         <p>
           <span className="type">캐시백</span>
-          <span className="amount">{payback === null ? 0 : payback}</span>
+          <span className="amount">
+            {payback === null ? 0 : getMoney(payback)}
+          </span>
         </p>
         <p>
           <span className="type">포인트</span>
-          <span className="amount">{point === null ? 0 : point}</span>
+          <span className="amount">{point === null ? 0 : getMoney(point)}</span>
         </p>
         <p>
           <span className="type">연회비</span>
-          <span className="amount">{annual}</span>
+          <span className="amount">{getMoney(annual)}</span>
         </p>
         <hr />
         <p style={{ color: "red" }}>
           <span className="type">최종혜택</span>
           <span className="amount">
             {total >= 0 ? "+" : "-"}
-            {total}
+            {getMoney(total)}
           </span>
         </p>
       </Card>

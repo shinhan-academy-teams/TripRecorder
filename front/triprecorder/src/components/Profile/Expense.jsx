@@ -118,19 +118,30 @@ const Expense = () => {
           <CardDiv>
             <CardInner>
               <span style={{ color: "white" }}>
-                총 예산: {data[0]?.tripExp}
+                총 예산:{" "}
+                {data[0]?.tripExp
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
               </span>
             </CardInner>
           </CardDiv>{" "}
           <CardDiv>
             <CardInner>
-              <span style={{ color: "white" }}>쓴 돈: {data[0]?.useExp}</span>
+              <span style={{ color: "white" }}>
+                쓴 돈:{" "}
+                {data[0]?.useExp
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+              </span>
             </CardInner>
           </CardDiv>{" "}
           <CardDiv>
             <CardInner>
               <span style={{ color: "white" }}>
-                남은 돈: {data[0]?.remainExp}
+                남은 돈:{" "}
+                {data[0]?.remainExp
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
               </span>
             </CardInner>
           </CardDiv>
@@ -196,10 +207,21 @@ const Expense = () => {
                         {item?.expTitle}
                       </div>
                     }
-                    description={item.expTime}
+                    description={
+                      new Date(item.expTime).toISOString().split("T")[0] +
+                      " " +
+                      new Date(item.expTime)
+                        .toISOString()
+                        .split("T")[1]
+                        .split(".")[0]
+                    }
                   />
                   <div>
-                    {item?.expPlace}에서 {item?.expMoney} KRW 소비
+                    {item?.expPlace}에서{" "}
+                    {item?.expMoney
+                      .toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
+                    KRW 소비
                   </div>
                   {/* <div>전체: {data[0]?.tripExp}</div>
                 <div>사용: {data[0]?.useExp}</div>

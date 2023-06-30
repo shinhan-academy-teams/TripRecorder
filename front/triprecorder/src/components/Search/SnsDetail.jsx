@@ -340,7 +340,10 @@ const SnsDetail = ({ snsData, snsList, updateSnsList }) => {
         <p>사용처: {exp.expPlace}</p>
         <p>
           결제 금액:{" "}
-          {userNo ? exp.expMoney + "원" : "로그인 후 조회 가능합니다🥲"}
+          {userNo
+            ? exp.expMoney.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+              "원"
+            : "로그인 후 조회 가능합니다🥲"}
         </p>
       </Modal>
     </div>
