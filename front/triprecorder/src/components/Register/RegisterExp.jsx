@@ -481,7 +481,7 @@ const RegisterExp = () => {
           </Form.Item>
 
           <Form.Item
-            label="날짜+시간"
+            label="거래일시"
             name="dateTime"
             rules={[
               {

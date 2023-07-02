@@ -128,7 +128,7 @@ const Expense = () => {
           <CardDiv>
             <CardInner>
               <span style={{ color: "white" }}>
-                쓴 돈:{" "}
+                사용 금액:{" "}
                 {data[0]?.useExp
                   .toString()
                   .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
@@ -138,7 +138,7 @@ const Expense = () => {
           <CardDiv>
             <CardInner>
               <span style={{ color: "white" }}>
-                남은 돈:{" "}
+                남은 금액:{" "}
                 {data[0]?.remainExp
                   .toString()
                   .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}

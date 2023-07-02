@@ -263,7 +263,7 @@ const RegisterSns = () => {
           onFinish={onFinish}
         >
           <Form.Item
-            label="영수증 선택"
+            label="경비 선택"
             name="receipt"
             rules={[
               {
