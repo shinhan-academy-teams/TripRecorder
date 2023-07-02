@@ -26,17 +26,24 @@ const Home = () => {
   return (
     <div className="snsbox">
       <div className="bigDiv">
-        {allData.map((sns, i) => {
-          return (
-            <SnsDetail
-              snsData={sns}
-              token={token ? token : null}
-              key={i}
-              snsList={allData}
-              updateSnsList={updateSnsList}
-            />
-          );
-        })}
+        {allData.length > 0 ? (
+          allData.map((sns, i) => {
+            return (
+              <SnsDetail
+                snsData={sns}
+                token={token ? token : null}
+                key={i}
+                snsList={allData}
+                updateSnsList={updateSnsList}
+              />
+            );
+          })
+        ) : (
+          <div style={{ textAlign: "center" }}>
+            <h1>아직 게시글이 없습니다.</h1>
+            <p>좌측 탭의 여행 등록을 통해 인상 깊었던 여행을 기록해 보세요✏️</p>
+          </div>
+        )}
       </div>
     </div>
   );
