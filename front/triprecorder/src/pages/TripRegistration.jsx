@@ -171,7 +171,7 @@ const TripRegistration = (props) => {
         </Form.Item>
 
         <Form.Item
-          label="여행 경비"
+          label="여행 예산"
           name="tripExp"
           rules={[
             {
