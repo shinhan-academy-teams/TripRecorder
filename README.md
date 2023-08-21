@@ -7,6 +7,8 @@
 ### 테이블 구조
 <img width="358" alt="테이블구조" src="https://github.com/shinhan-academy-teams/TripRecorder/assets/70212701/f59dda04-d49b-4791-a22f-2982df5b5e58">
 
+### 기술 스택
+![tripRecorder 기술스택](https://github.com/shinhan-academy-teams/TripRecorder/assets/18274777/69dd5de1-4a1c-452b-992e-3632f48085c1)
 
 ## 시연
 > ### [전체 시연영상](https://www.youtube.com/watch?v=DP1tGCBIfZc&t=1s)
