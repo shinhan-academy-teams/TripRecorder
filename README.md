@@ -3,7 +3,7 @@
 ## 👨‍👩‍👧‍👦 멤버
 |                   채희                    |                      은빈                       |                     용준                      |                   준호                    | 
 | :------------------------------------------: | :------------------------------------------------: | :----------------------------------------------: | :------------------------------------------: |
-| ![](https://github.com/hee2425.png?size=120) | <img src="https://avatars.githubusercontent.com/u/70212701?v=4" width=120px alt="은빈"/> | | ![](https://github.com/dltlaos11.png?size=120) | <img src="https://avatars.githubusercontent.com/u/120866984?v=4" width=120px alt="준호"/> |
+| ![](https://github.com/hee2425.png?size=120) | <img src="https://avatars.githubusercontent.com/u/70212701?v=4" width=120px alt="은빈"/> | ![](https://github.com/dltlaos11.png?size=120) | <img src="https://avatars.githubusercontent.com/u/120866984?v=4" width=120px alt="준호"/> |
 |   [hee2425](https://github.com/hee2425)  |  [svbean77](https://github.com/svbean77)  |  [dltlaos11](https://github.com/dltlaos11)  |  [junjuno](https://github.com/junjuno)  |  
 
 ## 프로젝트 구조
