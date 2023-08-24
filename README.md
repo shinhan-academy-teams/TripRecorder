@@ -1,5 +1,11 @@
 # TripRecorder
 
+## 👨‍👩‍👧‍👦 멤버
+|                   채희                    |                      은빈                       |                     용준                      |                   준호                    | 
+| :------------------------------------------: | :------------------------------------------------: | :----------------------------------------------: | :------------------------------------------: |
+| ![](https://github.com/hee2425.png?size=120) | ![](https://github.com/svbean77.png?size=120) | ![](https://github.com/dltlaos11.png?size=120) | ![](https://github.com/junjuno.png?size=120) |
+|   [hee2425](https://github.com/hee2425)  |  [svbean77](https://github.com/svbean77)  |  [dltlaos11](https://github.com/dltlaos11)  |  [junjuno](https://github.com/junjuno)  |  
+
 ## 프로젝트 구조
 ### 플로차트
 ![플로차트](https://github.com/shinhan-academy-teams/TripRecorder/assets/70212701/b5213a29-0560-4496-95a4-2102bd61f62b)
