@@ -1,9 +1,4 @@
 # TripRecorder
-## 👨‍👩‍👧‍👦 멤버
-|                   채희                    |                      은빈                       |                     용준                      |                   준호                    |
-| :------------------------------------------: | :------------------------------------------------: | :----------------------------------------------: | :------------------------------------------: | 
-| ![](https://github.com/hee2425.png?size=120) | ![](https://github.com/svbean77.png?size=120) | ![](https://github.com/dltlaos11.png?size=120) | ![](https://github.com/junjuno.png?size=120) |
-|  [hee2425](https://github.com/hee2425)  |  [svbean77](https://github.com/svbean77)  | [dltlaos11](https://github.com/dltlaos11)  | [junjuno](https://github.com/junjuno)  | 
 
 ## 👨‍👩‍👧‍👦 멤버
 |                   채희                    |                      은빈                       |                     용준                      |                   준호                    | 
